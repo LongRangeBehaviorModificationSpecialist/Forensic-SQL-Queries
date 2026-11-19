@@ -1,25 +1,33 @@
+/*
+[DLU]
+    19-Nov-2026
+*/
+
+
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RowNumber',
-    ZPROCESS.Z_PK AS 'ZPk',
+    ROW_NUMBER() OVER ( ORDER BY ZPROCESS.ZTIMESTAMP ) AS "RowNumber",
+    ZPROCESS.Z_PK AS "ZPk",
 
-    datetime(ZPROCESS.ZTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ProcessTimestampUtc',
-    datetime(ZPROCESS.ZFIRSTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'ProcessFirstTimestampUtc',
-    datetime(ZLIVEUSAGE.ZTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'LiveUsageTimestampUtc',
+    strftime ( '%F_%H:%M:%f', ZPROCESS.ZTIMESTAMP + 978307200, 'unixepoch' ) AS "ProcessTimeStampUtc",
+    strftime ( '%F_%H:%M:%f', ZPROCESS.ZFIRSTTIMESTAMP + 978307200, 'unixepoch' ) AS "ProcessFirstTimeStampUtc",
+    strftime ( '%F_%H:%M:%f', ZLIVEUSAGE.ZTIMESTAMP + 978307200, 'unixepoch' ) AS "LiveUsageTimeStampUtc",
 
-    ZPROCESS.ZBUNDLENAME AS 'BundleName',
-    ZPROCESS.ZPROCNAME AS 'ProcName',
-    printf("%,d", ZLIVEUSAGE.ZWIFIIN) AS 'WifiBytesIn',
-    printf("%,d", ZLIVEUSAGE.ZWIFIOUT) AS 'WifiBytesOut',
-    printf("%,d", ZLIVEUSAGE.ZWWANIN) AS 'WwanBytesIn',
-    printf("%,d", ZLIVEUSAGE.ZWWANOUT) AS 'WwanBytesOut',
-    ZLIVEUSAGE.ZWIREDIN AS 'WiredBytesIn',
-    ZLIVEUSAGE.ZWIREDOUT AS 'WiredBytesOut',
-    ZLIVEUSAGE.ZXIN AS 'XIn',
-    ZLIVEUSAGE.ZXOUT AS 'XOut',
+    ZPROCESS.ZBUNDLENAME AS "BundleName",
+    ZPROCESS.ZPROCNAME AS "ProcName",
+
+    printf ( '%,d', ZLIVEUSAGE.ZWIFIIN ) AS "WifiBytesIn",
+    printf ( '%,d', ZLIVEUSAGE.ZWIFIOUT ) AS "WifiBytesOut",
+    printf ( '%,d', ZLIVEUSAGE.ZWWANIN ) AS "WwanBytesIn",
+    printf ( '%,d', ZLIVEUSAGE.ZWWANOUT ) AS "WwanBytesOut",
+
+    ZLIVEUSAGE.ZWIREDIN AS "WiredBytesIn",
+    ZLIVEUSAGE.ZWIREDOUT AS "WiredBytesOut",
+    ZLIVEUSAGE.ZXIN AS "XIn",
+    ZLIVEUSAGE.ZXOUT AS "XOut",
 
     /* Source for each line of data */
-    'netusage.sqlite; Table:ZLIVEUSAGE(Z_PK: ' || ZLIVEUSAGE.Z_PK || ')' AS 'DataSource'
+    'netusage.sqlite; Table:ZLIVEUSAGE(Z_PK: ' || ZLIVEUSAGE.Z_PK || ')' AS "DataSource"
 
 
 FROM ZLIVEUSAGE

@@ -1,3 +1,9 @@
+/*
+[DLU]
+    19-Nov-2026
+*/
+
+
 ------------------------------------------------------
 /*
 This query is for MMS messages from the mmssms.db
@@ -7,82 +13,73 @@ This query is for MMS messages from the mmssms.db
 
 SELECT
     /* Add a row number at the beggining of each row */
-    ROW_NUMBER() OVER() AS 'RecordNumber',
+    ROW_NUMBER() OVER ( ORDER BY pdu.date ) AS "RowNumber",
 
-    pdu._id AS 'PduId',
-    pdu.thread_id AS 'PduThreadId',
+    pdu._id AS "PduId",
+    pdu.thread_id AS "PduThreadId",
 
     /* Date/Time of the message in UTC */
     CASE
-        WHEN pdu.date > 0 THEN strftime('%Y-%m-%d %H:%M:%S', pdu.date, 'unixepoch')
+        WHEN pdu.date > 0 THEN strftime( '%F_%H:%M:%f', pdu.date, 'unixepoch' )
         ELSE '[N/A]'
-    END AS 'PduDate',
+    END AS "PduDate",
 
     /* Date/Time the message was sent in UTC */
     CASE
-        WHEN pdu.date_sent > 0 THEN strftime('%Y-%m-%d %H:%M:%S', pdu.date_sent, 'unixepoch')
+        WHEN pdu.date_sent > 0 THEN strftime( '%F_%H:%M:%f', pdu.date_sent, 'unixepoch' )
         ELSE '[N/A]'
-    END as 'PduDateSentUtc',
+    END as "PduDateSentUtc",
 
     /* Message direction (incoming/outgoing) */
     CASE pdu.msg_box
-        WHEN 1 THEN 'Incoming [1]'
-        WHEN 2 THEN 'Outgoing [2]'
-        ELSE pdu.msg_box
-    END AS 'PduMsgBox',
+        WHEN 1 THEN 'Incoming'
+        WHEN 2 THEN 'Outgoing'
+        ELSE 'Type ' || pdu.msg_box
+    END AS "PduMsgBox",
 
     /* Was the message read */
-    pdu.read AS 'PduRead',
+    pdu.read AS "PduRead",
 
     /* Phone number of the message sender */
     /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
     CASE
-        WHEN (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=137 AND addr.address LIKE '%+1%') IS NULL THEN (
-            SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=137)
-        ELSE (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=137 AND addr.address LIKE '%+1%')
-    END AS 'From',
+        WHEN ( SELECT SUBSTR ( address, 3 ) FROM addr WHERE pdu._id = addr.msg_id AND addr.type = 137 AND addr.address LIKE '%+1%' ) IS NULL
+            THEN ( SELECT address FROM addr WHERE pdu._id = addr.msg_id AND addr.type = 137 )
+        ELSE ( SELECT SUBSTR ( address, 3 ) FROM addr WHERE pdu._id = addr.msg_id AND addr.type = 137 AND addr.address LIKE '%+1%' )
+    END AS "From",
 
     /* Phone number of the message recipient */
     /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
     CASE
-        WHEN (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=151 AND addr.address LIKE '%+1%') IS NULL THEN (
-            SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=151)
-        ELSE (SELECT SUBSTR(address,3) FROM addr WHERE pdu._id=addr.msg_id AND addr.type=151 AND addr.address LIKE '%+1%')
-    END AS 'To',
+        WHEN ( SELECT SUBSTR ( address, 3 ) FROM addr WHERE pdu._id = addr.msg_id AND addr.type = 151 AND addr.address LIKE '%+1%' ) IS NULL
+            THEN ( SELECT address FROM addr WHERE pdu._id = addr.msg_id AND addr.type = 151 )
+        ELSE ( SELECT SUBSTR ( address, 3 ) FROM addr WHERE pdu._id = addr.msg_id AND addr.type = 151 AND addr.address LIKE '%+1%' )
+    END AS "To",
 
     /* If the message was CCed to anyone, it will be listed here */
-    CASE
-        WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=130) IS NULL THEN NULL
-        ELSE (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=130)
-    END AS 'Cc',
+    ( SELECT address FROM addr WHERE pdu._id = addr.msg_id AND addr.type = 130 ) AS "Cc",
 
     /* If the message was BCCed to anyone, it will be listed here */
-    CASE
-        WHEN (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=129) IS NULL THEN NULL
-        ELSE (SELECT address FROM addr WHERE pdu._id=addr.msg_id AND addr.type=129)
-    END AS 'Bcc',
+    ( SELECT address FROM addr WHERE pdu._id = addr.msg_id AND addr.type = 129 ) AS "Bcc",
 
-    part._id AS 'PartId',
-    part.seq AS 'PartSeq',
-    part.ct AS 'PartCt',
+    part._id AS "PartId",
+    part.seq AS "PartSeq",
+    part.ct AS "PartCt",
 
     /* File name of the attached file (if any) */
-    CASE
-        WHEN part.cl IS NULL THEN NULL
-        ELSE part.cl
-    END AS 'PartCl',
+    part.cl AS "PartCl",
 
     /* File path of the attached file (if any) */
-    part._data AS 'PartData',
+    part._data AS "PartData",
     /* Message content */
-    part.text  AS 'PartText',
-    pdu.creator AS 'PduCreator',
-    pdu.sim_imsi AS 'PduSimImsi',
-    pdu.correlation_tag AS 'PduCorrelationTag',
-    pdu.ct_l AS 'PduCtL',
+    part.text  AS "PartText",
+    pdu.creator AS "PduCreator",
+    pdu.sim_imsi AS "PduSimImsi",
+    pdu.correlation_tag AS "PduCorrelationTag",
+    pdu.ct_l AS "PduCtL",
 
     /* Source for each line of data */
-    'File: \data\data\com.android.providers.telephony\databases\mmssms.db; Table: pdu(_id: ' || pdu._id || ')' AS 'DataSource'
+    'File: \data\data\com.android.providers.telephony\databases\mmssms.db; Table: pdu(_id: ' || pdu._id || ')' AS "DataSource"
 
 
 FROM pdu
@@ -102,67 +99,76 @@ Query for just SMS messages from the mmssms.db
 
 SELECT
     /* Add a row number at the beggining of each row */
-    ROW_NUMBER() OVER() AS 'RecordNumber',
+    ROW_NUMBER() OVER( ORDER BY sms.date ) AS "RowNumber",
 
-    sms._id AS 'SmsId',
-    sms.thread_id AS 'SmsThreadId',
+    sms._id AS "SmsId",
+    sms.thread_id AS "SmsThreadId",
 
-    /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
-    /* Formats string as a U.S. phone number, i.e. (###) ###-#### */
+    /*
+    Removes unnecessary text at the start of the string to leave just the 10-digit phone number
+    Formats string as a U.S. phone number, i.e. (###) ###-####
+    */
     CASE
-        WHEN LENGTH(sms.address) = 12 AND sms.address LIKE '%+1%' THEN '(' || SUBSTR(sms.address,3,3) || ') ' || SUBSTR(sms.address,6,3) || '-' || SUBSTR(sms.address,9,4)
-        WHEN LENGTH(sms.address) = 10 THEN '(' || SUBSTR(sms.address,1,3) || ') ' || SUBSTR(sms.address,4,3) || '-' || SUBSTR(sms.address,7,4)
-        ELSE sms.address
-    END AS 'SmsAddress',
+        WHEN LENGTH ( sms.address ) = 12 AND sms.address LIKE '%+1%'
+            THEN '(' ||
+                SUBSTR ( sms.address, 3, 3 ) || ') ' ||
+                SUBSTR ( sms.address, 6, 3 ) || '-' ||
+                SUBSTR ( sms.address, 9, 4 )
+        WHEN LENGTH ( sms.address ) = 10
+            THEN '(' ||
+                SUBSTR ( sms.address, 1, 3 ) || ') ' ||
+                SUBSTR ( sms.address, 4, 3 ) || '-' ||
+                SUBSTR ( sms.address, 7, 4 )
+        ELSE 'Type ' || sms.address
+    END AS "SmsAddress",
 
-    CASE
-        WHEN sms.person IS NULL THEN NULL
-        ELSE sms.person
-    END AS 'SmsPerson',
+    sms.person AS "SmsPerson",
 
     /* Date/Time of the message */
     CASE
-        WHEN sms.date > 0 THEN strftime('%Y-%m-%d %H:%M:%S', sms.date / 1000, 'unixepoch')
+        WHEN sms.date > 0 THEN strftime( '%Y-%m-%d %H:%M:%S', sms.date / 1000.0, 'unixepoch' )
         ELSE '[N/A]'
-    END AS 'SmsDateUtc',
+    END AS "SmsDateUtc",
 
     /* Message direction (incoming/outgoing) */
     CASE sms.type
-        WHEN 1 THEN 'Incoming [1]'
-        WHEN 2 THEN 'Outgoing [2]'
-        ELSE sms.type
-    END AS 'SmsDirection',
+        WHEN 1 THEN 'Incoming'
+        WHEN 2 THEN 'Outgoing'
+        ELSE 'Type ' || sms.type
+    END AS "SmsDirection",
 
     /* Was the message read */
     CASE sms.read
-        WHEN 0 THEN 'Unread [0]'
-        WHEN 1 THEN 'Read [1]'
-        ELSE sms.read
-    END AS 'SmsRead',
+        WHEN 0 THEN 'Unread'
+        WHEN 1 THEN 'Read'
+        ELSE 'Type ' || sms.read
+    END AS "SmsRead",
 
     /* Was a subject listed for the message */
-    CASE
-        WHEN sms.subject IS NULL THEN NULL
-        ELSE sms.subject
-    END AS 'SmsSubject',
+    sms.subject AS "SmsSubject",
 
     /* Message content */
-    sms.body AS 'SmsBody',
+    sms.body AS "SmsBody",
 
-    /* Removes unnecessary text at the start of the string to leave just the 10-digit phone number */
-    /* Formats string as a U.S. phone number, i.e. (###) ###-#### */
+    /*
+    Removes unnecessary text at the start of the string to leave just the 10-digit phone number
+    Formats string as a U.S. phone number, i.e. (###) ###-####
+    */
     CASE
-        WHEN sms.service_center IS NULL THEN NULL
-        WHEN LENGTH(sms.service_center) = 12 AND sms.service_center LIKE '%+1%' THEN '(' || SUBSTR(sms.service_center,3,3) || ') ' || SUBSTR(sms.service_center,6,3) || '-' || SUBSTR(sms.service_center,9,4)
-        ELSE sms.service_center
-    END AS 'SmsServiceCenter',
+        WHEN LENGTH ( sms.service_center ) = 12 AND sms.service_center LIKE '%+1%'
+            THEN '(' ||
+                SUBSTR ( sms.service_center, 3, 3 ) || ') ' ||
+                SUBSTR ( sms.service_center, 6, 3 ) || '-' ||
+                SUBSTR ( sms.service_center, 9, 4 )
+        ELSE 'Type ' || sms.service_center
+    END AS "SmsServiceCenter",
 
-    sms.creator AS 'SmsCreator',
-    sms.correlation_tag AS 'SmsCorrelationTag',
-    sms.sim_imsi AS 'SmsSimImsi',
+    sms.creator AS "SmsCreator",
+    sms.correlation_tag AS "SmsCorrelationTag",
+    sms.sim_imsi AS "SmsSimImsi",
 
     /* Source for each line of data */
-    'File: \data\data\com.android.providers.telephony\databases\mmssms.db; Table: sms(_id: ' || sms._id || ')' AS 'DataSource'
+    'File: \data\data\com.android.providers.telephony\databases\mmssms.db; Table: sms(_id: ' || sms._id || ')' AS "DataSource"
 
 FROM sms
 

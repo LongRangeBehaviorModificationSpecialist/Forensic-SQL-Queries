@@ -1,7 +1,7 @@
 SELECT
 
     /* Add a row number at the beggining of each row */
-    ROW_NUMBER() OVER() AS 'ROW_NUMBER',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
     ParentzGenAlbum.ZUUID AS 'ParentzGenAlbum.ZUUID',
     ParentzGenAlbum.ZCLOUDGUID AS 'ParentzGenAlbum.ZCLOUDGUID',
     ParentzGenAlbum.Z_PK AS 'ParentzGenAlbum.Z_PK',
@@ -60,7 +60,7 @@ SELECT
 
     ParentzGenAlbum.ZTITLE AS 'ParentzGenAlbum.ZTITLE',
 
-    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum.ZCREATIONDATE(UTC)',
+    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'unixepoch') AS 'ParentzGenAlbum.ZCREATIONDATE(UTC)',
 
     ParentzGenAlbum.ZPENDINGITEMSCOUNT AS 'ParentzGenAlbum.ZPENDINGITEMSCOUNT',
 
@@ -103,7 +103,7 @@ SELECT
         ELSE 'Unknown Value: ' || ParentzGenAlbum.ZTRASHEDSTATE || ''
     END AS 'ParentzGenAlbum.ZTRASHEDSTATE',
 
-    datetime(ParentzGenAlbum.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum.ZTRASHEDDATE',
+    datetime(ParentzGenAlbum.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'ParentzGenAlbum.ZTRASHEDDATE',
 
     CASE ParentzGenAlbum.ZCLOUDDELETESTATE
         WHEN 0 THEN '0 [ParentzGenAlbum Cloud Not Deleted]'
@@ -181,11 +181,11 @@ SELECT
     zGenAlbum.ZIMPORTEDBYBUNDLEIDENTIFIER AS 'zGenAlbum.ZIMPORTEDBYBUNDLEIDENTIFIER',
     zGenAlbum.ZTITLE AS 'zGenAlbum.ZTITLE',
 
-    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCREATIONDATE(UTC)',
-    datetime(zGenAlbum.ZCLOUDCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCLOUDCREATIONDATE(UTC)',
-    datetime(zGenAlbum.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZSTARTDATE(UTC)',
-    datetime(zGenAlbum.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZENDDATE(UTC)',
-    datetime(zGenAlbum.ZCLOUDSUBSCRIPTIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCLOUDSUBSCRIPTIONDATE(UTC)',
+    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum.ZCREATIONDATE(UTC)',
+    datetime(zGenAlbum.ZCLOUDCREATIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum.ZCLOUDCREATIONDATE(UTC)',
+    datetime(zGenAlbum.ZSTARTDATE + 978307200, 'unixepoch') AS 'zGenAlbum.ZSTARTDATE(UTC)',
+    datetime(zGenAlbum.ZENDDATE + 978307200, 'unixepoch') AS 'zGenAlbum.ZENDDATE(UTC)',
+    datetime(zGenAlbum.ZCLOUDSUBSCRIPTIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum.ZCLOUDSUBSCRIPTIONDATE(UTC)',
 
     zGenAlbum.ZCLOUDMETADATA AS 'zGenAlbum.ZCLOUDMETADATA(HEX NSKeyed Plist)',
     zGenAlbum.ZPENDINGITEMSCOUNT AS 'zGenAlbum.ZPENDINGITEMSCOUNT',
@@ -256,8 +256,8 @@ SELECT
         ELSE 'Unknown Value: ' || zGenAlbum.ZCLOUDALBUMSUBTYPE || ''
     END AS 'zGenAlbum.ZCLOUDALBUMSUBTYPE',
 
-    datetime(zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE(UTC)',
-    datetime(zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE(UTC)',
+    datetime(zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE(UTC)',
+    datetime(zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE + 978307200, 'unixepoch') AS 'zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE(UTC)',
 
     CASE zGenAlbum.ZCLOUDNOTIFICATIONSENABLED
         WHEN 0 THEN '0 [zGenAlbum-Cloud Notifications Disabled]'
@@ -306,7 +306,7 @@ SELECT
         ELSE 'Unknown Value: ' || zGenAlbum.ZTRASHEDSTATE || ''
     END AS 'zGenAlbum.ZTRASHEDSTATE',
 
-    datetime(zGenAlbum.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum.ZTRASHEDDATE(UTC)',
+    datetime(zGenAlbum.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'zGenAlbum.ZTRASHEDDATE(UTC)',
 
     CASE zGenAlbum.ZCLOUDDELETESTATE
         WHEN 0 THEN '0 [zGenAlbum Cloud Not Deleted]'
@@ -400,7 +400,7 @@ A
         ELSE 'Unknown Value: ' || zCldShareAlbumInvRec.ZINVITATIONSTATE || ''
     END AS 'zCldShareAlbumInvRec.ZINVITATIONSTATE',
 
-    datetime(zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE + 978307200, 'UNIXEPOCH') AS 'zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE(UTC)',
+    datetime(zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE + 978307200, 'unixepoch') AS 'zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE(UTC)',
 
     zCldShareAlbumInvRec.ZINVITEEFIRSTNAME AS 'zCldShareAlbumInvRec.ZINVITEEFIRSTNAME',
     zCldShareAlbumInvRec.ZINVITEELASTNAME AS 'zCldShareAlbumInvRec.ZINVITEELASTNAME',

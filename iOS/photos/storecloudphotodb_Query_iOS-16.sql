@@ -6,14 +6,14 @@ Query copied from
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
 
-    datetime(scopes.creationDate + 978307200, 'UNIXEPOCH') AS 'scopes.creationDate',
+    datetime(scopes.creationDate + 978307200, 'unixepoch') AS 'scopes.creationDate',
 
     -- [scopes.scopeIdentifier = Photos.sqlite_zShare.ScopeID]
     scopes.scopeIdentifier AS 'scopes.scopeIdentifier',
 
-    datetime(scopes.initialSyncDate + 978307200, 'UNIXEPOCH') AS 'scopes.initialSyncDate',
+    datetime(scopes.initialSyncDate + 978307200, 'unixepoch') AS 'scopes.initialSyncDate',
 
     cloudCache.class AS 'cloudCache.class',
     statusCenter.class AS 'statusCenter.class',
@@ -50,7 +50,7 @@ SELECT
     downloadQueue.taskIdentifier AS 'downloadQueue.taskIdentifier',
     downloadQueue.retryCount AS 'downloadQueue.retryCount',
 
-    datetime(idMapping.addTimestamp + 978307200, 'UNIXEPOCH') AS 'idMapping.addTimestamp(UTC)',
+    datetime(idMapping.addTimestamp + 978307200, 'unixepoch') AS 'idMapping.addTimestamp(UTC)',
 
     CASE cloudCache.confirmed
         WHEN 1 THEN '1 [Yes]'
@@ -63,10 +63,10 @@ SELECT
         ELSE 'Unknown Value: ' || cloudCache.state || ''
     END AS 'cloudCache.state',
 
-    datetime(scopes.disabledDate + 978307200, 'UNIXEPOCH') AS 'scopes.disabledDate(UTC)',
+    datetime(scopes.disabledDate + 978307200, 'unixepoch') AS 'scopes.disabledDate(UTC)',
     -- [scopes.deleteDate = zShare.ExpiryDate]
-    datetime(scopes.deleteDate + 978307200, 'UNIXEPOCH') AS 'scopes.deleteDate(UTC)',
-    datetime(idMapping.deleteTimestamp + 978307200, 'UNIXEPOCH') AS 'idMapping.deleteTimestamp(UTC)',
+    datetime(scopes.deleteDate + 978307200, 'unixepoch') AS 'scopes.deleteDate(UTC)',
+    datetime(idMapping.deleteTimestamp + 978307200, 'unixepoch') AS 'idMapping.deleteTimestamp(UTC)',
 
     CASE idMapping.deleteDirection
         WHEN 1 THEN '1 [Deleted via Recently Deleted via Device Photos App]'
@@ -99,9 +99,9 @@ SELECT
     scopes.estimatedSize AS 'scopes.estimatedSize',
     scopes.estimatedAssetCount AS 'scopes.estimatedAssetCount',
 
-    datetime(scopes.lastClearedPush + 978307200, 'UNIXEPOCH') AS 'scopes.lastClearedPush(UTC)',
-    datetime(scopes.lastLibraryInfoUpdate + 978307200, 'UNIXEPOCH') AS 'scopes.lastLibraryInfoUpdate(UTC)',
-    datetime(scopes.pullFromTransportLastCompletionDate + 978307200, 'UNIXEPOCH') AS 'scopes.pullFromTransportLastCompletionDate(UTC)',
+    datetime(scopes.lastClearedPush + 978307200, 'unixepoch') AS 'scopes.lastClearedPush(UTC)',
+    datetime(scopes.lastLibraryInfoUpdate + 978307200, 'unixepoch') AS 'scopes.lastLibraryInfoUpdate(UTC)',
+    datetime(scopes.pullFromTransportLastCompletionDate + 978307200, 'unixepoch') AS 'scopes.pullFromTransportLastCompletionDate(UTC)',
 
     scopes.droppedSomeRecords AS 'scopes.droppedSomeRecords',
     scopes.featureVersion AS 'scopes.featureVersion',
@@ -137,7 +137,7 @@ SELECT
     pushRepository.relatedIdentifier AS 'pushRepository.relatedIdentifier',
     pushRepository.secondaryIdentifier AS 'pushRepository.secondaryIdentifier',
 
-    datetime(pushRepository.dequeueOrder + 978307200, 'UNIXEPOCH') AS 'pushRepository.dequeueOrder(UTC)',
+    datetime(pushRepository.dequeueOrder + 978307200, 'unixepoch') AS 'pushRepository.dequeueOrder(UTC)',
 
     pushRepository.trashed AS 'pushRepository.trashed',
     pushRepository.uploadIdentifier AS 'pushRepository.uploadIdentifier',

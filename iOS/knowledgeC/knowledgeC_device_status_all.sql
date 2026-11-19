@@ -1,43 +1,43 @@
 /*
 [DLU]
-    05-Sep-2025
+    19-Nov-2026
 [DATABASE PATH]
     /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
 */
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'ROW_NUMBER',
-    ZOBJECT.Z_PK AS 'ZOBJECT.Z_PK',
+    ROW_NUMBER() OVER ( ORDER BY ZOBJECT.ZSTARTDATE ) AS "RowNumber",
+
+    ZOBJECT.Z_PK AS "ZPk",
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
-        WHEN '1' THEN '1 [Sunday]'
-        WHEN '2' THEN '2 [Monday]'
-        WHEN '3' THEN '3 [Tuesday]'
-        WHEN '4' THEN '4 [Wednesday]'
-        WHEN '5' THEN '5 [Thursday]'
-        WHEN '6' THEN '6 [Friday]'
-        WHEN '7' THEN '7 [Saturday]'
-        ELSE ZOBJECT.ZSTARTDAYOFWEEK
-    END AS 'ZOBJECT.ZSTARTDAYOFWEEK',
+        WHEN 1 THEN 'Sunday'
+        WHEN 2 THEN 'Monday'
+        WHEN 3 THEN 'Tuesday'
+        WHEN 4 THEN 'Wednesday'
+        WHEN 5 THEN 'Thursday'
+        WHEN 6 THEN 'Friday'
+        WHEN 7 THEN 'Saturday'
+    END AS "StartDayOfWeek",
 
-    datetime(ZOBJECT.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZSTARTDATE(UTC)',
-    datetime(ZOBJECT.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZENDDATE(UTC)',
-    (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'ZOBJECT.ZSECONDSFROMGMT',
-    (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) AS 'USAGE(Seconds)',
-    ROUND(((ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) / 60.00), 4) AS 'USAGE(Minutes)',
-    ZOBJECT.ZSTREAMNAME AS 'ZOBJECT.ZSTREAMNAME',
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZSTARTDATE + 978307200, 'unixepoch' ) AS "StartDateUtc",
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZENDDATE + 978307200, 'unixepoch' ) AS "EndDateUtc",
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZCREATIONDATE + 978307200, 'unixepoch' ) AS "CreationDateUtc",
+
+    ( ZOBJECT.ZSECONDSFROMGMT / 3600 ) AS "SecondsFromGmt",
+    ( ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE ) AS "UsageSeconds",
+    ROUND ( ( ( ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE ) / 60.00 ), 4 ) AS "UsageMinutes",
+    ZOBJECT.ZSTREAMNAME AS "StreamName",
 
     CASE ZOBJECT.ZVALUEINTEGER
-        WHEN '0.0' THEN '0.0 [False]'
-        WHEN '1.0' THEN '1.0 [True]'
+        WHEN '0.0' THEN 'False'
+        WHEN '1.0' THEN 'True'
         ELSE ZOBJECT.ZVALUEINTEGER
-    END AS 'ZOBJECT.ZVALUEINTEGER',
-
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZCREATIONDATE(UTC)'
+    END AS "ValueInteger",
 
     /* Source for each line of data */
-    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DATA_SOURCE'
+    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS "DataSource"
 
 
 FROM ZOBJECT

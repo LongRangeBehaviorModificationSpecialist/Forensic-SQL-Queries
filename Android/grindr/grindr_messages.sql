@@ -1,6 +1,6 @@
 /*
 [DLU]
-    03_Sep_2025
+    19-Nov-2026
 [OS Version]
     Android 16
 */
@@ -8,205 +8,208 @@
 
 SELECT
 
-    chat_messages.message_id AS 'message_id',
-    chat_messages.conversation_id AS 'conversation_id',
-    chat_conversations.name AS 'conversation_name',
-    chat_messages.sender AS 'sender',
-    chat_messages.recipient AS 'recipient',
+    /* Add a row number at the beggining of each row */
+    ROW_NUMBER() OVER ( ORDER BY chat_messages.timestamp ) AS "RowNumber",
 
-    datetime(chat_messages.timestamp / 1000, 'UNIXEPOCH') AS 'time_stamp_utc',
+    chat_messages.message_id AS "MessageId",
+    chat_messages.conversation_id AS "ConversationId",
+    chat_conversations.name AS "ConversationName",
+    chat_messages.sender AS "Sender",
+    chat_messages.recipient AS "Recipient",
 
-    chat_messages.type AS 'message_type',
+    strftime ( '%F_%H:%M:%f', chat_messages.timestamp / 1000.0, 'unixepoch' ) AS "TimeStampUtc",
+
+    chat_messages.type AS "MessageType",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.text') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.text')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.text' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.text' )
         ELSE NULL
-    END AS 'message_text',
+    END AS "MessageText",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.photoContentReply') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.photoContentReply')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.photoContentReply' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.photoContentReply' )
         ELSE NULL
-    END AS 'photo_content_reply',
+    END AS "PhotoContentReply",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.albumContentReply') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.albumContentReply')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.albumContentReply' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.albumContentReply' )
         ELSE NULL
-    END AS 'album_content_reply',
+    END AS "AlbumContentReply",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.mediaId') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.mediaId')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.mediaId' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.mediaId' )
         ELSE NULL
-    END AS 'media_id',
+    END AS "MediaId",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.url') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.url')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.url' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.url' )
         ELSE NULL
-    END AS 'url',
+    END AS "Url",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.lat') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.lat')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.lat' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.lat' )
         ELSE NULL
-    END AS 'latitude',
+    END AS "Latitude",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.lon') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.lon')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.lon' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.lon' )
         ELSE NULL
-    END AS 'longitude',
+    END AS "Longitude",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.albumId') IS NOT NULL
-            THEN json_extract(body, '$.albumId')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.albumId' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.albumId' )
         ELSE NULL
-    END AS 'album_id',
+    END AS "AlbumId",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.ownerProfileId') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.ownerProfileId')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.ownerProfileId' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.ownerProfileId' )
         ELSE NULL
-    END AS 'owner_profile_id',
+    END AS "OwnerProfileId",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.coverUrl') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.coverUrl')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.coverUrl' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.coverUrl' )
         ELSE NULL
-    END AS 'cover_url',
+    END AS "CoverUrl",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.albumContentId') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.albumContentId')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.albumContentId' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.albumContentId' )
         ELSE NULL
-    END AS 'album_content_id',
+    END AS "AlbumContentId",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.contentType') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.contentType')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.contentType' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.contentType' )
         ELSE NULL
-    END AS 'content_type',
+    END AS "ContentType",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.hasPhoto') IS NOT NULL
-            AND json_extract(chat_messages.body, '$.hasPhoto') = TRUE
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.hasPhoto' ) IS NOT NULL
+            AND json_extract ( chat_messages.body, '$.hasPhoto' ) = TRUE
                 THEN 'Yes'
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.hasPhoto') IS NOT NULL
-            AND json_extract(chat_messages.body, '$.hasPhoto') = FALSE
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.hasPhoto' ) IS NOT NULL
+            AND json_extract ( chat_messages.body, '$.hasPhoto' ) = FALSE
                 THEN 'No'
         ELSE NULL
-    END AS 'has_photo',
+    END AS "HasPhoto",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.hasVideo') IS NOT NULL
-            AND json_extract(chat_messages.body, '$.hasVideo') = TRUE
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.hasVideo' ) IS NOT NULL
+            AND json_extract ( chat_messages.body, '$.hasVideo' ) = TRUE
                 THEN 'Yes'
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.hasVideo') IS NOT NULL
-            AND json_extract(chat_messages.body, '$.hasVideo') = FALSE
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.hasVideo' ) IS NOT NULL
+            AND json_extract ( chat_messages.body, '$.hasVideo' ) = FALSE
                 THEN 'No'
         ELSE NULL
-    END AS 'has_video',
+    END AS "HasVideo",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.isViewable') IS NOT NULL
-            AND json_extract(chat_messages.body, '$.isViewable') = TRUE
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.isViewable' ) IS NOT NULL
+            AND json_extract ( chat_messages.body, '$.isViewable' ) = TRUE
                 THEN 'Yes'
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.isViewable') IS NOT NULL
-            AND json_extract(chat_messages.body, '$.isViewable') = FALSE
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.isViewable' ) IS NOT NULL
+            AND json_extract ( chat_messages.body, '$.isViewable' ) = FALSE
                 THEN 'No'
         ELSE NULL
-    END AS 'is_viewable',
+    END AS "IsViewable",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.viewableUntil') IS NOT NULL
-            THEN datetime(json_extract(chat_messages.body, '$.viewableUntil') / 1000, 'UNIXEPOCH')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.viewableUntil' ) IS NOT NULL
+            THEN strftime ( '%F_%H:%M:%f', ( json_extract ( chat_messages.body, '$.viewableUntil' ) / 1000.0, 'unixepoch' ) )
         ELSE NULL
-    END AS 'viewable_until_utc',
+    END AS "ViewableUntilUtc",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.hasUnseenContent') IS NOT NULL
-            AND json_extract(chat_messages.body, '$.hasUnseenContent') = TRUE
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.hasUnseenContent' ) IS NOT NULL
+            AND json_extract ( chat_messages.body, '$.hasUnseenContent' ) = TRUE
                 THEN 'Yes'
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.hasUnseenContent') IS NOT NULL
-            AND json_extract(chat_messages.body, '$.hasUnseenContent') = FALSE
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.hasUnseenContent' ) IS NOT NULL
+            AND json_extract ( chat_messages.body, '$.hasUnseenContent' ) = FALSE
                 THEN 'No'
         ELSE NULL
-    END AS 'has_unseen_content',
+    END AS "HasUnseenContent",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.albumNumber') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.albumNumber')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.albumNumber' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.albumNumber' )
         ELSE NULL
-    END AS 'album_number',
+    END AS "AlbumNumber",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.totalAlbumsShared') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.totalAlbumsShared')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.totalAlbumsShared' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.totalAlbumsShared' )
         ELSE NULL
-    END AS 'total_albums_shared',
+    END AS "TotalAlbumsShared",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.length') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.length')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.length' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.length' )
         ELSE NULL
-    END AS 'length',
+    END AS "Length",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.duration') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.duration')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.duration' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.duration' )
         ELSE NULL
-    END AS 'duration',
+    END AS "Duration",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.height') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.height')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.height' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.height' )
         ELSE NULL
-    END AS 'height',
+    END AS "Height",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.width') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.width')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.width' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.width' )
         ELSE NULL
-    END AS 'width',
+    END AS "Width",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.imageHash') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.imageHash')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.imageHash' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.imageHash' )
         ELSE NULL
-    END AS 'image_hash',
+    END AS "ImageHash",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.maxViews') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.maxViews')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.maxViews' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.maxViews' )
         ELSE NULL
-    END AS 'max_views',
+    END AS "MaxViews",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.viewsRemaining') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.viewsRemaining')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.viewsRemaining' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.viewsRemaining' )
         ELSE NULL
-    END AS 'views_remaining',
+    END AS "ViewsRemaining",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.createdAt') IS NOT NULL
-            THEN datetime(json_extract(chat_messages.body, '$.createdAt') / 1000, 'UNIXEPOCH')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.createdAt' ) IS NOT NULL
+            THEN strftime ( '%F_%H:%M:%f', ( json_extract ( chat_messages.body, '$.createdAt' ) / 1000.0, 'unixepoch' ) )
         ELSE NULL
-    END AS 'created_date_utc',
+    END AS "CreatedDateUtc",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.expiresAt') IS NOT NULL
-            THEN datetime(json_extract(chat_messages.body, '$.expiresAt') / 1000, 'UNIXEPOCH')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.expiresAt' ) IS NOT NULL
+            THEN strftime ( '%F_%H:%M:%f', ( json_extract ( chat_messages.body, '$.expiresAt' ) / 1000.0, 'unixepoch' ) )
         ELSE NULL
-    END AS 'expires_at_utc',
+    END AS "ExpiresAtUtc",
 
     CASE
-        WHEN json_valid(chat_messages.body) AND json_extract(chat_messages.body, '$.expirationType') IS NOT NULL
-            THEN json_extract(chat_messages.body, '$.expirationType')
+        WHEN json_valid ( chat_messages.body ) AND json_extract ( chat_messages.body, '$.expirationType' ) IS NOT NULL
+            THEN json_extract ( chat_messages.body, '$.expirationType' )
         ELSE NULL
-    END AS 'expiration_type'
+    END AS "ExpirationType"
 
 
 FROM chat_messages

@@ -7,7 +7,7 @@ Copied from
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RowNumber',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
 
     ZWACHATSESSION.ZPARTNERNAME AS 'PartnerName',
 
@@ -30,7 +30,7 @@ SELECT
         WHEN 15 THEN 'Sticker [15]'
         ELSE ZWAMESSAGE.ZMESSAGETYPE
 T
-    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'UNIXEPOCH') AS 'MessageDateUtc',
+    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch') AS 'MessageDateUtc',
 
     ZWAMESSAGE.ZTEXT AS 'Text'
 

@@ -7,7 +7,7 @@
 
 SELECT
 
-    ROW_NUMBER() OVER () AS 'RecordNumber',
+    ROW_NUMBER() OVER () AS "RowNumber",
     ZASSET.Z_PK AS 'Z_PK',
     ZGENERICALBUM.ZTITLE AS 'AlbumTitle',
     ZASSET.ZDIRECTORY AS 'Directory',
@@ -29,9 +29,9 @@ SELECT
         ELSE 'Unknown Value: ' || ZASSET.ZHIDDEN
     END AS 'IsHidden',
 
-    datetime(ZASSET.ZDATECREATED + 978307200, 'UNIXEPOCH') AS 'DateCreated(UTC)',
-    datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'ModificationDate(UTC)',
-    datetime(ZASSET.ZADDEDDATE + 978307200, 'UNIXEPOCH') AS 'DateAdded(UTC)',
+    datetime(ZASSET.ZDATECREATED + 978307200, 'unixepoch') AS 'DateCreated(UTC)',
+    datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'unixepoch') AS 'ModificationDate(UTC)',
+    datetime(ZASSET.ZADDEDDATE + 978307200, 'unixepoch') AS 'DateAdded(UTC)',
 
     CASE ZASSET.ZTRASHEDSTATE
         WHEN 0 THEN '0 [Not In Trash]'
@@ -41,7 +41,7 @@ SELECT
 
     CASE
         WHEN ZASSET.ZTRASHEDDATE IS NULL THEN '[N/A]'
-        ELSE datetime(ZASSET.ZTRASHEDDATE + 978307200, 'UNIXEPOCH')
+        ELSE datetime(ZASSET.ZTRASHEDDATE + 978307200, 'unixepoch')
     END AS 'TrashedDate(UTC)',
 
     CASE ZASSET.ZLATITUDE
@@ -55,7 +55,7 @@ SELECT
     END 'Longitude',
 
     /* Source for each line of data */
-    'Photos.sqlite; ZASSET(Z_PK:' || ZASSET.Z_PK || ')' AS 'DataSource'
+    'Photos.sqlite; ZASSET(Z_PK:' || ZASSET.Z_PK || ')' AS "DataSource"
 
 
 FROM ZASSET

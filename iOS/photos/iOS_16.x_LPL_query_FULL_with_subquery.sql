@@ -9,7 +9,7 @@ WITH joined AS (
 
     SELECT
 
-        ROW_NUMBER() OVER() AS '001_record_number',
+        ROW_NUMBER() OVER ( ORDER BY  ) AS '001_record_number',
         ZASSET.ZSORTTOKEN AS '002_ZASSET.zsorttoken',
         ZASSET.ZPROMOTIONSCORE AS '003_ZASSET.zpromotionscore',
 
@@ -60,7 +60,7 @@ WITH joined AS (
         ZCLOUDMASTER.ZORIGINALFILENAME AS '029_ZCLOUDMASTER.zoriginalfilename',
         ZADDASSETATTR.ZSYNDICATIONIDENTIFIER AS '030_ZADDASSETATTR.zsyndicationidentifier',
 
-        datetime(ZASSET.ZADDEDDATE + 978307200, 'UNIXEPOCH') AS '031_ZASSET.zaddeddate_utc',
+        datetime(ZASSET.ZADDEDDATE + 978307200, 'unixepoch') AS '031_ZASSET.zaddeddate_utc',
 
         CASE ZADDASSETATTR.ZDATECREATEDSOURCE
             WHEN 0 THEN 'Cloud Asset [0]'
@@ -69,16 +69,16 @@ WITH joined AS (
             ELSE 'Unknown Value: ' || ZADDASSETATTR.ZDATECREATEDSOURCE || ''
         END AS '032_ZADDASSETATTR.zdatecreatedsource',
 
-        datetime(ZASSET.ZDATECREATED + 978307200, 'UNIXEPOCH') AS '033_ZASSET.zdatecreated_utc',
-        datetime(ZCLOUDMASTER.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS '034_ZCLOUDMASTER.zcreationdate_utc',
-        datetime(ZINTERNALRESOURCE.ZCLOUDMASTERDATECREATED + 978307200, 'UNIXEPOCH') AS '035_ZINTERNALRESOURCE.zcloudmasterdatecreated_utc',
+        datetime(ZASSET.ZDATECREATED + 978307200, 'unixepoch') AS '033_ZASSET.zdatecreated_utc',
+        datetime(ZCLOUDMASTER.ZCREATIONDATE + 978307200, 'unixepoch') AS '034_ZCLOUDMASTER.zcreationdate_utc',
+        datetime(ZINTERNALRESOURCE.ZCLOUDMASTERDATECREATED + 978307200, 'unixepoch') AS '035_ZINTERNALRESOURCE.zcloudmasterdatecreated_utc',
 
         ZADDASSETATTR.ZTIMEZONENAME AS '036_ZADDASSETATTR.ztimezonename',
         ZADDASSETATTR.ZTIMEZONEOFFSET AS '037_ZADDASSETATTR.ztimezoneoffset',
         ZADDASSETATTR.ZINFERREDTIMEZONEOFFSET AS '038_ZADDASSETATTR.zinferredtimezoneoffset',
         ZADDASSETATTR.ZEXIFTIMESTAMPSTRING AS '039_ZADDASSETATTR.zexiftimestampstring',
 
-        datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS '040_ZASSET.zmodificationdate_utc',
+        datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'unixepoch') AS '040_ZASSET.zmodificationdate_utc',
 
         ZINTERNALRESOURCE.ZFINGERPRINT AS '041_ZINTERNALRESOURCE.ZFINGERPRINT',
         -- ZADDASSETATTR.ZADJUSTEDFINGERPRINT AS '042_ZADDASSETATTR.zadjustedfingerprint',
@@ -93,8 +93,8 @@ WITH joined AS (
 
         ParentZGENALBUM.ZTITLE AS '046_PARENTZGENALBUM.ztitle',
 
-        datetime(ParentZGENALBUM.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS '047_PARENTZGENALBUM.zcreationdate_utc',
-        datetime(ZGENALBUM.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS '048_ZGENALBUM.zcreationdate_utc',
+        datetime(ParentZGENALBUM.ZCREATIONDATE + 978307200, 'unixepoch') AS '047_PARENTZGENALBUM.zcreationdate_utc',
+        datetime(ZGENALBUM.ZCREATIONDATE + 978307200, 'unixepoch') AS '048_ZGENALBUM.zcreationdate_utc',
 
         CASE ZGENALBUM.ZCLOUDLOCALSTATE
             WHEN 0 THEN 'iCloud Photos ON (Asset In Shared/Other Album) | iCloud Photos OFF (Generic Album) [0]'
@@ -390,11 +390,11 @@ WITH joined AS (
 
         CASE ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE
             WHEN 0 THEN 'N/A [0]'
-            ELSE datetime(ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE + 978307200, 'UNIXEPOCH')
+            ELSE datetime(ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE + 978307200, 'unixepoch')
         END AS '091_ZINTERNALRESOURCE.zcloudlastprefetchdate_utc',
 
         ZINTERNALRESOURCE.ZCLOUDPREFETCHCOUNT AS '092_ZINTERNALRESOURCE.ZCLOUDPREFETCHCOUNT',
-        datetime(ZINTERNALRESOURCE.ZCLOUDLASTONDEMANDDOWNLOADDATE + 978307200, 'UNIXEPOCH') AS '093_ZINTERNALRESOURCE.zcloudlastondemanddownloaddate_utc',
+        datetime(ZINTERNALRESOURCE.ZCLOUDLASTONDEMANDDOWNLOADDATE + 978307200, 'unixepoch') AS '093_ZINTERNALRESOURCE.zcloudlastondemanddownloaddate_utc',
 
         CASE ZINTERNALRESOURCE.ZUTICONFORMANCEHINT
             WHEN 0 THEN 'N/A, Does Not Conform [0]'
@@ -435,22 +435,22 @@ WITH joined AS (
             ELSE 'Unknown Value: ' || ZCLOUDMASTER.ZCLOUDLOCALSTATE || ''
         END AS '100_ZCLOUDMASTER.zcloudlocalstate',
 
-        datetime(ZCLOUDMASTER.ZIMPORTDATE + 978307200, 'UNIXEPOCH') AS '101_ZCLOUDMASTER.zimportdate_utc',
+        datetime(ZCLOUDMASTER.ZIMPORTDATE + 978307200, 'unixepoch') AS '101_ZCLOUDMASTER.zimportdate_utc',
 
         ZASSET.ZIMPORTSESSION AS '102_ZASSET.zimportsession',
         ZADDASSETATTR.ZIMPORTSESSIONID AS '103_ZADDASSETATTR.zimportsessionid',
 
-        datetime(ZADDASSETATTR.ZALTERNATEIMPORTIMAGEDATE + 978307200, 'UNIXEPOCH') AS '104_ZADDASSETATTR.zalternateimportimagedate_utc',
+        datetime(ZADDASSETATTR.ZALTERNATEIMPORTIMAGEDATE + 978307200, 'unixepoch') AS '104_ZADDASSETATTR.zalternateimportimagedate_utc',
 
         ZCLOUDMASTER.ZIMPORTSESSIONID AS '105_ZCLOUDMASTER.zimportsessionid',
 
-        datetime(ZASSET.ZCLOUDBATCHPUBLISHDATE + 978307200, 'UNIXEPOCH') AS '106_ZASSET.zcloudbatchpublishdate_utc',
-        datetime(ZASSET.ZCLOUDSERVERPUBLISHDATE + 978307200, 'UNIXEPOCH') AS '107_ZASSET.zcloudserverpublishdate_utc',
+        datetime(ZASSET.ZCLOUDBATCHPUBLISHDATE + 978307200, 'unixepoch') AS '106_ZASSET.zcloudbatchpublishdate_utc',
+        datetime(ZASSET.ZCLOUDSERVERPUBLISHDATE + 978307200, 'unixepoch') AS '107_ZASSET.zcloudserverpublishdate_utc',
 
         ZASSET.ZCLOUDDOWNLOADREQUESTS AS '108_ZASSET.zclouddownloadrequests',
         ZASSET.ZCLOUDBATCHID AS '109_ZASSET.zcloudbatchid',
 
-        datetime(ZADDASSETATTR.ZLASTUPLOADATTEMPTDATE + 978307200, 'UNIXEPOCH') AS '110_ZADDASSETATTR.zlastuploadattemptdate(swy)_utc',
+        datetime(ZADDASSETATTR.ZLASTUPLOADATTEMPTDATE + 978307200, 'unixepoch') AS '110_ZADDASSETATTR.zlastuploadattemptdate(swy)_utc',
 
         ZADDASSETATTR.ZUPLOADATTEMPTS AS '111_ZADDASSETATTR.zuploadattempts',
 
@@ -660,8 +660,8 @@ WITH joined AS (
         -- [ZUNMADJ.Z_PK = ZADDASSETATTR.ZUNMANAGEDADJUSTMENT]
         ZUNMADJ.Z_PK AS '167_ZUNMADJ.z_pk',
         ZUNMADJ.ZUUID AS '168_ZUNMADJ.uuid',
-        datetime(ZASSET.ZADJUSTMENTTIMESTAMP + 978307200, 'UNIXEPOCH') AS '169_ZASSET.zadjustmenttimestamp_utc',
-        datetime(ZUNMADJ.ZADJUSTMENTTIMESTAMP + 978307200, 'UNIXEPOCH') AS '170_ZUNMADJ.zadjustmenttimestamp_utc',
+        datetime(ZASSET.ZADJUSTMENTTIMESTAMP + 978307200, 'unixepoch') AS '169_ZASSET.zadjustmenttimestamp_utc',
+        datetime(ZUNMADJ.ZADJUSTMENTTIMESTAMP + 978307200, 'unixepoch') AS '170_ZUNMADJ.zadjustmenttimestamp_utc',
         ZADDASSETATTR.ZEDITORBUNDLEID AS '171_ZADDASSETATTR.zeditorbundleid',
         ZUNMADJ.ZEDITORLOCALIZEDNAME AS '172_ZUNMADJ.zeditorlocalizedname',
         ZUNMADJ.ZADJUSTMENTFORMATIDENTIFIER AS '173_ZUNMADJ.zadjustmentformatidentifier',
@@ -710,7 +710,7 @@ WITH joined AS (
             ELSE 'Unknown Value: ' || ZASSET.ZTRASHEDSTATE || ''
         END AS '180_ZASSET.ztrashedstate (local asset recently deleted)',
 
-        datetime(ZASSET.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS '181_ZASSET.ztrasheddate_utc',
+        datetime(ZASSET.ZTRASHEDDATE + 978307200, 'unixepoch') AS '181_ZASSET.ztrasheddate_utc',
 
         CASE ZASSET.ZDELETEREASON
             WHEN 1 THEN 'Delete Reason - Still Testing [1]'
@@ -730,7 +730,7 @@ WITH joined AS (
             ELSE 'Unknown Value: ' || ZINTERNALRESOURCE.ZTRASHEDSTATE || ''
         END AS '184_ZINTERNALRESOURCE.ztrashedstate',
 
-        datetime(ZINTERNALRESOURCE.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS '185_ZINTERNALRESOURCE.ztrasheddate_utc',
+        datetime(ZINTERNALRESOURCE.ZTRASHEDDATE + 978307200, 'unixepoch') AS '185_ZINTERNALRESOURCE.ztrasheddate_utc',
 
         CASE ZASSET.ZCLOUDDELETESTATE
             WHEN 0 THEN 'CLOUD Asset Not Deleted [0]'
@@ -758,8 +758,8 @@ WITH joined AS (
 
         ZINTERNALRESOURCE.ZCLOUDDELETEASSETUUIDWITHRESOURCETYPE AS '190_ZINTERNALRESOURCE.zclouddeleteassetuuidwithresourcetype',
 
-        datetime(ZMEDIAANALYSISASSETATTRIBUTES.ZMEDIAANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS '191_ZMEDIAANALYSISASSETATTRIBUTES.zmediaanalysistimestamp_utc',
-        datetime(ZASSET.ZANALYSISSTATEMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS '192_ZASSET.zanalysisstatemodificationdate_utc',
+        datetime(ZMEDIAANALYSISASSETATTRIBUTES.ZMEDIAANALYSISTIMESTAMP + 978307200, 'unixepoch') AS '191_ZMEDIAANALYSISASSETATTRIBUTES.zmediaanalysistimestamp_utc',
+        datetime(ZASSET.ZANALYSISSTATEMODIFICATIONDATE + 978307200, 'unixepoch') AS '192_ZASSET.zanalysisstatemodificationdate_utc',
 
         ZADDASSETATTR.ZPENDINGVIEWCOUNT AS '193_ZADDASSETATTR.zpendingviewcount',
         ZADDASSETATTR.ZVIEWCOUNT AS '194_ZADDASSETATTR.zviewcount',
@@ -768,7 +768,7 @@ WITH joined AS (
         ZADDASSETATTR.ZPENDINGSHARECOUNT AS '197_ZADDASSETATTR.zpendingsharecount',
         ZADDASSETATTR.ZSHARECOUNT AS '198_ZADDASSETATTR.zsharecount',
 
-        datetime(ZASSET.ZLASTSHAREDDATE + 978307200, 'UNIXEPOCH') AS '199_ZASSET.zlastshareddate_utc',
+        datetime(ZASSET.ZLASTSHAREDDATE + 978307200, 'unixepoch') AS '199_ZASSET.zlastshareddate_utc',
 
         ZADDASSETATTR.ZSHAREORIGINATOR AS '200_ZADDASSETATTR.zshareoriginator',
 
@@ -792,7 +792,7 @@ WITH joined AS (
             ELSE 'Unknown Value: ' || ZMEDIAANALYSISASSETATTRIBUTES.ZSYNDICATIONPROCESSINGVALUE || ''
         END AS '204_ZMEDIAANALYSISASSETATTRIBUTES.zsyndicationprocessingvalue',
 
-        -- datetime(ZMEDIAANALYSISASSETATTRIBUTES.ZVAANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS '205_ZMEDIAANALYSISASSETATTRIBUTES.zvaanalysistimestamp_utc',
+        -- datetime(ZMEDIAANALYSISASSETATTRIBUTES.ZVAANALYSISTIMESTAMP + 978307200, 'unixepoch') AS '205_ZMEDIAANALYSISASSETATTRIBUTES.zvaanalysistimestamp_utc',
         -- ZMEDIAANALYSISASSETATTRIBUTES.ZVAANALYSISVERSION AS '206_ZMEDIAANALYSISASSETATTRIBUTES.zvaanalysisversion',
 
         CASE ZADDASSETATTR.ZALLOWEDFORANALYSIS
@@ -808,7 +808,7 @@ WITH joined AS (
             ELSE 'Unknown Value: ' || ZADDASSETATTR.ZSCENEANALYSISISFROMPREVIEW || ''
         END AS '209_ZADDASSETATTR.zsceneanalysisisfrompreview',
 
-        datetime(ZADDASSETATTR.ZSCENEANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS '210_ZADDASSETATTR.zsceneanalysistimestamp_utc',
+        datetime(ZADDASSETATTR.ZSCENEANALYSISTIMESTAMP + 978307200, 'unixepoch') AS '210_ZADDASSETATTR.zsceneanalysistimestamp_utc',
 
         CASE ZASSET.ZDUPLICATEASSETVISIBILITYSTATE
             WHEN 0 THEN 'No Duplicates [0]'

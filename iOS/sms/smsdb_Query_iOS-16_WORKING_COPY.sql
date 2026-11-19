@@ -1,6 +1,6 @@
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
     message.ROWID AS 'message.ROWID',
 --     chat.service_name AS 'chat.service name',
 --     handle.service AS 'handle.service',
@@ -28,7 +28,7 @@ SELECT
 
 --     CASE chat_message_join.message_date
 --         WHEN 0 THEN ''
---         ELSE datetime((chat_message_join.message_date / 1000000000) + 978307200, 'UNIXEPOCH')
+--         ELSE datetime((chat_message_join.message_date / 1000000000) + 978307200, 'unixepoch')
 --     END AS 'chat_message_join.message_date',
 
 --     message.guid AS 'message_guid',
@@ -42,22 +42,22 @@ SELECT
 
     CASE message.date
         WHEN 0 THEN '[N/A]'
-        ELSE datetime((message.date / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((message.date / 1000000000) + 978307200, 'unixepoch')
     END AS 'message.date',
 
     CASE message.date_delivered
         WHEN 0 THEN '[N/A]'
-        ELSE datetime((message.date_delivered / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((message.date_delivered / 1000000000) + 978307200, 'unixepoch')
     END AS 'message.date_delivered',
 
     CASE message.date_read
         WHEN 0 THEN '[N/A]'
-        ELSE datetime((message.date_read / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((message.date_read / 1000000000) + 978307200, 'unixepoch')
     END AS 'message.date_read',
 
 --     CASE chat.last_read_message_timestamp
 --         WHEN 0 THEN '0'
---         ELSE datetime((chat.last_read_message_timestamp / 1000000000) + 978307200, 'UNIXEPOCH')
+--         ELSE datetime((chat.last_read_message_timestamp / 1000000000) + 978307200, 'unixepoch')
 --     END AS 'chat.last_read_message_timestamp',
 
     CASE message.was_data_detected
@@ -76,12 +76,12 @@ SELECT
 
     CASE attachment.created_date
         WHEN 0 THEN '[N/A]'
-        ELSE datetime(attachment.created_date + 978307200, 'UNIXEPOCH')
+        ELSE datetime(attachment.created_date + 978307200, 'unixepoch')
     END AS 'attachment.created_date',
 
     CASE attachment.start_date
         WHEN 0 THEN '[N/A]'
-        ELSE datetime(attachment.start_date + 978307200, 'UNIXEPOCH')
+        ELSE datetime(attachment.start_date + 978307200, 'unixepoch')
     END AS 'attachment.start_date',
 
     CASE attachment.is_outgoing
@@ -103,7 +103,7 @@ SELECT
 
 --     CASE chat.syndication_date
 --         WHEN 0 THEN '0'
---         ELSE datetime((chat.syndication_date / 1000000000) + 978307200, 'UNIXEPOCH')
+--         ELSE datetime((chat.syndication_date / 1000000000) + 978307200, 'unixepoch')
 --     END AS 'chat.syndication_date',
 
 --     CASE chat.syndication_type
@@ -179,7 +179,7 @@ SELECT
 --     message.ck_record_change_tag AS 'message.ck_record_change_tag',
 --     attachment.ck_server_change_token_blob AS 'attachment.ck_server_change_token_blob',
     /* Source for each line of data */
-    '/private/var/mobile/Library/SMS/sms.db; Table: message(ROWID: ' || message.ROWID || ')' AS 'DataSource'
+    '/private/var/mobile/Library/SMS/sms.db; Table: message(ROWID: ' || message.ROWID || ')' AS "DataSource"
 
 FROM message
     LEFT JOIN message_attachment_join ON message.ROWID = message_attachment_join.message_id

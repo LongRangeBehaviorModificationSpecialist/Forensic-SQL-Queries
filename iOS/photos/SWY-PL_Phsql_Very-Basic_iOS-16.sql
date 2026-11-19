@@ -3,7 +3,7 @@ Query copied from https://github.com/ScottKjr3347/iOS_SWY_PL_Photos.sqlite_Queri
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'Record #',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS 'Record #',
     zAsset.Z_PK AS 'zAsset-zPK',
     zAddAssetAttr.Z_PK AS 'zAddAssetAttr-zPK',
     zAsset.ZUUID AS 'zAsset-UUID = store.cloudphotodb',
@@ -141,19 +141,19 @@ SELECT
         WHEN 4096 THEN '4096-STILLTESTING_SWY_Asset_Manually_Saved-4096'
         ELSE 'Unknown-New-Value!: ' || zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVALUE || ''
     END AS 'zMedAnlyAstAttr-Syndication Processing Value',
-    DateTime(zAsset.ZADDEDDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Add Date',
+    DateTime(zAsset.ZADDEDDATE + 978307200, 'unixepoch') AS 'zAsset-Add Date',
     CASE zAddAssetAttr.ZDATECREATEDSOURCE
         WHEN 0 THEN '0-Cloud-Asset-0'
         WHEN 1 THEN '1-Local_Asset_EXIF-1'
         WHEN 3 THEN '3-Local_Asset_No_EXIF-3'
         ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZDATECREATEDSOURCE || ''
     END AS 'zAddAssetAttr-Date Created Source',
-    DateTime(zAsset.ZDATECREATED + 978307200, 'UNIXEPOCH') AS 'zAsset-Date Created',
-    DateTime(zCldMast.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zCldMast-Creation Date',
+    DateTime(zAsset.ZDATECREATED + 978307200, 'unixepoch') AS 'zAsset-Date Created',
+    DateTime(zCldMast.ZCREATIONDATE + 978307200, 'unixepoch') AS 'zCldMast-Creation Date',
     zAddAssetAttr.ZTIMEZONENAME AS 'zAddAssetAttr-Time Zone Name',
     zAddAssetAttr.ZTIMEZONEOFFSET AS 'zAddAssetAttr-Time Zone Offset',
     zAddAssetAttr.ZEXIFTIMESTAMPSTRING AS 'zAddAssetAttr-EXIF-String',
-    DateTime(zAsset.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Modification Date',
+    DateTime(zAsset.ZMODIFICATIONDATE + 978307200, 'unixepoch') AS 'zAsset-Modification Date',
     CASE zCldMast.ZCLOUDLOCALSTATE
         WHEN 0 THEN '0-Not Synced with Cloud-0'
         WHEN 1 THEN '1-Pending Upload-1'

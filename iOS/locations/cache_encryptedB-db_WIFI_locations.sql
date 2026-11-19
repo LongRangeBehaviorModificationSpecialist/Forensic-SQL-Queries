@@ -1,4 +1,7 @@
 /*
+[DLU]
+    19-Nov-2026
+
 [Module Metadata]
 AUTHOR=[@mikespon]
 MODULE_NOTES=Locations from Wifi
@@ -12,24 +15,25 @@ VERSION=iOS 16.6 (20G75)
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RowNumber',
+    ROW_NUMBER() OVER ( ORDER BY WifiLocation.timestamp ) AS "RowNumber",
 
-    strftime('%Y-%m-%dT%H:%M:%SZ', datetime(timestamp + 978307200, 'UNIXEPOCH')) AS 'TimestampUtc',
-    strftime('%Y-%m-%d %H:%M:%S', datetime(timestamp + 978307200, 'UNIXEPOCH', 'localtime')) AS 'TimestampLocal',
+    strftime ( '%Y-%m-%dT%H:%M:%SZ', WifiLocation.timestamp + 978307200, 'unixepoch' ) AS "TimeStampUtc",
+    strftime ( '%Y-%m-%d %H:%M:%S', WifiLocation.timestamp + 978307200, 'unixepoch', 'localtime' ) AS "TimeStampLocal",
 
     /* This will concat the MAC address into a readable format */
-    UPPER(substr(printf("%0!.12x", MAC), 1, 2) || ':' ||
-        substr(printf("%0!.12x", MAC), 3, 2) || ':' ||
-        substr(printf("%0!.12x", MAC), 5, 2) || ':' ||
-        substr(printf("%0!.12x", MAC), 7, 2) || ':' ||
-        substr(printf("%0!.12x", MAC), 9, 2) || ':' ||
-        substr(printf("%0!.12x", MAC), 11, 2)) AS 'MacAddress',
+    UPPER ( substr ( printf ( '%0!.12x', MAC ), 1, 2 )  || ':' ||
+        substr ( printf ( '%0!.12x', MAC ), 3, 2 )  || ':' ||
+        substr ( printf ( '%0!.12x', MAC ), 5, 2 )  || ':' ||
+        substr ( printf ( '%0!.12x', MAC ), 7, 2 )  || ':' ||
+        substr ( printf ( '%0!.12x', MAC ), 9, 2 )  || ':' ||
+        substr ( printf ( '%0!.12x', MAC ), 11, 2 )
+    ) AS "MacAddress",
 
-    Channel AS 'Channel',
-    Latitude AS 'Latitude',
-    Longitude AS 'Longitude',
-    HorizontalAccuracy AS 'HorizontalAccuracy',
-    Altitude AS 'Altitude',
+    Channel AS "Channel",
+    Latitude AS "Latitude",
+    Longitude AS "Longitude",
+    HorizontalAccuracy AS "HorizontalAccuracy",
+    Altitude AS "Altitude",
     Confidence AS 'Confidence'
 
 

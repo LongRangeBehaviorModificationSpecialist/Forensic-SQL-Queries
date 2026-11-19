@@ -3,11 +3,11 @@ Query copied from https://github.com/ScottKjr3347/iOS_sms.db_queries/blob/main/i
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'RecordNo.',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS 'RecordNo.',
 
     CASE message.date
         WHEN 0 THEN '0'
-        ELSE datetime((message.date / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((message.date / 1000000000) + 978307200, 'unixepoch')
     END AS 'message-date received-on-device',
 
     message.guid AS 'message-guid',
@@ -15,32 +15,32 @@ SELECT
 
     CASE attachment.created_date
         WHEN 0 THEN '0'
-        ELSE datetime(attachment.created_date + 978307200, 'UNIXEPOCH')
+        ELSE datetime(attachment.created_date + 978307200, 'unixepoch')
     END AS 'attachment-created date',
 
     CASE attachment.start_date
         WHEN 0 THEN '0'
-        ELSE datetime(attachment.start_date + 978307200, 'UNIXEPOCH')
+        ELSE datetime(attachment.start_date + 978307200, 'unixepoch')
     END AS 'attachment-start date',
 
     CASE message.date_delivered
         WHEN 0 THEN '0'
-        ELSE datetime((message.date_delivered / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((message.date_delivered / 1000000000) + 978307200, 'unixepoch')
     END AS 'message-date_delivered',
 
     CASE message.date_read
         WHEN 0 THEN '0'
-        ELSE datetime((message.date_read / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((message.date_read / 1000000000) + 978307200, 'unixepoch')
     END AS 'message-date_read',
 
     CASE chat.last_read_message_timestamp
         WHEN 0 THEN '0'
-        ELSE datetime((chat.last_read_message_timestamp / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((chat.last_read_message_timestamp / 1000000000) + 978307200, 'unixepoch')
     END AS 'chat-last read message timestamp',
 
     CASE chat.syndication_date
         WHEN 0 THEN '0'
-        ELSE datetime((chat.syndication_date / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((chat.syndication_date / 1000000000) + 978307200, 'unixepoch')
     END AS 'chat-syndication date',
 
     attachment.filename AS 'attachment-filename',
@@ -84,7 +84,7 @@ SELECT
 
     CASE chat_message_join.message_date
         WHEN 0 THEN '0'
-        ELSE datetime((chat_message_join.message_date / 1000000000) + 978307200, 'UNIXEPOCH')
+        ELSE datetime((chat_message_join.message_date / 1000000000) + 978307200, 'unixepoch')
     END AS 'chat_message_join-message date',
 
     chat.last_addressed_handle AS 'chat-last addressed handle',

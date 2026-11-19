@@ -9,7 +9,7 @@
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RowNumber',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
 
     msg.msg_uuid AS 'MsgUuid',
     msg.sender AS 'MsgSender',
@@ -82,7 +82,7 @@ SELECT
     END AS 'MsgReadStatus',
 
     /* Source for each line of data */
-    'File: \data\data\com.zhiliaoapp.musically\databases\7455782601761915946_im.db; Table: msg(_id: ' || msg.msg_uuid || ')' AS 'DataSource'
+    'File: \data\data\com.zhiliaoapp.musically\databases\7455782601761915946_im.db; Table: msg(_id: ' || msg.msg_uuid || ')' AS "DataSource"
 
 FROM msg
 

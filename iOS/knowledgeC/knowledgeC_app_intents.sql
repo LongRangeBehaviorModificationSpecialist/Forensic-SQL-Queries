@@ -1,38 +1,38 @@
 /*
 [DLU]
-    05-Sep-2025
+    19-Nov-2026
 [DATABASE PATH]
     /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
 */
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
-    ZOBJECT.Z_PK AS 'ZOBJECT.Z_PK',
-    ZOBJECT.ZVALUESTRING AS 'ZOBJECT.ZVALUESTRING',
-    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTCLASS AS 'INTENTCLASS',
-    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTVERB AS 'INTENTACTION',
-    ZSOURCE.ZBUNDLEID AS 'BundleID',
+    ROW_NUMBER() OVER ( ORDER BY ZOBJECT.ZCREATIONDATE ) AS "RowNumber",
+    ZOBJECT.Z_PK AS "ZPk",
+    ZOBJECT.ZVALUESTRING AS "ValueString",
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTCLASS AS "IntentClass",
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTVERB AS "Interaction",
+    ZSOURCE.ZBUNDLEID AS "BundleID",
 
-    datetime(ZOBJECT.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ZOBJECT.ZCREATIONDATE(UTC)',
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZCREATIONDATE + 978307200, 'unixepoch' ) AS "CreationDateUtc",
 
-    (ZOBJECT.ZSECONDSFROMGMT / 3600) AS 'GMTOFFSET(HOURS)',
+    ( ZOBJECT.ZSECONDSFROMGMT / 3600 ) AS "GmtOffsetHours",
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
-        WHEN 1 THEN '1 [Sunday]'
-        WHEN 2 THEN '2 [Monday]'
-        WHEN 3 THEN '3 [Tuesday]'
-        WHEN 4 THEN '4 [Wednesday]'
-        WHEN 5 THEN '5 [Thursday]'
-        WHEN 6 THEN '6 [Friday]'
-        WHEN 7 THEN '7 [Saturday]'
+        WHEN 1 THEN 'Sunday'
+        WHEN 2 THEN 'Monday'
+        WHEN 3 THEN 'Tuesday'
+        WHEN 4 THEN 'Wednesday'
+        WHEN 5 THEN 'Thursday'
+        WHEN 6 THEN 'Friday'
+        WHEN 7 THEN 'Saturday'
         ELSE ZOBJECT.ZSTARTDAYOFWEEK
-    END 'ZOBJECT.ZSTARTDAYOFWEEK',
+    END "StartDayOfWeek",
 
-    ZSOURCE.ZSOURCEID as 'ZSOURCE.ZSOURCEID',
+    ZSOURCE.ZSOURCEID as "SourceId",
 
     /* Source for each line of data */
-    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS 'DATA_SOURCE'
+    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS "DataSource"
 
 
 FROM ZOBJECT

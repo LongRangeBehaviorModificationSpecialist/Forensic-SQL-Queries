@@ -1,6 +1,6 @@
 /*
 [DLU]
-    03-Nov-2026
+    19-Nov-2026
 [Database Metadata]
     DATABASE=RMAdminStore-Local.sqlite, RMAdminStore-Cloud.sqlite
 */
@@ -8,37 +8,56 @@
 SELECT
 
     DISTINCT
-        ROW_NUMBER() OVER() AS 'RowNumber',
 
-        datetime(ZUSAGEBLOCK.ZSTARTDATE + 978307200, 'unixepoc') AS 'StartDateUtc',
+        ROW_NUMBER() OVER ( ORDER BY ZUSAGEBLOCK.ZSTARTDATE ) AS "RowNumber",
 
-        ZUSAGEBLOCK.ZSCREENTIMEINSECONDS AS 'ScreenTimeInSeconds',
-        (ZUSAGEBLOCK.ZSCREENTIMEINSECONDS / 60.00) AS 'Screentime(Minutes)',
-        ZCOREUSER.ZGIVENNAME AS 'GivenName',
-        ZCOREUSER.ZFAMILYNAME AS 'FamilyMame',
-        ZCOREDEVICE.ZNAME AS 'Name',
+        strftime (
+            '%F_%H:%M:%f',
+            ZUSAGEBLOCK.ZSTARTDATE + 978307200,
+            'unixepoch'
+        ) AS "StartDateUtc",
+
+        ZUSAGEBLOCK.ZSCREENTIMEINSECONDS AS "ScreenTimeInSeconds",
+        ( ZUSAGEBLOCK.ZSCREENTIMEINSECONDS / 60.00 ) AS "ScreentimeMinutes",
+        ZCOREUSER.ZGIVENNAME AS "GivenName",
+        ZCOREUSER.ZFAMILYNAME AS "FamilyMame",
+        ZCOREDEVICE.ZNAME AS "Name",
 
         CASE ZCOREDEVICE.ZPLATFORM
-            WHEN 0 THEN 'Unknown [0]'
-            WHEN 1 THEN 'macOS [1]'
-            WHEN 2 THEN 'iOS [2]'
-            WHEN 4 THEN 'Apple Watch [4]'
+            WHEN 0 THEN 'Unknown'
+            WHEN 1 THEN 'macOS'
+            WHEN 2 THEN 'iOS'
+            WHEN 4 THEN 'Apple Watch'
             ELSE ZCOREDEVICE.ZPLATFORM
-        END AS 'Platform',
+        END AS "Platform",
 
-        ZCOREDEVICE.ZIDENTIFIER AS 'Identifier',
-        ZCOREDEVICE.ZLOCALUSERDEVICESTATE AS 'LocalUserDeviceState',
+        ZCOREDEVICE.ZIDENTIFIER AS "Identifier",
+        ZCOREDEVICE.ZLOCALUSERDEVICESTATE AS "LocalUserDeviceState",
 
-        datetime(ZUSAGEBLOCK.ZLONGESTSESSIONSTARTDATE + 978307200, 'unixepoc') AS 'LongestSessionStartDateUtc',
-        datetime(ZUSAGEBLOCK.ZLONGESTSESSIONENDDATE + 978307200, 'unixepoc') AS 'LongestSessionEndDateUtc',
-        datetime(ZUSAGEBLOCK.ZLASTEVENTDATE + 978307200, 'unixepoc') AS 'LastEventDateUtc',
+        strftime (
+            '%F_%H:%M:%f',
+            ZUSAGEBLOCK.ZLONGESTSESSIONSTARTDATE + 978307200,
+            'unixepoch'
+        ) AS "LongestSessionStartDateUtc",
 
-        (ZUSAGEBLOCK.ZLONGESTSESSIONENDDATE - ZUSAGEBLOCK.ZLONGESTSESSIONSTARTDATE) AS 'LongestSessionTime(Seconds)',
-        ((ZUSAGEBLOCK.ZLONGESTSESSIONENDDATE - ZUSAGEBLOCK.ZLONGESTSESSIONSTARTDATE) / 60.00) AS 'LongestSessionTime(Minutes)',
-        ZCOREUSER.ZFAMILYMEMBERTYPE AS 'FamilyMemberType',
-        ZCOREUSER.ZAPPLEID AS 'AppleId',
-        ZCOREUSER.ZDSID AS 'Dsid',
-        ZCOREUSER.ZALTDSID AS 'AltDsid'
+        strftime (
+            '%F_%H:%M:%f',
+            ZUSAGEBLOCK.ZLONGESTSESSIONENDDATE + 978307200,
+            'unixepoch'
+        ) AS "LongestSessionEndDateUtc",
+
+        strftime (
+            '%F_%H:%M:%f',
+            ZUSAGEBLOCK.ZLASTEVENTDATE + 978307200,
+            'unixepoch'
+        ) AS "LastEventDateUtc",
+
+        ( ZUSAGEBLOCK.ZLONGESTSESSIONENDDATE - ZUSAGEBLOCK.ZLONGESTSESSIONSTARTDATE ) AS "LongestSessionTimeSeconds",
+        ( ( ZUSAGEBLOCK.ZLONGESTSESSIONENDDATE - ZUSAGEBLOCK.ZLONGESTSESSIONSTARTDATE ) / 60.00 ) AS "LongestSessionTimeMinutes",
+        ZCOREUSER.ZFAMILYMEMBERTYPE AS "FamilyMemberType",
+        ZCOREUSER.ZAPPLEID AS "AppleId",
+        ZCOREUSER.ZDSID AS "Dsid",
+        ZCOREUSER.ZALTDSID AS "AltDsid"
 
 
 FROM ZUSAGETIMEDITEM

@@ -3,7 +3,7 @@ Query copied from https://github.com/ScottKjr3347/iOS_SWY_PL_Photos.sqlite_Queri
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'Record #',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS 'Record #',
     zAsset.ZSORTTOKEN AS 'zAsset.ZSORTTOKEN',
     zAsset.ZPROMOTIONSCORE AS 'zAsset.ZPROMOTIONSCORE',
 
@@ -54,8 +54,8 @@ SELECT
 
     ParentzGenAlbum.ZTITLE AS 'ParentzGenAlbum-Title-4Start',
 
-    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum-Creation Date-4Start',
-    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Creation Date-4Start',
+    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'unixepoch') AS 'ParentzGenAlbum-Creation Date-4Start',
+    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum-Creation Date-4Start',
 
     CASE zGenAlbum.ZCLOUDLOCALSTATE
         WHEN 0 THEN '0-iCldPhotos-ON=Asset_In_Shared/Other-Album/iCldPhotos-OFF=Generic_Album-0'
@@ -226,7 +226,7 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || zMedAnlyAstAttr.ZSYNDICATIONPROCESSINGVALUE || ''
     END AS 'zMedAnlyAstAttr-Syndication Processing Value',
 
-    datetime(zAsset.ZADDEDDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Add Date',
+    datetime(zAsset.ZADDEDDATE + 978307200, 'unixepoch') AS 'zAsset-Add Date',
 
     CASE zAddAssetAttr.ZDATECREATEDSOURCE
         WHEN 0 THEN '0-Cloud-Asset-0'
@@ -235,16 +235,16 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZDATECREATEDSOURCE || ''
     END AS 'zAddAssetAttr-Date Created Source',
 
-    datetime(zAsset.ZDATECREATED + 978307200, 'UNIXEPOCH') AS 'zAsset-Date Created',
-    datetime(zCldMast.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zCldMast-Creation Date',
-    datetime(zIntResou.ZCLOUDMASTERDATECREATED + 978307200, 'UNIXEPOCH') AS 'zIntResou-CldMst Date Created',
+    datetime(zAsset.ZDATECREATED + 978307200, 'unixepoch') AS 'zAsset-Date Created',
+    datetime(zCldMast.ZCREATIONDATE + 978307200, 'unixepoch') AS 'zCldMast-Creation Date',
+    datetime(zIntResou.ZCLOUDMASTERDATECREATED + 978307200, 'unixepoch') AS 'zIntResou-CldMst Date Created',
 
     zAddAssetAttr.ZTIMEZONENAME AS 'zAddAssetAttr-Time Zone Name',
     zAddAssetAttr.ZTIMEZONEOFFSET AS 'zAddAssetAttr-Time Zone Offset',
     zAddAssetAttr.ZINFERREDTIMEZONEOFFSET AS 'zAddAssetAttr-Inferred Time Zone Offset',
     zAddAssetAttr.ZEXIFTIMESTAMPSTRING AS 'zAddAssetAttr-EXIF-String',
 
-    datetime(zAsset.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Modification Date',
+    datetime(zAsset.ZMODIFICATIONDATE + 978307200, 'unixepoch') AS 'zAsset-Modification Date',
 
     CASE zCldMast.ZCLOUDLOCALSTATE
         WHEN 0 THEN '0-Not Synced with Cloud-0'
@@ -254,22 +254,22 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || zCldMast.ZCLOUDLOCALSTATE || ''
     END AS 'zCldMast-Cloud Local State',
 
-    datetime(zCldMast.ZIMPORTDATE + 978307200, 'UNIXEPOCH') AS 'zCldMast-Import Date',
+    datetime(zCldMast.ZIMPORTDATE + 978307200, 'unixepoch') AS 'zCldMast-Import Date',
 
     zAsset.ZIMPORTSESSION AS 'zAsset-Import Session',
     zAddAssetAttr.ZIMPORTSESSIONID AS 'zAddAssetAttr-Import Session ID',
 
-    datetime(zAddAssetAttr.ZALTERNATEIMPORTIMAGEDATE + 978307200, 'UNIXEPOCH') AS 'zAddAssetAttr-Alt Import Image Date',
+    datetime(zAddAssetAttr.ZALTERNATEIMPORTIMAGEDATE + 978307200, 'unixepoch') AS 'zAddAssetAttr-Alt Import Image Date',
 
     zCldMast.ZIMPORTSESSIONID AS 'zCldMast-Import Session ID',
 
-    datetime(zAsset.ZCLOUDBATCHPUBLISHDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Cloud Batch Publish Date',
-    datetime(zAsset.ZCLOUDSERVERPUBLISHDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Cloud Server Publish Date',
+    datetime(zAsset.ZCLOUDBATCHPUBLISHDATE + 978307200, 'unixepoch') AS 'zAsset-Cloud Batch Publish Date',
+    datetime(zAsset.ZCLOUDSERVERPUBLISHDATE + 978307200, 'unixepoch') AS 'zAsset-Cloud Server Publish Date',
 
     zAsset.ZCLOUDDOWNLOADREQUESTS AS 'zAsset-Cloud Download Requests',
     zAsset.ZCLOUDBATCHID AS 'zAsset-Cloud Batch ID',
 
-    datetime(zAddAssetAttr.ZLASTUPLOADATTEMPTDATE + 978307200, 'UNIXEPOCH') AS 'zAddAssetAttr-Last Upload Attempt Date-SWY',
+    datetime(zAddAssetAttr.ZLASTUPLOADATTEMPTDATE + 978307200, 'unixepoch') AS 'zAddAssetAttr-Last Upload Attempt Date-SWY',
     zAddAssetAttr.ZUPLOADATTEMPTS AS 'zAddAssetAttr-Upload Attempts',
 
     CASE zAsset.ZLATITUDE
@@ -562,10 +562,10 @@ SELECT
     END AS 'zIntResou-Recipe ID',
     CASE zIntResou.ZCLOUDLASTPREFETCHDATE
         WHEN 0 THEN '0-NA-0'
-        ELSE datetime(zIntResou.ZCLOUDLASTPREFETCHDATE + 978307200, 'UNIXEPOCH')
+        ELSE datetime(zIntResou.ZCLOUDLASTPREFETCHDATE + 978307200, 'unixepoch')
     END AS 'zIntResou-Cloud Last Prefetch Date',
     zIntResou.ZCLOUDPREFETCHCOUNT AS 'zIntResou-Cloud Prefetch Count',
-    datetime(zIntResou.ZCLOUDLASTONDEMANDDOWNLOADDATE + 978307200, 'UNIXEPOCH') AS 'zIntResou-Last OnDemand Download Date',
+    datetime(zIntResou.ZCLOUDLASTONDEMANDDOWNLOADDATE + 978307200, 'unixepoch') AS 'zIntResou-Last OnDemand Download Date',
     CASE zIntResou.ZUTICONFORMANCEHINT
         WHEN 0 THEN '0-NA/Doesnt_Conform-0'
         WHEN 1 THEN '1-UTTypeImage-1'
@@ -655,8 +655,8 @@ SELECT
     zAddAssetAttr.ZUNMANAGEDADJUSTMENT AS 'zAddAssetAttr-UnmanAdjust Key=zUnmAdj.zPK',
     zUnmAdj.Z_PK AS 'zUnmAdj.Z_PK=zAddAssetAttr.ZUnmanAdj Key',
     zUnmAdj.ZUUID AS 'zUnmAdj-UUID',
-    datetime(zAsset.ZADJUSTMENTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zAsset-Adjustment Timestamp',
-    datetime(zUnmAdj.ZADJUSTMENTTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zUnmAdj-Adjustment Timestamp',
+    datetime(zAsset.ZADJUSTMENTTIMESTAMP + 978307200, 'unixepoch') AS 'zAsset-Adjustment Timestamp',
+    datetime(zUnmAdj.ZADJUSTMENTTIMESTAMP + 978307200, 'unixepoch') AS 'zUnmAdj-Adjustment Timestamp',
     zAddAssetAttr.ZEDITORBUNDLEID AS 'zAddAssetAttr-Editor Bundle ID',
     zUnmAdj.ZEDITORLOCALIZEDNAME AS 'zUnmAdj-Editor Localized Name',
     zUnmAdj.ZADJUSTMENTFORMATIDENTIFIER AS 'zUnmAdj-Adjustment Format ID',
@@ -698,7 +698,7 @@ SELECT
         WHEN 1 THEN '1-Asset In Trash/Recently Deleted-1'
         ELSE 'Unknown-New-Value!: ' || zAsset.ZTRASHEDSTATE || ''
     END AS 'zAsset-Trashed State/LocalAssetRecentlyDeleted',
-    datetime(zAsset.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Trashed Date',
+    datetime(zAsset.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'zAsset-Trashed Date',
     CASE zAsset.ZDELETEREASON
         WHEN 1 THEN '1-StillTesting Delete-Reason-1'
         WHEN 2 THEN '2-StillTesting Delete-Reason-2'
@@ -714,7 +714,7 @@ SELECT
         WHEN 1 THEN '1-zIntResou-In Trash/Recently Deleted-1'
         ELSE 'Unknown-New-Value!: ' || zIntResou.ZTRASHEDSTATE || ''
     END AS 'zIntResou-Trash State',
-    datetime(zIntResou.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zIntResou-Trashed Date',
+    datetime(zIntResou.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'zIntResou-Trashed Date',
     CASE zAsset.ZCLOUDDELETESTATE
         WHEN 0 THEN '0-Cloud Asset Not Deleted-0'
         WHEN 1 THEN '1-Cloud Asset Deleted-1'
@@ -736,15 +736,15 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || zIntResou.ZPTPTRASHEDSTATE || ''
     END AS 'zIntResou-PTP Trashed State',
     zIntResou.ZCLOUDDELETEASSETUUIDWITHRESOURCETYPE AS 'zIntResou-Cloud Delete Asset UUID With Resource Type',
-    datetime(zMedAnlyAstAttr.ZMEDIAANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zMedAnlyAstAttr-Media Analysis Timestamp',
-    datetime(zAsset.ZANALYSISSTATEMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Analysis State Modificaion Date',
+    datetime(zMedAnlyAstAttr.ZMEDIAANALYSISTIMESTAMP + 978307200, 'unixepoch') AS 'zMedAnlyAstAttr-Media Analysis Timestamp',
+    datetime(zAsset.ZANALYSISSTATEMODIFICATIONDATE + 978307200, 'unixepoch') AS 'zAsset-Analysis State Modificaion Date',
     zAddAssetAttr.ZPENDINGVIEWCOUNT AS 'zAddAssetAttr-Pending View Count',
     zAddAssetAttr.ZVIEWCOUNT AS 'zAddAssetAttr-View Count',
     zAddAssetAttr.ZPENDINGPLAYCOUNT AS 'zAddAssetAttr-Pending Play Count',
     zAddAssetAttr.ZPLAYCOUNT AS 'zAddAssetAttr-Play Count',
     zAddAssetAttr.ZPENDINGSHARECOUNT AS 'zAddAssetAttr-Pending Share Count',
     zAddAssetAttr.ZSHARECOUNT AS 'zAddAssetAttr-Share Count',
-    datetime(zAsset.ZLASTSHAREDDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Last Shared Date',
+    datetime(zAsset.ZLASTSHAREDDATE + 978307200, 'unixepoch') AS 'zAsset-Last Shared Date',
     zAddAssetAttr.ZSHAREORIGINATOR AS 'zAddAssetAttr-Share Originator',
     CASE zAddAssetAttr.ZALLOWEDFORANALYSIS
         WHEN 0 THEN '0-Asset Not Allowed For Analysis-0'
@@ -756,7 +756,7 @@ SELECT
         WHEN 0 THEN '0-No-0'
         ELSE 'Unknown-New-Value!: ' || zAddAssetAttr.ZSCENEANALYSISISFROMPREVIEW || ''
     END AS 'zAddAssetAttr-Scene Analysis is From Preview',
-    datetime(zAddAssetAttr.ZSCENEANALYSISTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zAddAssetAttr-Scene Analysis Timestamp',
+    datetime(zAddAssetAttr.ZSCENEANALYSISTIMESTAMP + 978307200, 'unixepoch') AS 'zAddAssetAttr-Scene Analysis Timestamp',
     CASE zAsset.ZDUPLICATEASSETVISIBILITYSTATE
         WHEN 0 THEN 'No-Duplicates-0'
         WHEN 1 THEN 'Has Duplicate-1'
@@ -842,9 +842,9 @@ SELECT
     zPhotoAnalysisAssetAttr.Z_OPT AS 'zPhotoAnalysisAssetAttr-zOpt',
     zPhotoAnalysisAssetAttr.ZWALLPAPERPROPERTIESVERSION AS 'zPhotoAnalysisAssetAttr-Wallpaper Properties Version',
     zPhotoAnalysisAssetAttr.ZASSET AS 'zPhotoAnalysisAssetAttr-zAsset = zAsset.Z_PK',
-    datetime(zPhotoAnalysisAssetAttr.ZWALLPAPERPROPERTIESTIMESTAMP + 978307200, 'UNIXEPOCH') AS 'zPhotoAnalysisAssetAttr-Wallpaper Properties Timestamp',
+    datetime(zPhotoAnalysisAssetAttr.ZWALLPAPERPROPERTIESTIMESTAMP + 978307200, 'unixepoch') AS 'zPhotoAnalysisAssetAttr-Wallpaper Properties Timestamp',
     zPhotoAnalysisAssetAttr.ZWALLPAPERPROPERTIESDATA AS 'zPhotoAnalysisAssetAttr-Wallpaper Properties Data',
-    datetime(zCldFeedEnt.ZENTRYDATE + 978307200, 'UNIXEPOCH') AS 'zCldFeedEnt-Entry Date',
+    datetime(zCldFeedEnt.ZENTRYDATE + 978307200, 'unixepoch') AS 'zCldFeedEnt-Entry Date',
     zCldFeedEnt.ZENTRYALBUMGUID AS 'zCldFeedEnt-Album-GUID=zGenAlbum.zCloudGUID',
     zCldFeedEnt.ZENTRYINVITATIONRECORDGUID AS 'zCldFeedEnt-Entry Invitation Record GUID',
     zCldFeedEnt.ZENTRYCLOUDASSETGUID AS 'zCldFeedEnt-Entry Cloud Asset GUID',
@@ -874,9 +874,9 @@ SELECT
     zCldSharedComment.Z_OPT AS 'zCldSharedComment-zOPT',
     zCldSharedComment.ZCOMMENTEDASSET AS 'zCldSharedComment-Commented Asset Key=zAsset.zPK',
     zCldSharedComment.Z_FOK_CLOUDFEEDCOMMENTENTRY AS 'zCldSharedComment-FOK-Cld-Feed-Comment-Entry-Key',
-    datetime(zCldSharedComment.ZCOMMENTDATE + 978307200, 'UNIXEPOCH') AS 'zCldSharedComment-Date',
-    datetime(zCldSharedComment.ZCOMMENTCLIENTDATE + 978307200, 'UNIXEPOCH') AS 'zCldSharedComment-Comment Client Date',
-    datetime(zAsset.ZCLOUDLASTVIEWEDCOMMENTDATE + 978307200, 'UNIXEPOCH') AS 'zAsset-Cloud Last Viewed Comment Date',
+    datetime(zCldSharedComment.ZCOMMENTDATE + 978307200, 'unixepoch') AS 'zCldSharedComment-Date',
+    datetime(zCldSharedComment.ZCOMMENTCLIENTDATE + 978307200, 'unixepoch') AS 'zCldSharedComment-Comment Client Date',
+    datetime(zAsset.ZCLOUDLASTVIEWEDCOMMENTDATE + 978307200, 'unixepoch') AS 'zAsset-Cloud Last Viewed Comment Date',
     zCldSharedComment.ZCOMMENTTYPE AS 'zCldSharedComment-Type',
     zCldSharedComment.ZCOMMENTTEXT AS 'zCldSharedComment-Comment Text',
     zCldSharedComment.ZCOMMENTERHASHEDPERSONID AS 'zCldSharedComment-Commenter Hashed Person ID',
@@ -996,7 +996,7 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZCLOUDLOCALSTATE || ''
     END AS 'ParentzGenAlbum-Cloud-Local-State',
     ParentzGenAlbum.ZTITLE AS 'ParentzGenAlbum-Title',
-    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum-Creation Date',
+    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'unixepoch') AS 'ParentzGenAlbum-Creation Date',
     ParentzGenAlbum.ZPENDINGITEMSCOUNT AS 'ParentzGenAlbum-Pending Items Count',
     CASE ParentzGenAlbum.ZPENDINGITEMSTYPE
         WHEN 1 THEN 'No-1'
@@ -1030,7 +1030,7 @@ SELECT
         WHEN 1 THEN '1-ParentzGenAlbum Album In Trash-1'
         ELSE 'Unknown-New-Value!: ' || ParentzGenAlbum.ZTRASHEDSTATE || ''
     END AS 'ParentzGenAlbum-Trashed State',
-    datetime(ParentzGenAlbum.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'ParentzGenAlbum-Trash Date',
+    datetime(ParentzGenAlbum.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'ParentzGenAlbum-Trash Date',
     CASE ParentzGenAlbum.ZCLOUDDELETESTATE
         WHEN 0 THEN '0-ParentzGenAlbum Cloud Not Deleted-0'
         WHEN 1 THEN '1-ParentzGenAlbum Cloud Album Deleted-1'
@@ -1103,11 +1103,11 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDLOCALSTATE || ''
     END AS 'zGenAlbum-Cloud_Local_State',
     zGenAlbum.ZTITLE AS 'zGenAlbum-Title/User&System Applied',
-    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Creation Date',
-    datetime(zGenAlbum.ZCLOUDCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Cloud Creation Date',
-    datetime(zGenAlbum.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Start Date',
-    datetime(zGenAlbum.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-End Date',
-    datetime(zGenAlbum.ZCLOUDSUBSCRIPTIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Cloud Subscription Date',
+    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum-Creation Date',
+    datetime(zGenAlbum.ZCLOUDCREATIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum-Cloud Creation Date',
+    datetime(zGenAlbum.ZSTARTDATE + 978307200, 'unixepoch') AS 'zGenAlbum-Start Date',
+    datetime(zGenAlbum.ZENDDATE + 978307200, 'unixepoch') AS 'zGenAlbum-End Date',
+    datetime(zGenAlbum.ZCLOUDSUBSCRIPTIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum-Cloud Subscription Date',
     zGenAlbum.ZCLOUDMETADATA AS 'zGenAlbum-Cloud Metadata/HEX NSKeyed Plist',
     zGenAlbum.ZPENDINGITEMSCOUNT AS 'zGenAlbum-Pending Items Count',
     CASE zGenAlbum.ZPENDINGITEMSTYPE
@@ -1166,8 +1166,8 @@ SELECT
         WHEN 0 THEN 'zGenAlbum Multi-Contributor-0'
         ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZCLOUDALBUMSUBTYPE || ''
     END AS 'zGenAlbum-Cloud Album Sub Type',
-    datetime(zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Cloud Contribution Date',
-    datetime(zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Cloud Last Interesting Change Date',
+    datetime(zGenAlbum.ZCLOUDLASTCONTRIBUTIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum-Cloud Contribution Date',
+    datetime(zGenAlbum.ZCLOUDLASTINTERESTINGCHANGEDATE + 978307200, 'unixepoch') AS 'zGenAlbum-Cloud Last Interesting Change Date',
     CASE zGenAlbum.ZCLOUDNOTIFICATIONSENABLED
         WHEN 0 THEN 'zGenAlbum-Cloud Notifications Disabled-0'
         WHEN 1 THEN 'zGenAlbum-Cloud Notifications Enabled-1'
@@ -1207,7 +1207,7 @@ SELECT
         WHEN 1 THEN 'zGenAlbum Album In Trash-1'
         ELSE 'Unknown-New-Value!: ' || zGenAlbum.ZTRASHEDSTATE || ''
     END AS 'zGenAlbum-Trashed State',
-    datetime(zGenAlbum.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zGenAlbum-Trash Date',
+    datetime(zGenAlbum.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'zGenAlbum-Trash Date',
     CASE zGenAlbum.ZCLOUDDELETESTATE
         WHEN 0 THEN 'zGenAlbum Cloud Not Deleted-0'
         WHEN 1 THEN 'zGenAlbum Cloud Album Deleted-1'
@@ -1287,7 +1287,7 @@ SELECT
         WHEN 5 THEN '5-StillTesting'
         ELSE 'Unknown-New-Value!: ' || zCldShareAlbumInvRec.ZINVITATIONSTATE || ''
     END AS 'zCldShareAlbumInvRec-Invitation State/Shared Album Invite Status',
-    datetime(zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE + 978307200, 'UNIXEPOCH') AS 'zCldShareAlbumInvRec-Subscription Date',
+    datetime(zCldShareAlbumInvRec.ZINVITEESUBSCRIPTIONDATE + 978307200, 'unixepoch') AS 'zCldShareAlbumInvRec-Subscription Date',
     zCldShareAlbumInvRec.ZINVITEEFIRSTNAME AS 'zCldShareAlbumInvRec-Invitee First Name',
     zCldShareAlbumInvRec.ZINVITEELASTNAME AS 'zCldShareAlbumInvRec-Invitee Last Name',
     zCldShareAlbumInvRec.ZINVITEEFULLNAME AS 'zCldShareAlbumInvRec-Invitee Full Name',
@@ -1308,10 +1308,10 @@ SELECT
         WHEN 3 THEN 'CMM_SWY_Syndication_Asset-3'
         ELSE 'Unknown-New-Value!: ' || zShare.ZSTATUS || ''
     END AS 'zShare-Status',
-    datetime(zShare.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zShare-Creation Date-iCldLnk-Created Timestamp',
-    datetime(zShare.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'zShare-Start Date-iCldLnk-1st Asset Created Timestamp',
-    datetime(zShare.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'zShare-End Date-iCldLnk-Last Asset Created Timestamp',
-    datetime(zShare.ZEXPIRYDATE + 978307200, 'UNIXEPOCH') AS 'zShare-Expiry Date-iCldLnk-Expiration Timestamp',
+    datetime(zShare.ZCREATIONDATE + 978307200, 'unixepoch') AS 'zShare-Creation Date-iCldLnk-Created Timestamp',
+    datetime(zShare.ZSTARTDATE + 978307200, 'unixepoch') AS 'zShare-Start Date-iCldLnk-1st Asset Created Timestamp',
+    datetime(zShare.ZENDDATE + 978307200, 'unixepoch') AS 'zShare-End Date-iCldLnk-Last Asset Created Timestamp',
+    datetime(zShare.ZEXPIRYDATE + 978307200, 'unixepoch') AS 'zShare-Expiry Date-iCldLnk-Expiration Timestamp',
     zShare.ZTITLE AS 'zShare-Title-iCldLnk-Title-zPH-Subtitle-VerboseDescription',
     zShare.ZSHAREURL AS 'zShare-Share URL-iCldLnk-URL',
     CASE zShare.ZPARTICIPANTCLOUDUPDATESTATE
@@ -1383,7 +1383,7 @@ SELECT
         WHEN 1 THEN '1-StillTesting'
         ELSE 'Unknown-New-Value!: ' || zShare.ZSHOULDNOTIFYONUPLOADCOMPLETION || ''
     END AS 'zShare-Should Notify On Upload Completion-iCldLnk',
-    datetime(zShare.ZTRASHEDDATE + 978307200, 'UNIXEPOCH') AS 'zShare-Trashed Date Timestamp',
+    datetime(zShare.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'zShare-Trashed Date Timestamp',
     CASE zShare.ZTRASHEDSTATE
         WHEN 0 THEN 'iCldLnk Not in Trash-0'
         WHEN 1 THEN 'iCldLnk In the Trash-1'
@@ -1394,8 +1394,8 @@ SELECT
         WHEN 1 THEN 'iCldLnk Deleted-1'
         ELSE 'Unknown-New-Value!: ' || zShare.ZCLOUDDELETESTATE || ''
     END AS 'zShare-Cloud Delete State-iCldLnk',
-    datetime(zShare.ZLASTPARTICIPANTASSETTRASHNOTIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'zShare-Last Participant Asset Trash Notification Date Timestamp',
-    datetime(zShare.ZLASTPARTICIPANTASSETTRASHNOTIFICATIONVIEWEDDATE + 978307200, 'UNIXEPOCH') AS 'zShare-Last Participant Asset Trash Notification View Date Timestamp',
+    datetime(zShare.ZLASTPARTICIPANTASSETTRASHNOTIFICATIONDATE + 978307200, 'unixepoch') AS 'zShare-Last Participant Asset Trash Notification Date Timestamp',
+    datetime(zShare.ZLASTPARTICIPANTASSETTRASHNOTIFICATIONVIEWEDDATE + 978307200, 'unixepoch') AS 'zShare-Last Participant Asset Trash Notification View Date Timestamp',
     zGenAlbum.ZKEYASSETFACEIDENTIFIER AS 'zGenAlbum-Key Asset Face ID',
     CASE
         WHEN zAsset.ZFACEAREAPOINTS > 0 THEN 'Face Area Points Detected in zAsset'
@@ -1828,8 +1828,8 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || zMemory.ZSUBCATEGORY || ''
     END AS 'zMemory-SubCategory',
 
-    datetime(zMemory.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'zMemory-Creation Date',
-    datetime(zMemory.ZLASTENRICHMENTDATE + 978307200, 'UNIXEPOCH') AS 'zMemory-Last Enrichment Date',
+    datetime(zMemory.ZCREATIONDATE + 978307200, 'unixepoch') AS 'zMemory-Creation Date',
+    datetime(zMemory.ZLASTENRICHMENTDATE + 978307200, 'unixepoch') AS 'zMemory-Last Enrichment Date',
 
     CASE zMemory.ZUSERACTIONOPTIONS
         WHEN 0 THEN 'User Actions Options Memory Not User Created-0'
@@ -1851,8 +1851,8 @@ SELECT
     zMemory.ZMOVIEASSETSTATE AS 'zMemory-MovieAssetState/HEX NSKeyed Plist',
     zMemory.ZMOVIEDATA AS 'zMemory-MovieData/HEX NSKeyed Plist',
 
-    datetime(zMemory.ZLASTMOVIEPLAYEDDATE + 978307200, 'UNIXEPOCH') AS 'zMemory-Last Movie Play Date',
-    datetime(zMemory.ZLASTVIEWEDDATE + 978307200, 'UNIXEPOCH') AS 'zMemory-Last Viewed Date',
+    datetime(zMemory.ZLASTMOVIEPLAYEDDATE + 978307200, 'unixepoch') AS 'zMemory-Last Movie Play Date',
+    datetime(zMemory.ZLASTVIEWEDDATE + 978307200, 'unixepoch') AS 'zMemory-Last Viewed Date',
 
     zMemory.ZPENDINGPLAYCOUNT AS 'zMemory-Pending Play Count Memory',
     zMemory.ZPENDINGSHARECOUNT AS 'zMemory-Pending Share Count Memory',
@@ -1923,13 +1923,13 @@ SELECT
     zMoment.Z_OPT AS 'zMoment-zOPT',
     zMoment.ZAGGREGATIONSCORE AS 'zMoment-Aggregation Score',
 
-    datetime(zMoment.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'zMoment-Start Date',
-    datetime(zMoment.ZREPRESENTATIVEDATE + 978307200, 'UNIXEPOCH') AS 'zMoment-Representative Date',
+    datetime(zMoment.ZSTARTDATE + 978307200, 'unixepoch') AS 'zMoment-Start Date',
+    datetime(zMoment.ZREPRESENTATIVEDATE + 978307200, 'unixepoch') AS 'zMoment-Representative Date',
 
     zMoment.ZTIMEZONEOFFSET AS 'zMoment-Timezone Offset',
 
-    datetime(zMoment.ZMODIFICATIONDATE + 978307200, 'UNIXEPOCH') AS 'zMoment-Modification Date',
-    datetime(zMoment.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'zMoment-End Date',
+    datetime(zMoment.ZMODIFICATIONDATE + 978307200, 'unixepoch') AS 'zMoment-Modification Date',
+    datetime(zMoment.ZENDDATE + 978307200, 'unixepoch') AS 'zMoment-End Date',
 
     zMoment.ZSUBTITLE AS 'zMoment-SubTitle',
     zMoment.ZLOCALIZEDLOCATIONNAMES AS 'zMoment-Localized Location Names',
@@ -1986,7 +1986,7 @@ SELECT
     SBKAzSugg.ZSUGGESTIONCONTEXT AS 'SBKAzSugg-Suggestion Context',
     SBKAzSugg.ZSHARINGCOMPOSITION AS 'SBKAzSugg-Sharing Composition',
 
-    datetime(SBKAzSugg.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'SBKAzSugg-Start Date',
+    datetime(SBKAzSugg.ZSTARTDATE + 978307200, 'unixepoch') AS 'SBKAzSugg-Start Date',
 
     CASE SBKAzSugg.ZSTATE
         WHEN 0 THEN '0-StillTesting'
@@ -2006,11 +2006,11 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || SBKAzSugg.ZNOTIFICATIONSTATE || ''
     END AS 'SBKAzSugg-Notification State',
 
-    datetime(SBKAzSugg.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'SBKAzSugg-Creation Date',
-    datetime(SBKAzSugg.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'SBKAzSugg-End Date',
-    datetime(SBKAzSugg.ZACTIVATIONDATE + 978307200, 'UNIXEPOCH') AS 'SBKAzSugg-Activation Date',
-    datetime(SBKAzSugg.ZEXPUNGEDATE + 978307200, 'UNIXEPOCH') AS 'SBKAzSugg-Expunge Date',
-    datetime(SBKAzSugg.ZRELEVANTUNTILDATE + 978307200, 'UNIXEPOCH') AS 'SBKAzSugg-Relevant Until Date',
+    datetime(SBKAzSugg.ZCREATIONDATE + 978307200, 'unixepoch') AS 'SBKAzSugg-Creation Date',
+    datetime(SBKAzSugg.ZENDDATE + 978307200, 'unixepoch') AS 'SBKAzSugg-End Date',
+    datetime(SBKAzSugg.ZACTIVATIONDATE + 978307200, 'unixepoch') AS 'SBKAzSugg-Activation Date',
+    datetime(SBKAzSugg.ZEXPUNGEDATE + 978307200, 'unixepoch') AS 'SBKAzSugg-Expunge Date',
+    datetime(SBKAzSugg.ZRELEVANTUNTILDATE + 978307200, 'unixepoch') AS 'SBKAzSugg-Relevant Until Date',
 
     SBKAzSugg.ZTITLE AS 'SBKAzSugg-Title',
     SBKAzSugg.ZSUBTITLE AS 'SBKAzSugg-Sub Title',
@@ -2054,7 +2054,7 @@ SELECT
     SBRAzSugg.ZSUGGESTIONCONTEXT AS 'SBRAzSugg-Suggestion Context',
     SBRAzSugg.ZSHARINGCOMPOSITION AS 'SBRAzSugg-Sharing Composition',
 
-    datetime(SBRAzSugg.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS 'SBRAzSugg-Start Date',
+    datetime(SBRAzSugg.ZSTARTDATE + 978307200, 'unixepoch') AS 'SBRAzSugg-Start Date',
 
     CASE SBRAzSugg.ZSTATE
         WHEN 0 THEN '0-StillTesting'
@@ -2074,11 +2074,11 @@ SELECT
         ELSE 'Unknown-New-Value!: ' || SBRAzSugg.ZNOTIFICATIONSTATE || ''
     END AS 'SBRAzSugg-Notification State',
 
-    datetime(SBRAzSugg.ZCREATIONDATE + 978307200, 'UNIXEPOCH') AS 'SBRAzSugg-Creation Date',
-    datetime(SBRAzSugg.ZENDDATE + 978307200, 'UNIXEPOCH') AS 'SBRAzSugg-End Date',
-    datetime(SBRAzSugg.ZACTIVATIONDATE + 978307200, 'UNIXEPOCH') AS 'SBRAzSugg-Activation Date',
-    datetime(SBRAzSugg.ZEXPUNGEDATE + 978307200, 'UNIXEPOCH') AS 'SBRAzSugg-Expunge Date',
-    datetime(SBRAzSugg.ZRELEVANTUNTILDATE + 978307200, 'UNIXEPOCH') AS 'SBRAzSugg-Relevant Until Date',
+    datetime(SBRAzSugg.ZCREATIONDATE + 978307200, 'unixepoch') AS 'SBRAzSugg-Creation Date',
+    datetime(SBRAzSugg.ZENDDATE + 978307200, 'unixepoch') AS 'SBRAzSugg-End Date',
+    datetime(SBRAzSugg.ZACTIVATIONDATE + 978307200, 'unixepoch') AS 'SBRAzSugg-Activation Date',
+    datetime(SBRAzSugg.ZEXPUNGEDATE + 978307200, 'unixepoch') AS 'SBRAzSugg-Expunge Date',
+    datetime(SBRAzSugg.ZRELEVANTUNTILDATE + 978307200, 'unixepoch') AS 'SBRAzSugg-Relevant Until Date',
 
     SBRAzSugg.ZTITLE AS 'SBRAzSugg-Title',
     SBRAzSugg.ZSUBTITLE AS 'SBRAzSugg-Sub Title',
@@ -2150,8 +2150,8 @@ SELECT
     zAssetAnalyState.ZWORKERTYPE AS 'zAssetAnalyState-Worker Type',
     zAssetAnalyState.ZASSET AS 'zAssetAnalyState-Asset=zAsset.Z_PK',
 
-    datetime(zAssetAnalyState.ZIGNOREUNTILDATE + 978307200, 'UNIXEPOCH') AS 'zAssetAnalyState-Ignore Until Date',
-    datetime(zAssetAnalyState.ZLASTIGNOREDDATE + 978307200, 'UNIXEPOCH') AS 'zAssetAnalyState-Last Ignored Date',
+    datetime(zAssetAnalyState.ZIGNOREUNTILDATE + 978307200, 'unixepoch') AS 'zAssetAnalyState-Ignore Until Date',
+    datetime(zAssetAnalyState.ZLASTIGNOREDDATE + 978307200, 'unixepoch') AS 'zAssetAnalyState-Last Ignored Date',
 
     zAssetAnalyState.ZSORTTOKEN AS 'zAssetAnalyState-Sort Token',
     zAssetAnalyState.ZASSETUUID AS 'zAssetAnalyState-Asset UUID',

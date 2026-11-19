@@ -1,6 +1,6 @@
 /*
 [DLU]
-    03-Apr-2026
+    19-Nov-2026
 [DATABASE PATH]
     /private/var/mobile/Library/AddressBook/AddressBook.sqlitedb
 */
@@ -8,87 +8,84 @@
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RowNumber',
-    ABPerson.ROWID AS 'RowId',
-    ABPerson.First AS 'Rirst',
-    ABPerson.Middle AS 'Middle',
-    ABPerson.Last AS 'Last',
-    ABPerson.Organization AS 'Organization',
-    ABPerson.Department AS 'Department',
-    ABPerson.Birthday AS 'Birthday',
-    ABPerson.JobTitle AS 'JobTitle',
-    ABPerson.Note AS 'Note',
+    ROW_NUMBER() OVER ( ABPerson.CreationDate ) AS "RowNumber",
 
-    (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
-        SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Work>!$_')) AS 'WorkPhone',
+    ABPerson.ROWID AS "RowId",
+    ABPerson.First AS "Rirst",
+    ABPerson.Middle AS "Middle",
+    ABPerson.Last AS "Last",
+    ABPerson.Organization AS "Organization",
+    ABPerson.Department AS "Department",
+    ABPerson.Birthday AS "Birthday",
+    ABPerson.JobTitle AS "JobTitle",
+    ABPerson.Note AS "Note",
 
-    (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
-        SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Mobile>!$_')) AS 'MobilePhone',
+    ( SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
+        SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Work>!$_' ) ) AS "WorkPhone",
 
-    (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
-        SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Home>!$_')) AS 'HomePhone',
+    ( SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
+        SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Mobile>!$_' ) ) AS "MobilePhone",
 
-    (SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label IS NULL) AS 'PhoneOther',
+    ( SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label = (
+        SELECT ROWID FROM ABMultiValueLabel WHERE value = '_$!<Home>!$_' ) ) AS "HomePhone",
 
-    (SELECT group_concat(value, ' | ') FROM ABMultiValue WHERE property = 4 AND record_id = ABPerson.ROWID) AS 'Email',
+    ( SELECT value FROM ABMultiValue WHERE property = 3 AND record_id = ABPerson.ROWID AND label IS NULL ) AS "PhoneOther",
 
-    (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
-        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
-            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'street')) AS 'Address',
+    ( SELECT GROUP_CONCAT ( value, ' | ' ) FROM ABMultiValue WHERE property = 4 AND record_id = ABPerson.ROWID ) AS "Email",
 
-    (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
-        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
-            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'city')) AS 'City',
+    ( SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
+        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID ) AND key = (
+            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER ( value ) = 'street' ) ) AS "Address",
 
-    (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
-        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
-            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'state')) AS 'State',
+    ( SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
+        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID ) AND key = (
+            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER ( value ) = 'city' ) ) AS "City",
 
-    (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
-        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
-            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'zip')) AS 'ZipCode',
+    ( SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
+        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID ) AND key = (
+            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER ( value ) = 'state' ) ) AS "State",
 
-    (SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
-        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID) AND key = (
-            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER(value) = 'country')) AS 'Country',
+    ( SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
+        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID ) AND key = (
+            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER ( value ) = 'zip' ) ) AS "ZipCode",
 
-    (SELECT GROUP_CONCAT(value, '; ') FROM ABMultiValue WHERE property = 22 AND record_id = ABPerson.ROWID) AS 'Url',
+    ( SELECT value FROM ABMultiValueEntry WHERE parent_id IN (
+        SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID ) AND key = (
+            SELECT ROWID FROM ABMultiValueEntryKey WHERE LOWER ( value ) = 'country' ) ) AS "Country",
 
-    CASE
-        WHEN ABPersonFullTextSearch_content.c21RelatedNames IS NULL THEN NULL
-        ELSE ABPersonFullTextSearch_content.c21RelatedNames
-    END AS 'RelatedNames',
+    ( SELECT GROUP_CONCAT ( value, '; ' ) FROM ABMultiValue WHERE property = 22 AND record_id = ABPerson.ROWID ) AS "Url",
 
-    ABPersonFullTextSearch_content.c19SocialProfile AS 'SocialProfile',
+    ABPersonFullTextSearch_content.c21RelatedNames AS "RelatedNames",
+    ABPersonFullTextSearch_content.c19SocialProfile AS "SocialProfile",
 
-    (SELECT GROUP_CONCAT(
+    ( SELECT GROUP_CONCAT (
         CASE ABMultiValueEntry.key
-            WHEN 1 THEN 'Service: ' || value || ' [1]'
-            WHEN 2 THEN 'Username: ' || value || ' [2]'
-            WHEN 3 THEN 'URL: ' || value || ' [3]'
+            WHEN 1 THEN 'Service: ' || value
+            WHEN 2 THEN 'Username: ' || value
+            WHEN 3 THEN 'URL: ' || value
             ELSE ABMultiValueEntry.key || ': ' || value
-        END, ' | ')
+        END, ' | ' )
         FROM ABMultiValueEntry WHERE parent_id IN (
-            SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID)) AS 'Services',
+            SELECT ROWID FROM ABMultiValue WHERE record_id = ABPerson.ROWID ) ) AS "Services",
 
     CASE
-        WHEN LENGTH(ABPerson.CreationDate) = 18 THEN strftime(
-            '%Y-%m-%d %H:%M:%S', (ABPerson.CreationDate / 1000000000) + 978307200, 'unixepoch')
-        WHEN LENGTH(ABPerson.CreationDate) = 9 THEN strftime(
-            '%Y-%m-%d %H:%M:%S', ABPerson.CreationDate + 978307200, 'unixepoch')
-        ELSE ABPerson.CreationDate
-    END AS 'CreationDateUtc',
+        WHEN LENGTH ( ABPerson.CreationDate ) = 18
+            THEN strftime ( '%F_%H:%M:%f', ( ABPerson.CreationDate / 1000000000.0 ) + 978307200, 'unixepoch' )
+        WHEN LENGTH ( ABPerson.CreationDate ) = 9
+            THEN strftime ( '%F_%H:%M:%f', ABPerson.CreationDate + 978307200, 'unixepoch' )
+        ELSE 'Type ' || ABPerson.CreationDate
+    END AS "CreationDateUtc",
 
     CASE
-        WHEN LENGTH(ABPerson.ModificationDate) = 18 THEN strftime(
-            '%Y-%m-%d %H:%M:%S', (ABPerson.ModificationDate / 1000000000) + 978307200, 'unixepoch')
-        WHEN LENGTH(ABPerson.ModificationDate) = 9 THEN strftime(
-            '%Y-%m-%d %H:%M:%S', ABPerson.ModificationDate + 978307200, 'unixepoch')
-        ELSE ABPerson.ModificationDate
-    END AS 'ModificationDateUtc',
+        WHEN LENGTH ( ABPerson.ModificationDate ) = 18
+            THEN strftime ( '%F_%H:%M:%f', ( ABPerson.ModificationDate / 1000000000.0 ) + 978307200, 'unixepoch' )
+        WHEN LENGTH ( ABPerson.ModificationDate ) = 9
+            THEN strftime ( '%F_%H:%M:%f', ABPerson.ModificationDate + 978307200, 'unixepoch' )
+        ELSE 'Type ' || ABPerson.ModificationDate
+    END AS "ModificationDateUtc",
 
     /* Source for each line of data */
-    'AddressBook.sqlitedb; Table:ABPerson(ROWID:' || ABPerson.ROWID || ')' AS 'DataSource'
+    'AddressBook.sqlitedb; Table:ABPerson(ROWID:' || ABPerson.ROWID || ')' AS "DataSource"
 
 
 FROM ABPerson

@@ -1,61 +1,71 @@
 /*
 [DLU]
-    03-Nov-2026
+    19-Nov-2026
 [FILE PATH]
     \private\var\mobile\Library\Application Support\com.apple.remotemanagementd
 [FILE NAMES]
     RMAdminStore-Local.sqlite & RMAdminStore-Cloud.sqlite
 */
 
+
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RowNumber',
+    ROW_NUMBER() OVER ( ORDER BY ZUSAGEBLOCK.ZSTARTDATE ) AS "RowNumber",
 
-    datetime(ZUSAGEBLOCK.ZSTARTDATE + 978307200, 'unixepoc') AS 'StartDateUtc',
-    datetime(ZUSAGEBLOCK.ZLASTEVENTDATE + 978307200, 'unixepoc') AS 'LastEventDateUtc',
+    strftime (
+        '%F_%H:%M:%f',
+        ZUSAGEBLOCK.ZSTARTDATE + 978307200,
+        'unixepoch'
+    ) AS "StartDateUtc",
 
-    ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS AS 'TotalTimeInSeconds',
-    ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS / 60.00 AS 'TotalTimeInMinutes',
-    ZUSAGETIMEDITEM.ZBUNDLEIDENTIFIER AS 'BundleIdentifier',
+    strftime (
+        '%F_%H:%M:%f',
+        ZUSAGEBLOCK.ZLASTEVENTDATE + 978307200,
+        'unixepoch'
+    ) AS "LastEventDateUtc",
+
+    ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS AS "TotalTimeInSeconds",
+    ( ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS / 60.00 ) AS "TotalTimeInMinutes",
+    ZUSAGETIMEDITEM.ZBUNDLEIDENTIFIER AS "BundleIdentifier",
 
     CASE ZUSAGECATEGORY.ZIDENTIFIER
-        WHEN 'DH0011' THEN 'Unspecified1 [DH0011]'
-        WHEN 'DH0012' THEN 'Unspecified2 [DH0012]'
-        WHEN 'DH0013' THEN 'Unspecified3 [DH0013]'
-        WHEN 'DH1001' THEN 'Games [DH1001]'
-        WHEN 'DH1002' THEN 'SocialNetworking [DH1002]'
-        WHEN 'DH1003' THEN 'Entertainment [DH1003]'
-        WHEN 'DH1004' THEN 'Creativity [DH1004]'
-        WHEN 'DH1005' THEN 'Productivity [DH1005]'
-        WHEN 'DH1006' THEN 'Education [DH1006]'
-        WHEN 'DH1007' THEN 'ReadingReference [DH1007]'
-        WHEN 'DH1008' THEN 'HealthFitness [DH1008]'
-        WHEN 'DH1009' THEN 'Other [DH1009]'
-        ELSE ZUSAGECATEGORY.ZIDENTIFIER
-    END AS 'UsageCategoryIdentifier',
+        WHEN 'DH0011' THEN 'Unspecified1'
+        WHEN 'DH0012' THEN 'Unspecified2'
+        WHEN 'DH0013' THEN 'Unspecified3'
+        WHEN 'DH1001' THEN 'Games'
+        WHEN 'DH1002' THEN 'SocialNetworking'
+        WHEN 'DH1003' THEN 'Entertainment'
+        WHEN 'DH1004' THEN 'Creativity'
+        WHEN 'DH1005' THEN 'Productivity'
+        WHEN 'DH1006' THEN 'Education'
+        WHEN 'DH1007' THEN 'ReadingReference'
+        WHEN 'DH1008' THEN 'HealthFitness'
+        WHEN 'DH1009' THEN 'Other'
+        ELSE 'Type ' || ZUSAGECATEGORY.ZIDENTIFIER
+    END AS "UsageCategoryIdentifier",
 
-    ZUSAGECOUNTEDITEM.ZNUMBEROFNOTIFICATIONS AS 'NumberOfNotifications',
-    ZUSAGECOUNTEDITEM.ZNUMBEROFPICKUPS AS 'NumberOfPickups',
-    ZUSAGEBLOCK.ZNUMBEROFPICKUPSWITHOUTAPPLICATIONUSAGE AS 'NumberOfPickupsWithoutApplicationUsage',
-    ZCOREDEVICE.ZNAME AS 'Name',
-    ZCOREDEVICE.ZIDENTIFIER AS 'CoreDeviceIdentifier',
+    ZUSAGECOUNTEDITEM.ZNUMBEROFNOTIFICATIONS AS "NumberOfNotifications",
+    ZUSAGECOUNTEDITEM.ZNUMBEROFPICKUPS AS "NumberOfPickups",
+    ZUSAGEBLOCK.ZNUMBEROFPICKUPSWITHOUTAPPLICATIONUSAGE AS "NumberOfPickupsWithoutApplicationUsage",
+    ZCOREDEVICE.ZNAME AS "Name",
+    ZCOREDEVICE.ZIDENTIFIER AS "CoreDeviceIdentifier",
 
     CASE ZCOREDEVICE.ZPLATFORM
-        WHEN 0 THEN 'Unknown [0]'
-        WHEN 1 THEN 'macOS [1]'
-        WHEN 2 THEN 'iOS [2]'
-        WHEN 4 THEN 'Apple Watch [4]'
-        ELSE ZCOREDEVICE.ZPLATFORM
-    END AS 'Platform',
+        WHEN 0 THEN 'Unknown'
+        WHEN 1 THEN 'macOS'
+        WHEN 2 THEN 'iOS'
+        WHEN 4 THEN 'Apple Watch'
+        ELSE 'Type ' || ZCOREDEVICE.ZPLATFORM
+    END AS "Platform",
 
-    ZCOREUSER.ZAPPLEID AS 'AppleId',
-    ZCOREUSER.ZDSID AS 'Dsid',
-    ZCOREUSER.ZALTDSID AS 'AltDsid',
-    ZCOREUSER.ZGIVENNAME || ' ' || ZCOREUSER.ZFAMILYNAME AS 'GivenName',
-    ZCOREUSER.ZFAMILYMEMBERTYPE AS 'FamilyMemberType',
+    ZCOREUSER.ZAPPLEID AS "AppleId",
+    ZCOREUSER.ZDSID AS "Dsid",
+    ZCOREUSER.ZALTDSID AS "AltDsid",
+    ZCOREUSER.ZGIVENNAME || ' ' || ZCOREUSER.ZFAMILYNAME AS "GivenName",
+    ZCOREUSER.ZFAMILYMEMBERTYPE AS "FamilyMemberType",
 
     /* Source for each line of data */
-    'Table: ZUSAGEGETIMEDITEM (Z_PK:' || ZUSAGETIMEDITEM.Z_PK || ')' AS 'DataSource'
+    'Table: ZUSAGEGETIMEDITEM (Z_PK:' || ZUSAGETIMEDITEM.Z_PK || ')' AS "DataSource"
 
 
 FROM ZUSAGETIMEDITEM

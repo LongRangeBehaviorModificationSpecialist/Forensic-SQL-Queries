@@ -1,5 +1,5 @@
 SELECT  pushRepository.scopeIndex AS 'pushRepository- scopeIndex',
-  DateTime(pushRepository.dequeueOrder + 978307200, 'UNIXEPOCH') AS 'pushRepository- dequeueOrder',
+  DateTime(pushRepository.dequeueOrder + 978307200, 'unixepoch') AS 'pushRepository- dequeueOrder',
   CASE pushRepository.changeType
     WHEN 0 THEN '0-Unknown- Still Testing-0'
     WHEN 2 THEN '2-Unknown- Still Testing-2'
@@ -10,7 +10,7 @@ SELECT  pushRepository.scopeIndex AS 'pushRepository- scopeIndex',
   pushRepository.identifier AS 'pushRepository- identifier',
   pushRepository.relatedIdentifier AS 'pushRepository- relatedIdentifier',
   pushRepository.secondaryIdentifier AS 'pushRepository- secondaryIdentifier',
-  pushRepository.uploadIdentifier AS 'pushRepository- uploadIdentifier',  
+  pushRepository.uploadIdentifier AS 'pushRepository- uploadIdentifier',
   CASE pushRepository.trashed
     WHEN 0 THEN '0-Not Trashed-0'
     ELSE 'Unknown-New-Value!: ' || pushRepository.trashed || ''

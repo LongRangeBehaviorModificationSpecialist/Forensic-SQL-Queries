@@ -1,36 +1,41 @@
 /*
 [DLU]
-    03-Nov-2026
+    19-Nov-2026
 */
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RowNumber',
-    history_visits.id AS 'history_visits.Id',
-    history_items.id AS 'history_items.Id',
+    ROW_NUMBER() OVER ( ORDER BY history_visits.visit_time ) AS "RowNumber",
 
-    datetime(history_visits.visit_time + 978307200, 'unixepoc') AS 'history_visits.VisitTimeUtc',
+    history_visits.id AS "HistoryVisitsId",
+    history_items.id AS "HistoryItemsId",
+
+    strftime (
+        '%F_%H:%M:%f',
+        history_visits.visit_time + 978307200,
+        'unixepoch'
+    ) AS "HistoryVisitsVisitTimeUtc",
 
     CASE history_visits.load_successful
-        WHEN 0 THEN 'No [0]'
-        WHEN 1 THEN 'Yes [1]'
+        WHEN 0 THEN 'No'
+        WHEN 1 THEN 'Yes'
         ELSE history_visits.load_successful
-    END AS 'history_visits.LoadSuccessful',
+    END AS "HistoryVisitsLoadSuccessful",
 
     CASE history_visits.origin
-        WHEN 0 THEN 'ViewedOnThisDevice [0]'
-        WHEN 1 THEN 'SyncedFromiCloudDevice [1]'
+        WHEN 0 THEN 'ViewedOnThisDevice'
+        WHEN 1 THEN 'SyncedFromiCloudDevice'
         ELSE history_visits.origin
-    END AS 'history_visits.Origin',
+    END AS "HistoryVisitsOrigin",
 
-    history_visits.title AS 'history_visits.Title',
-    history_items.url AS 'history_items.Url',
-    history_items.visit_count AS 'history_items.VisitCount',
-    history_visits.redirect_source AS 'history_visits.RedirectSource',
-    history_visits.redirect_destination AS 'history_visits.RedirectDestination',
+    history_visits.title AS "HistoryVisitsTitle",
+    history_items.url AS "HistoryItemsUrl",
+    history_items.visit_count AS "HistoryItemsVisitCount",
+    history_visits.redirect_source AS "HistoryVisitsRedirectSource",
+    history_visits.redirect_destination AS "HistoryVisitsRedirectDestination",
 
     /* Source for each line of data */
-    'History.db; Table: history_items(id:' ||  history_items.id || '), Table: history_visits(id:' || history_visits.id || ')' AS 'DataSource'
+    'History.db; Table: history_items(id:' ||  history_items.id || '), Table: history_visits(id:' || history_visits.id || ')' AS "DataSource"
 
 
 FROM history_visits

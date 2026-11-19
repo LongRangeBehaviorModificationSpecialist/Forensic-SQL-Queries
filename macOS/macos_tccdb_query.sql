@@ -10,18 +10,18 @@ QUERY=
 */
 
 SELECT
-    datetime ( LAST_MODIFIED, 'UNIXEPOCH' ) AS 'LastModified',
-    SERVICE AS 'Service',
-    CLIENT AS 'Client',
+    datetime ( LAST_MODIFIED, 'unixepoch' ) AS "LastModified",
+    SERVICE AS "Service",
+    CLIENT AS "Client",
 
     CASE ALLOWED
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE 'Contact Examiner for Further'
-    END AS 'Allowed',
+    END AS "Allowed",
 
-    CLIENT_TYPE AS 'ClientType',
-    PROMPT_COUNT AS 'PromptCount',
-    INDIRECT_OBJECT_IDENTIFIER AS 'IndirectObjectIdentifier'
+    CLIENT_TYPE AS "ClientType",
+    PROMPT_COUNT AS "PromptCount",
+    INDIRECT_OBJECT_IDENTIFIER AS "IndirectObjectIdentifier"
 
 FROM ACCESS

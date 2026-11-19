@@ -1,6 +1,6 @@
-SELECT DateTime(scopes.creationDate + 978307200, 'UNIXEPOCH') AS 'scopes-creationDate',
+SELECT DateTime(scopes.creationDate + 978307200, 'unixepoch') AS 'scopes-creationDate',
   scopes.scopeIdentifier AS 'scopes-scopeIdentifier = Photos.sqlite_zShare-ScopeID',
-  DateTime(scopes.initialSyncDate + 978307200, 'UNIXEPOCH') AS 'scopes- initialSyncDate',
+  DateTime(scopes.initialSyncDate + 978307200, 'unixepoch') AS 'scopes- initialSyncDate',
   cloudCache.class AS 'cloudCache-class',
   statusCenter.class AS 'statusCenter- class',
   cloudCache.serializedRecord AS 'cloudCache- serializedRecord',
@@ -25,7 +25,7 @@ SELECT DateTime(scopes.creationDate + 978307200, 'UNIXEPOCH') AS 'scopes-creatio
   downloadQueue.position AS 'downloadQueue-position',
   downloadQueue.taskIdentifier AS 'downloadQueue-taskIdentifier',
   downloadQueue.retryCount AS 'downloadQueue-retryCount',
-  DateTime(idMapping.addTimestamp + 978307200, 'UNIXEPOCH') AS 'idMapping-addTimestamp',
+  DateTime(idMapping.addTimestamp + 978307200, 'unixepoch') AS 'idMapping-addTimestamp',
   CASE cloudCache.confirmed
     WHEN 1 THEN 'Yes-1'
     WHEN 2 THEN 'StillTesting-2'
@@ -35,9 +35,9 @@ SELECT DateTime(scopes.creationDate + 978307200, 'UNIXEPOCH') AS 'scopes-creatio
     WHEN 1 THEN 'Active-1'
     ELSE 'Unknown-New-Value!: ' || cloudCache.state || ''
   END AS 'cloudCache-state',
-  DateTime(scopes.disabledDate + 978307200, 'UNIXEPOCH') AS 'scopes-disabledDate',
-  DateTime(scopes.deleteDate + 978307200, 'UNIXEPOCH') AS 'scopes-deleteDate = zShare-ExpiryDate',
-  DateTime(idMapping.deleteTimestamp + 978307200, 'UNIXEPOCH') AS 'idMapping-deleteTimestamp',
+  DateTime(scopes.disabledDate + 978307200, 'unixepoch') AS 'scopes-disabledDate',
+  DateTime(scopes.deleteDate + 978307200, 'unixepoch') AS 'scopes-deleteDate = zShare-ExpiryDate',
+  DateTime(idMapping.deleteTimestamp + 978307200, 'unixepoch') AS 'idMapping-deleteTimestamp',
   CASE idMapping.deleteDirection
     WHEN 1 THEN 'Deleted via Recently Deleted via Device Photos App-1'
     WHEN 2 THEN 'StillTesting-2'
@@ -60,9 +60,9 @@ SELECT DateTime(scopes.creationDate + 978307200, 'UNIXEPOCH') AS 'scopes-creatio
   downloadQueue.fileSize AS 'downloadQueue-fileSize',
   scopes.estimatedSize AS 'scopes- estimatedSize',
   scopes.estimatedAssetCount AS 'scopes- estimatedAssetCount',
-  DateTime(scopes.lastClearedPush + 978307200, 'UNIXEPOCH') AS 'scopes- lastClearedPush',
-  DateTime(scopes.lastLibraryInfoUpdate + 978307200, 'UNIXEPOCH') AS 'scopes- last Library InfoUpdate',
-  DateTime(scopes.pullFromTransportLastCompletionDate + 978307200, 'UNIXEPOCH') AS 'scopes- pull From Transport Last CompletionDate',
+  DateTime(scopes.lastClearedPush + 978307200, 'unixepoch') AS 'scopes- lastClearedPush',
+  DateTime(scopes.lastLibraryInfoUpdate + 978307200, 'unixepoch') AS 'scopes- last Library InfoUpdate',
+  DateTime(scopes.pullFromTransportLastCompletionDate + 978307200, 'unixepoch') AS 'scopes- pull From Transport Last CompletionDate',
   scopes.droppedSomeRecords AS 'scopes- dropped Some Records',
   scopes.featureVersion AS 'scopes- feature Version',
   scopes.flags AS 'scopes-flags',

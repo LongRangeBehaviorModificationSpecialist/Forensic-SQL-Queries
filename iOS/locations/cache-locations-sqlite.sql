@@ -1,6 +1,6 @@
 /*
 [DLU]
-    03-Nov-2026
+    19-Nov-2026
 [DATABASE PATH]
     /private/var/mobile/Library/Caches/com.apple.routined/Cache.sqlite
 [VERSION]
@@ -9,56 +9,56 @@
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RowNumber',
+    ROW_NUMBER() OVER ( ORDER BY ZRTCLLOCATIONMO.ZTIMESTAMP ) AS "RowNumber",
 
     /* Primary key of the record */
-    ZRTCLLOCATIONMO.Z_PK AS 'ZPk',
+    ZRTCLLOCATIONMO.Z_PK AS "ZPk",
 
     /* Convert the ZTIMESTAMP value to UTC in the 'yyyy-mm-ddTHH:MM:SSZ' format */
-    strftime('%Y-%m-%dT%H:%M:%SZ', datetime(ZRTCLLOCATIONMO.ZTIMESTAMP + 978307200, 'unixepoch')) AS 'TimestampUtc',
+    strftime ( '%Y-%m-%dT%H:%M:%SZ', ZRTCLLOCATIONMO.ZTIMESTAMP + 978307200, 'unixepoch' ) AS "TimeStampUtc",
 
     /* Convert the ZTIMESTAMP value to local time in the 'yyyy-mm-dd HH:MM:SS' format */
-    strftime('%Y-%m-%d %H:%M:%S (UTC-4)', datetime(ZRTCLLOCATIONMO.ZTIMESTAMP + 978307200, 'unixepoch', 'localtime')) AS 'TimestampLocal',
+    strftime ( '%Y-%m-%d %H:%M:%S', ZRTCLLOCATIONMO.ZTIMESTAMP + 978307200, 'unixepoch', 'localtime' ) AS "TimeStampLocal",
 
     /* Latitude value of the entry */
-    ZRTCLLOCATIONMO.ZLATITUDE AS 'Latitude',
+    ZRTCLLOCATIONMO.ZLATITUDE AS "Latitude",
 
     /* Longitude value of the entry */
-    ZRTCLLOCATIONMO.ZLONGITUDE AS 'Longitude',
+    ZRTCLLOCATIONMO.ZLONGITUDE AS "Longitude",
 
-    RTRIM(LTRIM(CONCAT(ROUND(ZRTCLLOCATIONMO.ZLATITUDE, 6), ',', ROUND(ZRTCLLOCATIONMO.ZLONGITUDE, 6)))) AS 'LatLongMerged',
+    RTRIM ( LTRIM ( CONCAT ( ROUND ( ZRTCLLOCATIONMO.ZLATITUDE, 6 ), ',', ROUND ( ZRTCLLOCATIONMO.ZLONGITUDE, 6 ) ) ) ) AS "LatLongMerged",
 
     /* Display the recorded speed for the data point (round the value to four decimal places) */
     CASE ZRTCLLOCATIONMO.ZSPEED
         WHEN -1 THEN '[N/A]'
-        ELSE ROUND(ZRTCLLOCATIONMO.ZSPEED, 4)
-    END AS 'SpeedMetersPerSec',
+        ELSE ROUND ( ZRTCLLOCATIONMO.ZSPEED, 4 )
+    END AS "SpeedMetersPerSec",
 
     /* Convert meters/second to miles/hour (round the result to four decimal places) */
     CASE ZRTCLLOCATIONMO.ZSPEED
         WHEN -1 THEN '[N/A]'
-        ELSE ROUND(ZRTCLLOCATIONMO.ZSPEED * 2.23694, 4)
-    END AS 'SpeedMph',
+        ELSE ROUND ( ( ZRTCLLOCATIONMO.ZSPEED * 2.23694 ), 4 )
+    END AS "SpeedMph",
 
     CASE ZRTCLLOCATIONMO.ZCOURSE
         WHEN -1 THEN '[N/A]'
         ELSE ZRTCLLOCATIONMO.ZCOURSE
-    END AS 'Course',
+    END AS "Course",
 
     /* Round the ZHORIZONTALACCURACY value to four decimal places */
-    ROUND(ZRTCLLOCATIONMO.ZHORIZONTALACCURACY, 4) AS 'HorizontalAccuracy(M)',
+    ROUND ( ZRTCLLOCATIONMO.ZHORIZONTALACCURACY, 4 ) AS "HorizontalAccuracyMeters",
 
     /* Convert the ZHORIZONTALACCURACY value from meters to feet and round the value to four decimal places */
-    ROUND(ZRTCLLOCATIONMO.ZHORIZONTALACCURACY * 3.281, 4) AS 'HorizontalAccuracy(Feet)',
+    ROUND ( ( ZRTCLLOCATIONMO.ZHORIZONTALACCURACY * 3.281 ), 4 ) AS "HorizontalAccuracyFeet",
 
     /* Round the ZVERTICALACCURACY value to four decimal places */
-    ROUND(ZRTCLLOCATIONMO.ZVERTICALACCURACY, 4) AS 'VerticalAccuracy(M)',
+    ROUND ( ZRTCLLOCATIONMO.ZVERTICALACCURACY, 4 ) AS "VerticalAccuracyMeters",
 
     /* Convert the ZVERTICALACCURACY value from meters to feet and round the value to four decimal places */
-    ROUND(ZRTCLLOCATIONMO.ZVERTICALACCURACY * 3.281, 4) AS 'VerticalAccuracy(Feet)',
+    ROUND ( ( ZRTCLLOCATIONMO.ZVERTICALACCURACY * 3.281 ), 4 ) AS "VerticalAccuracyFeet",
 
     /* Source for each line of data */
-    'Cache.sqlite; Table: ZRTCLLOCATIONMO(Z_PK:' || ZRTCLLOCATIONMO.Z_PK || ')' AS 'DataSource'
+    'Cache.sqlite; Table: ZRTCLLOCATIONMO(Z_PK:' || ZRTCLLOCATIONMO.Z_PK || ')' AS "DataSource"
 
 
 FROM ZRTCLLOCATIONMO

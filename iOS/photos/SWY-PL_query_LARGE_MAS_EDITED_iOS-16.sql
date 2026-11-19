@@ -6,7 +6,7 @@ Query copied from https://github.com/ScottKjr3347/iOS_SWY_PL_Photos.sqlite_Queri
 */
 
 SELECT
-    ROW_NUMBER() OVER() AS 'RowNumber',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
     ZASSET.Z_PK AS 'ZASSET.ZPk ',
     -- ZASSET.ZSORTTOKEN AS 'ZASSET.ZSORTTOKEN',
     -- ZASSET.ZPROMOTIONSCORE AS 'ZASSET.ZPROMOTIONSCORE',
@@ -75,23 +75,23 @@ SELECT
 
     CASE
         WHEN ZASSET.ZADDEDDATE < 0 THEN 'Invalid Date/Time Value: [' || ZASSET.ZADDEDDATE || ']'
-        ELSE datetime(ZASSET.ZADDEDDATE + 978307200, 'unixepoc')
+        ELSE datetime(ZASSET.ZADDEDDATE + 978307200, 'unixepoch')
     END AS 'ZASSET.AddedDateUtc',
 
     CASE
         WHEN ZASSET.ZDATECREATED < 0 THEN 'Invalid Date/Time Value: [' || ZASSET.ZDATECREATED || ']'
-        ELSE datetime(ZASSET.ZDATECREATED + 978307200, 'unixepoc')
+        ELSE datetime(ZASSET.ZDATECREATED + 978307200, 'unixepoch')
     END AS 'ZASSET.DateCreatedUtc',
 
-    datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'unixepoc') AS 'ZASSET.ModificationDateUtc',
+    datetime(ZASSET.ZMODIFICATIONDATE + 978307200, 'unixepoch') AS 'ZASSET.ModificationDateUtc',
 
     CASE
         WHEN NULL THEN NULL
-        ELSE datetime(ZASSET.ZANALYSISSTATEMODIFICATIONDATE + 978307200, 'unixepoc')
+        ELSE datetime(ZASSET.ZANALYSISSTATEMODIFICATIONDATE + 978307200, 'unixepoch')
     END AS 'ZASSET.AnalysisStateModificationDateUtc',
 
-    datetime(ZCLOUDMASTER.ZCREATIONDATE + 978307200, 'unixepoc') AS 'ZCLOUDMASTER.CreationDateUtc',
-    datetime(ZINTERNALRESOURCE.ZCLOUDMASTERDATECREATED + 978307200, 'unixepoc') AS 'ZINTERNALRESOURCE.CloudMasterDateCreatedUtc',
+    datetime(ZCLOUDMASTER.ZCREATIONDATE + 978307200, 'unixepoch') AS 'ZCLOUDMASTER.CreationDateUtc',
+    datetime(ZINTERNALRESOURCE.ZCLOUDMASTERDATECREATED + 978307200, 'unixepoch') AS 'ZINTERNALRESOURCE.CloudMasterDateCreatedUtc',
 
     ZADDASSETATTR.ZIMPORTEDBYBUNDLEIDENTIFIER AS 'ZADDASSETATTR.ImportedByBundleIdentifier',
     ZADDASSETATTR.ZIMPORTEDBYDISPLAYNAME AS 'ZADDASSETATTR.ImportedByDisplayName',
@@ -110,8 +110,8 @@ SELECT
 
     ParentzGenAlbum.ZTITLE AS 'ParentzGenAlbum.Title',
 
-    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'unixepoc') AS 'ParentzGenAlbum.CreationDateUtc',
-    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'unixepoc') AS 'zGenAlbum.CreationDateUtc',
+    datetime(ParentzGenAlbum.ZCREATIONDATE + 978307200, 'unixepoch') AS 'ParentzGenAlbum.CreationDateUtc',
+    datetime(zGenAlbum.ZCREATIONDATE + 978307200, 'unixepoch') AS 'zGenAlbum.CreationDateUtc',
 
     CASE zGenAlbum.ZCLOUDLOCALSTATE
         WHEN 0 THEN '0 [iCloudPhotos ON=Asset In Shared/Other Album / iCloudPhotos OFF=Generic Album]'
@@ -138,7 +138,7 @@ SELECT
         ELSE 'Unknown Value: ' || ZADDASSETATTR.ZIMPORTEDBY || ''
     END AS 'ZADDASSETATTR.ImportedBy',
 
-    datetime(ZCLOUDMASTER.ZIMPORTDATE + 978307200, 'unixepoc') AS 'ZCLOUDMASTER.ImportDateUtc',
+    datetime(ZCLOUDMASTER.ZIMPORTDATE + 978307200, 'unixepoch') AS 'ZCLOUDMASTER.ImportDateUtc',
 
 	CASE ZCLOUDMASTER.ZIMPORTEDBY
         WHEN 0 THEN '0 [Cloud Other]'
@@ -292,17 +292,17 @@ SELECT
     ZASSET.ZIMPORTSESSION AS 'ZASSET.ImportSession',
     ZADDASSETATTR.ZIMPORTSESSIONID AS 'ZADDASSETATTR.ImportSessionId',
 
-    datetime(ZADDASSETATTR.ZALTERNATEIMPORTIMAGEDATE + 978307200, 'unixepoc') AS 'ZADDASSETATTR.AlternateImportImageDateUtc',
+    datetime(ZADDASSETATTR.ZALTERNATEIMPORTIMAGEDATE + 978307200, 'unixepoch') AS 'ZADDASSETATTR.AlternateImportImageDateUtc',
 
     ZCLOUDMASTER.ZIMPORTSESSIONID AS 'ZCLOUDMASTER.zimportsessionid',
 
-    datetime(ZASSET.ZCLOUDBATCHPUBLISHDATE + 978307200, 'unixepoc') AS 'ZASSET.CloudBatchPublishDateUtc',
-    datetime(ZASSET.ZCLOUDSERVERPUBLISHDATE + 978307200, 'unixepoc') AS 'ZASSET.CloudServerPublishDateUtc',
+    datetime(ZASSET.ZCLOUDBATCHPUBLISHDATE + 978307200, 'unixepoch') AS 'ZASSET.CloudBatchPublishDateUtc',
+    datetime(ZASSET.ZCLOUDSERVERPUBLISHDATE + 978307200, 'unixepoch') AS 'ZASSET.CloudServerPublishDateUtc',
 
     ZASSET.ZCLOUDDOWNLOADREQUESTS AS 'ZASSET.CloudDownloadRequests',
     ZASSET.ZCLOUDBATCHID AS 'ZASSET.CloudBatchId',
 
-    datetime(ZADDASSETATTR.ZLASTUPLOADATTEMPTDATE + 978307200, 'unixepoc') AS 'ZADDASSETATTR.LastUploadAttemptDateUtc',
+    datetime(ZADDASSETATTR.ZLASTUPLOADATTEMPTDATE + 978307200, 'unixepoch') AS 'ZADDASSETATTR.LastUploadAttemptDateUtc',
 
     ZADDASSETATTR.ZUPLOADATTEMPTS AS 'ZADDASSETATTR.UploadAttempts',
 
@@ -626,12 +626,12 @@ SELECT
 
     CASE ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE
         WHEN 0 THEN 'N/A [0]'
-        ELSE datetime(ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE + 978307200, 'unixepoc')
+        ELSE datetime(ZINTERNALRESOURCE.ZCLOUDLASTPREFETCHDATE + 978307200, 'unixepoch')
     END AS 'ZINTERNALRESOURCE.zcloudlastprefetchdateUtc',
 
     ZINTERNALRESOURCE.ZCLOUDPREFETCHCOUNT AS 'ZINTERNALRESOURCE.zcloudprefetchcount',
 
-    datetime(ZINTERNALRESOURCE.ZCLOUDLASTONDEMANDDOWNLOADDATE + 978307200, 'unixepoc') AS 'ZINTERNALRESOURCE.zcloudlastondemanddownloaddateUtc',
+    datetime(ZINTERNALRESOURCE.ZCLOUDLASTONDEMANDDOWNLOADDATE + 978307200, 'unixepoch') AS 'ZINTERNALRESOURCE.zcloudlastondemanddownloaddateUtc',
 
     CASE ZINTERNALRESOURCE.ZUTICONFORMANCEHINT
         WHEN 0 THEN '0 [N/A / Does not Conform]'
@@ -744,8 +744,8 @@ SELECT
 
     ZUNMANAGEDADJUSTMENT.ZUUID AS 'ZUNMANAGEDADJUSTMENT.Uuid',
 
-    datetime(ZASSET.ZADJUSTMENTTIMESTAMP + 978307200, 'unixepoc') AS 'ZASSET.AdjustmentTimestampUtc',
-    datetime(ZUNMANAGEDADJUSTMENT.ZADJUSTMENTTIMESTAMP + 978307200, 'unixepoc') AS 'ZUNMANAGEDADJUSTMENT.AdjustmentTimestampUtc',
+    datetime(ZASSET.ZADJUSTMENTTIMESTAMP + 978307200, 'unixepoch') AS 'ZASSET.AdjustmentTimestampUtc',
+    datetime(ZUNMANAGEDADJUSTMENT.ZADJUSTMENTTIMESTAMP + 978307200, 'unixepoch') AS 'ZUNMANAGEDADJUSTMENT.AdjustmentTimestampUtc',
 
     ZADDASSETATTR.ZEDITORBUNDLEID AS 'ZADDASSETATTR.EditorBundleId',
     ZUNMANAGEDADJUSTMENT.ZEDITORLOCALIZEDNAME AS 'ZUNMANAGEDADJUSTMENT.EditorLocalizedName',
@@ -796,7 +796,7 @@ SELECT
         ELSE 'Unknown Value: ' || ZASSET.ZTRASHEDSTATE || ''
     END AS 'ZASSET.TrashedState',
 
-    datetime(ZASSET.ZTRASHEDDATE + 978307200, 'unixepoc') AS 'ZASSET.TrashedDateUtc',
+    datetime(ZASSET.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'ZASSET.TrashedDateUtc',
 
     CASE ZASSET.ZDELETEREASON
         WHEN NULL THEN NULL
@@ -819,7 +819,7 @@ SELECT
         ELSE 'Unknown Value: ' || ZINTERNALRESOURCE.ZTRASHEDSTATE || ''
     END AS 'ZINTERNALRESOURCE.TrashedState',
 
-    datetime(ZINTERNALRESOURCE.ZTRASHEDDATE + 978307200, 'unixepoc') AS 'ZINTERNALRESOURCE.TrashedDateUtc',
+    datetime(ZINTERNALRESOURCE.ZTRASHEDDATE + 978307200, 'unixepoch') AS 'ZINTERNALRESOURCE.TrashedDateUtc',
 
     CASE ZASSET.ZCLOUDDELETESTATE
         WHEN 0 THEN 'CloudAssetNotDeleted [0]'
@@ -847,7 +847,7 @@ SELECT
 
     ZINTERNALRESOURCE.ZCLOUDDELETEASSETUUIDWITHRESOURCETYPE AS 'ZINTERNALRESOURCE.CloudDeleteAssetUuidWithResourceType',
 
-    datetime(zMedAnlyAstAttr.ZMEDIAANALYSISTIMESTAMP + 978307200, 'unixepoc') AS 'zMedAnlyAstAttr.MediaAnalysisTimestampUtc',
+    datetime(zMedAnlyAstAttr.ZMEDIAANALYSISTIMESTAMP + 978307200, 'unixepoch') AS 'zMedAnlyAstAttr.MediaAnalysisTimestampUtc',
 
     ZADDASSETATTR.ZPENDINGVIEWCOUNT AS 'ZADDASSETATTR.PendingViewCount',
     ZADDASSETATTR.ZVIEWCOUNT AS 'ZADDASSETATTR.ViewCount',
@@ -856,7 +856,7 @@ SELECT
     ZADDASSETATTR.ZPENDINGSHARECOUNT AS 'ZADDASSETATTR.PendingShareCount',
     ZADDASSETATTR.ZSHARECOUNT AS 'ZADDASSETATTR.ShareCount',
 
-    datetime(ZASSET.ZLASTSHAREDDATE + 978307200, 'unixepoc') AS 'ZASSET.LastSharedDateUtc',
+    datetime(ZASSET.ZLASTSHAREDDATE + 978307200, 'unixepoch') AS 'ZASSET.LastSharedDateUtc',
 
     ZADDASSETATTR.ZSHAREORIGINATOR AS 'ZADDASSETATTR.ShareOriginator',
 
@@ -873,7 +873,7 @@ SELECT
         ELSE 'Unknown Value: ' || ZADDASSETATTR.ZSCENEANALYSISISFROMPREVIEW || ''
     END AS 'ZADDASSETATTR.SceneAnalysisIsFromPreview',
 
-    datetime(ZADDASSETATTR.ZSCENEANALYSISTIMESTAMP + 978307200, 'unixepoc') AS 'ZADDASSETATTR.SceneAnalysisTimestampUtc',
+    datetime(ZADDASSETATTR.ZSCENEANALYSISTIMESTAMP + 978307200, 'unixepoch') AS 'ZADDASSETATTR.SceneAnalysisTimestampUtc',
 
     CASE ZASSET.ZDUPLICATEASSETVISIBILITYSTATE
         WHEN 0 THEN 'NoDuplicates [0]'
@@ -898,7 +898,7 @@ SELECT
     ZCLOUDMASTER.ZSOURCEMASTERFORDUPLICATIONIDENTIFIER AS 'ZCLOUDMASTER.SourceMasterForDuplicationIdentifier',
 
     /* Source for each line of data */
-    'private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite; ZASSET(Z_PK:' || ZASSET.Z_PK || ')' AS 'DataSource'
+    'private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite; ZASSET(Z_PK:' || ZASSET.Z_PK || ')' AS "DataSource"
 
 
 FROM ZASSET

@@ -1,5 +1,5 @@
 SELECT pushRepository.scopeIndex AS 'pushRepository- scopeIndex',
-  DateTime(pushRepository.dequeueOrder + 978307200, 'UNIXEPOCH') AS 'pushRepository- dequeueOrder',
+  DateTime(pushRepository.dequeueOrder + 978307200, 'unixepoch') AS 'pushRepository- dequeueOrder',
   CASE pushRepository.changeType
     WHEN 0 THEN '0-Unknown- Still Testing-0'
     WHEN 2 THEN '2-Unknown- Still Testing-2'

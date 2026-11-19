@@ -11,7 +11,7 @@
 
 SELECT
 
-    ROW_NUMBER() OVER() AS 'RECORD_NUMBER',
+    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
     message.ROWID AS 'message.ROWID',
     message.guid AS 'message.guid',
 
@@ -32,29 +32,29 @@ SELECT
     message.service AS 'message.service',
 
     CASE
-        WHEN LENGTH(message.date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date / 1000000000) + 978307200, 'UNIXEPOCH')
-        WHEN LENGTH(message.date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(message.date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date / 1000000000) + 978307200, 'unixepoch')
+        WHEN LENGTH(message.date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date + 978307200, 'unixepoch')
         WHEN message.date IS 0 THEN NULL
         ELSE message.date
     END AS 'message.date(UTC)',
 
     CASE
-        WHEN LENGTH(message.date_delivered) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_delivered / 1000000000) + 978307200, 'UNIXEPOCH')
-        WHEN LENGTH(message.date_delivered) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_delivered + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(message.date_delivered) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_delivered / 1000000000) + 978307200, 'unixepoch')
+        WHEN LENGTH(message.date_delivered) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_delivered + 978307200, 'unixepoch')
         WHEN message.date_delivered IS 0 THEN NULL
         ELSE message.date_delivered
     END AS 'message.date_delivered(UTC)',
 
     CASE
-        WHEN LENGTH(message.date_read) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_read / 1000000000) + 978307200, 'UNIXEPOCH')
-        WHEN LENGTH(message.date_read) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_read + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(message.date_read) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_read / 1000000000) + 978307200, 'unixepoch')
+        WHEN LENGTH(message.date_read) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_read + 978307200, 'unixepoch')
         WHEN message.date_read IS 0 THEN NULL
         ELSE message.date_read
     END AS 'message.date_read(UTC)',
 
     CASE
-        WHEN LENGTH(message.date_edited) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_edited / 1000000000) + 978307200, 'UNIXEPOCH')
-        WHEN LENGTH(message.date_edited) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_edited + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(message.date_edited) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_edited / 1000000000) + 978307200, 'unixepoch')
+        WHEN LENGTH(message.date_edited) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_edited + 978307200, 'unixepoch')
         WHEN message.date_edited IS 0 THEN NULL
         ELSE message.date_edited
     END AS 'message.date_edited(UTC)',
@@ -107,8 +107,8 @@ SELECT
     END AS 'message.is_played',
 
     CASE
-        WHEN LENGTH(message.date_played) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_played / 1000000000) + 978307200, 'UNIXEPOCH')
-        WHEN LENGTH(message.date_played) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_played + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(message.date_played) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (message.date_played / 1000000000) + 978307200, 'unixepoch')
+        WHEN LENGTH(message.date_played) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', message.date_played + 978307200, 'unixepoch')
         WHEN message.date_played IS 0 THEN NULL
         ELSE message.date_played
     END AS 'message.date_played(UTC)',
@@ -290,8 +290,8 @@ SELECT
 
     -- Date the attachment was created
     CASE
-        WHEN LENGTH(attachment.created_date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (attachment.created_date / 1000000000) + 978307200, 'UNIXEPOCH')
-        WHEN LENGTH(attachment.created_date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', attachment.created_date + 978307200, 'UNIXEPOCH')
+        WHEN LENGTH(attachment.created_date) = 18 THEN strftime('%Y-%m-%d %H:%M:%S', (attachment.created_date / 1000000000) + 978307200, 'unixepoch')
+        WHEN LENGTH(attachment.created_date) = 9 THEN strftime('%Y-%m-%d %H:%M:%S', attachment.created_date + 978307200, 'unixepoch')
         WHEN attachment.created_date IS NULL THEN NULL
         ELSE attachment.created_date
     END AS 'attachment.created_date(UTC)',
