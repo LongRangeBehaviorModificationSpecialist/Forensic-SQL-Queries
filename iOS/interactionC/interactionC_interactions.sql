@@ -1,0 +1,71 @@
+/*
+[DLU]
+    03-Nov-2026
+[VERSION]
+    Tested on iOS 18
+[DATABASE PATH]
+    /private/var/mobile/Library/CoreDuet/People/interactionC.db
+*/
+
+
+SELECT
+
+    ROW_NUMBER() OVER() AS 'RowNumber',
+    ZINTERACTIONS.Z_PK AS 'ZPk',
+
+    CASE ZINTERACTIONS.ZDIRECTION
+        WHEN 0 THEN 'Incoming [0]'
+        WHEN 1 THEN 'Outgoing [1]'
+        ELSE ZINTERACTIONS.ZDIRECTION
+    END AS 'MessageDirection',
+
+    ZINTERACTIONS.ZBUNDLEID AS 'BundleId',
+    ZINTERACTIONS.ZDOMAINIDENTIFIER AS 'DomainIdentifier',
+    ZINTERACTIONS.ZGROUPNAME AS 'GroupName',
+    ZINTERACTIONS.ZSENDER AS 'Sender',
+    Z_2INTERACTIONRECIPIENT.Z_2RECIPIENTS AS 'Recipients',
+    ZCONTACTS.ZDISPLAYNAME AS 'DisplayName',
+    ZCONTACTS.ZIDENTIFIER AS 'Identifier',
+    ZINTERACTIONS.ZCONTENTURL AS 'ContentUrl',
+
+    datetime(ZINTERACTIONS.ZSTARTDATE + 978307200, 'unixepoch') AS 'StartDateUtc',
+    datetime(ZINTERACTIONS.ZENDDATE + 978307200, 'unixepoch') AS 'EndDateUtc',
+    datetime(ZINTERACTIONS.ZCREATIONDATE + 978307200, 'unixepoch') AS 'CreationDateUtc',
+    datetime(ZINTERACTIONS.ZUPDATEDATE + 978307200, 'unixepoch') AS 'UpdateDateUtc',
+
+    ZCONTACTS.ZINCOMINGRECIPIENTCOUNT AS 'IncomingRecipientCount',
+
+    datetime(ZCONTACTS.ZFIRSTINCOMINGRECIPIENTDATE + 978307200, 'unixepoch') AS 'FirstIncomingRecipientDateUtc',
+
+    ZCONTACTS.ZINCOMINGSENDERCOUNT AS 'IncomingSenderCount',
+
+    datetime(ZCONTACTS.ZFIRSTINCOMINGSENDERDATE + 978307200, 'unixepoch') AS 'FirstIncomingSenderDateUtc',
+
+    ZCONTACTS.ZOUTGOINGRECIPIENTCOUNT AS 'OutgoingRecipientCount',
+
+    datetime(ZCONTACTS.ZFIRSTOUTGOINGRECIPIENTDATE + 978307200, 'unixepoch') AS 'FirstOutgoingRecipientDateUtc',
+
+    CASE
+        WHEN ZCONTACTS.ZLASTINCOMINGRECIPIENTDATE IS 0 THEN NULL
+        ELSE datetime(ZCONTACTS.ZLASTINCOMINGRECIPIENTDATE + 978307200, 'unixepoch')
+    END AS 'LastIncomingRecipientDateUtc',
+
+    datetime(ZCONTACTS.ZLASTINCOMINGSENDERDATE + 978307200, 'unixepoch') AS 'LastIncomingSenderDateUtc',
+    datetime(ZCONTACTS.ZLASTOUTGOINGRECIPIENTDATE + 978307200, 'unixepoch') AS 'LastOutgoingRecipientDateUtc',
+
+    /* Source for each line of data */
+    'interactionC.db; Table: ZINTERACTIONS(Z_PK: ' || ZINTERACTIONS.Z_PK || ')' AS 'DataSource'
+
+
+FROM ZINTERACTIONS
+    LEFT JOIN Z_2INTERACTIONRECIPIENT ON ZINTERACTIONS.Z_PK = Z_2INTERACTIONRECIPIENT.Z_3INTERACTIONRECIPIENT
+    LEFT JOIN ZCONTACTS ON ZINTERACTIONS.ZSENDER = ZCONTACTS.Z_PK
+
+
+WHERE
+    --To filter between date/time points
+    ZINTERACTIONS.ZSTARTDATE BETWEEN 750312000 AND 750449160
+
+
+ORDER BY
+    ZINTERACTIONS.ZSTARTDATE ASC
