@@ -11,6 +11,7 @@
 SELECT
 
     ROW_NUMBER() OVER ( ORDER BY ZINTERACTIONS.ZSTARTDATE ) AS "RowNumber",
+
     ZINTERACTIONS.Z_PK AS "ZPk",
 
     CASE ZINTERACTIONS.ZDIRECTION
@@ -28,26 +29,71 @@ SELECT
     ZCONTACTS.ZIDENTIFIER AS "Identifier",
     ZINTERACTIONS.ZCONTENTURL AS "ContentUrl",
 
-    strftime ( '%F_%H:%M:%f', ZINTERACTIONS.ZSTARTDATE + 978307200, 'unixepoch' ) AS "StartDateUtc",
-    strftime ( '%F_%H:%M:%f', ZINTERACTIONS.ZENDDATE + 978307200, 'unixepoch' ) AS "EndDateUtc",
-    strftime ( '%F_%H:%M:%f', ZINTERACTIONS.ZCREATIONDATE + 978307200, 'unixepoch' ) AS "CreationDateUtc",
-    strftime ( '%F_%H:%M:%f', ZINTERACTIONS.ZUPDATEDATE + 978307200, 'unixepoch' ) AS "UpdateDateUtc",
+    strftime (
+        '%F_%H:%M:%f',
+        ZINTERACTIONS.ZSTARTDATE + 978307200,
+        'unixepoch'
+    ) AS "StartDateUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZINTERACTIONS.ZENDDATE + 978307200,
+        'unixepoch'
+    ) AS "EndDateUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZINTERACTIONS.ZCREATIONDATE + 978307200,
+        'unixepoch'
+    ) AS "CreationDateUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZINTERACTIONS.ZUPDATEDATE + 978307200,
+        'unixepoch'
+    ) AS "UpdateDateUtc",
 
     ZCONTACTS.ZINCOMINGRECIPIENTCOUNT AS "IncomingRecipientCount",
 
-    strftime ( ZCONTACTS.ZFIRSTINCOMINGRECIPIENTDATE + 978307200, 'unixepoch' ) AS "FirstIncomingRecipientDateUtc",
+    strftime (
+        '%F_%H:%M:%f',
+        ZCONTACTS.ZFIRSTINCOMINGRECIPIENTDATE + 978307200,
+        'unixepoch'
+    ) AS "FirstIncomingRecipientDateUtc",
 
     ZCONTACTS.ZINCOMINGSENDERCOUNT AS "IncomingSenderCount",
 
-    strftime ( ZCONTACTS.ZFIRSTINCOMINGSENDERDATE + 978307200, 'unixepoch' ) AS "FirstIncomingSenderDateUtc",
+    strftime (
+        '%F_%H:%M:%f',
+        ZCONTACTS.ZFIRSTINCOMINGSENDERDATE + 978307200,
+        'unixepoch'
+    ) AS "FirstIncomingSenderDateUtc",
 
     ZCONTACTS.ZOUTGOINGRECIPIENTCOUNT AS "OutgoingRecipientCount",
 
-    strftime ( ZCONTACTS.ZFIRSTOUTGOINGRECIPIENTDATE + 978307200, 'unixepoch' ) AS "FirstOutgoingRecipientDateUtc",
-    strftime ( ZCONTACTS.ZLASTINCOMINGRECIPIENTDATE + 978307200, 'unixepoch') AS "LastIncomingRecipientDateUtc",
+    strftime (
+        '%F_%H:%M:%f',
+        ZCONTACTS.ZFIRSTOUTGOINGRECIPIENTDATE + 978307200,
+        'unixepoch'
+    ) AS "FirstOutgoingRecipientDateUtc",
 
-    strftime ( ZCONTACTS.ZLASTINCOMINGSENDERDATE + 978307200, 'unixepoch' ) AS "LastIncomingSenderDateUtc",
-    strftime ( ZCONTACTS.ZLASTOUTGOINGRECIPIENTDATE + 978307200, 'unixepoch' ) AS "LastOutgoingRecipientDateUtc",
+    strftime (
+        '%F_%H:%M:%f',
+        ZCONTACTS.ZLASTINCOMINGRECIPIENTDATE + 978307200,
+        'unixepoch'
+    ) AS "LastIncomingRecipientDateUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZCONTACTS.ZLASTINCOMINGSENDERDATE + 978307200,
+        'unixepoch'
+    ) AS "LastIncomingSenderDateUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZCONTACTS.ZLASTOUTGOINGRECIPIENTDATE + 978307200,
+        'unixepoch'
+    ) AS "LastOutgoingRecipientDateUtc",
 
     /* Source for each line of data */
     'interactionC.db; Table: ZINTERACTIONS(Z_PK: ' || ZINTERACTIONS.Z_PK || ')' AS "DataSource"

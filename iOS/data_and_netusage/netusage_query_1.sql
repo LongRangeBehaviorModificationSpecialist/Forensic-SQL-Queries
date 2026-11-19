@@ -8,12 +8,27 @@
 SELECT
 
     ROW_NUMBER() OVER ( ORDER BY ZLIVEROUTEPERF.ZTIMESTAMP ) AS "RowNumber",
-    ZLIVEROUTEPERF.Z_PK AS "LiveRoutePerfZpk",
-    ZNETWORKATTACHMENT.Z_PK AS "NetworkAttachmentZpk",
 
-    strftime ( '%F_%H:%M:%f', ZLIVEROUTEPERF.ZTIMESTAMP + 978307200, 'unixepoch' ) AS "LiveOutEperfTimeStampUtc",
-    strftime ( '%F_%H:%M:%f', ZNETWORKATTACHMENT.ZFIRSTTIMESTAMP + 978307200, 'unixepoch' ) AS "NetworkAttachmentFirstTimeStampUtc",
-    strftime ( '%F_%H:%M:%f', ZNETWORKATTACHMENT.ZTIMESTAMP + 978307200, 'unixepoch' ) AS "NetworkAttachmentTimeStampUtc",
+    ZLIVEROUTEPERF.Z_PK AS "LiveRoutePerfZPk",
+    ZNETWORKATTACHMENT.Z_PK AS "NetworkAttachmentZPk",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZLIVEROUTEPERF.ZTIMESTAMP + 978307200,
+        'unixepoch'
+    ) AS "LiveOutEPerfTimeStampUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZNETWORKATTACHMENT.ZFIRSTTIMESTAMP + 978307200,
+        'unixepoch'
+    ) AS "NetworkAttachmentFirstTimeStampUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZNETWORKATTACHMENT.ZTIMESTAMP + 978307200,
+        'unixepoch'
+    ) AS "NetworkAttachmentTimeStampUtc",
 
     CASE ZLIVEROUTEPERF.ZKIND
         WHEN 1 THEN 'WiFi'
@@ -23,6 +38,7 @@ SELECT
 
     printf ( '%,d', ZLIVEROUTEPERF.ZBYTESIN ) AS "BytesIn",
     printf ( '%,d', ZLIVEROUTEPERF.ZBYTESOUT ) AS "BytesOut",
+
     ZLIVEROUTEPERF.ZPACKETSIN AS "PacketsIn",
     ZLIVEROUTEPERF.ZPACKETSOUT AS "PacketsOut",
     ZLIVEROUTEPERF.ZCONNATTEMPTS AS "ConnAttempts",
@@ -30,7 +46,7 @@ SELECT
     ZNETWORKATTACHMENT.ZIDENTIFIER AS "Identifier",
     ZNETWORKATTACHMENT.ZISKNOWNGOOD AS "IsKnownGood",
 
-    hex ( ZNETWORKATTACHMENT.ZNETSIGNATURE ) AS "NetSignature(hex)",
+    hex ( ZNETWORKATTACHMENT.ZNETSIGNATURE ) AS "NetSignatureHex",
 
     ZNETWORKATTACHMENT.ZOVERALLSTAYMEAN AS "OverallStayMean",
     ZNETWORKATTACHMENT.ZOVERALLSTAYVAR AS "OverallStayVar",

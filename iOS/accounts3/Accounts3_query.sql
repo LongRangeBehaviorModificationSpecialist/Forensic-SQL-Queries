@@ -9,9 +9,17 @@ SELECT
 
     ROW_NUMBER() OVER ( ORDER BY zaccount.zdate ) AS "RowNumber",
 
-    datetime('2001-01-01', zaccount.zdate || ' seconds') AS "AccountDateUtc",
+    datetime(
+        '2001-01-01',
+        zaccount.zdate ||
+        ' seconds'
+    ) AS "AccountDateUtc",
 
-    datetime('2001-01-01', zaccount.ZLASTCREDENTIALRENEWALREJECTIONDATE || ' seconds') AS "LastCredentialRenewalRejectionDateUtc",
+    datetime(
+        '2001-01-01',
+        zaccount.ZLASTCREDENTIALRENEWALREJECTIONDATE ||
+        ' seconds'
+    ) AS "LastCredentialRenewalRejectionDateUtc",
 
     ZACCOUNTTYPE.ZACCOUNTTYPEDESCRIPTION AS "AccountTypeDescription",
     ZACCOUNTTYPE.ZIDENTIFIER AS "AccountIdentifier",

@@ -7,11 +7,26 @@
 SELECT
 
     ROW_NUMBER() OVER ( ORDER BY ZPROCESS.ZTIMESTAMP ) AS "RowNumber",
+
     ZPROCESS.Z_PK AS "ZPk",
 
-    strftime ( '%F_%H:%M:%f', ZPROCESS.ZTIMESTAMP + 978307200, 'unixepoch' ) AS "ProcessTimeStampUtc",
-    strftime ( '%F_%H:%M:%f', ZPROCESS.ZFIRSTTIMESTAMP + 978307200, 'unixepoch' ) AS "ProcessFirstTimeStampUtc",
-    strftime ( '%F_%H:%M:%f', ZLIVEUSAGE.ZTIMESTAMP + 978307200, 'unixepoch' ) AS "LiveUsageTimeStampUtc",
+    strftime (
+        '%F_%H:%M:%f',
+        ZPROCESS.ZTIMESTAMP + 978307200,
+        'unixepoch'
+    ) AS "ProcessTimeStampUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZPROCESS.ZFIRSTTIMESTAMP + 978307200,
+        'unixepoch'
+    ) AS "ProcessFirstTimeStampUtc",
+
+    strftime (
+        '%F_%H:%M:%f',
+        ZLIVEUSAGE.ZTIMESTAMP + 978307200,
+        'unixepoch'
+    ) AS "LiveUsageTimeStampUtc",
 
     ZPROCESS.ZBUNDLENAME AS "BundleName",
     ZPROCESS.ZPROCNAME AS "ProcName",

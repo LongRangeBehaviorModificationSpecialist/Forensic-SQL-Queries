@@ -11,13 +11,25 @@ Use 'DESC' for decending order (most recent date at the top) OR can use 'ASC' fo
 SELECT
 
     ROW_NUMBER() OVER ( ORDER BY ZCALLRECORD.ZDATE ) AS "RowNumber",
+
     ZCALLRECORD.Z_PK AS "ZPk",
 
-    ZCALLRECORD.ZADDRESS AS "Partner(s)",
+    ZCALLRECORD.ZADDRESS AS "Partners",
     ZCALLRECORD.ZLOCATION AS "Location",
 
-    strftime ( '%F_%H:%M:%f', ZCALLRECORD.ZDATE + 978307200, 'unixepoch' ) AS "CallDateTimeUtc",
-    strftime ( '%F_%H:%M:%f', ( ( ZCALLRECORD.ZDATE + 978307200 ) + ZCALLRECORD.ZDURATION ), 'unixepoch' ) AS "CallEndDateTimeUtc",
+    strftime (
+        '%F_%H:%M:%f',
+        ZCALLRECORD.ZDATE + 978307200,
+        'unixepoch'
+    ) AS "CallDateTimeUtc",
+
+    -- End time calculated based on the ZDATE plus the ZDURATION
+    strftime (
+        '%F_%H:%M:%f',
+        ( ( ZCALLRECORD.ZDATE + 978307200 ) + ZCALLRECORD.ZDURATION ),
+        'unixepoch'
+    ) AS "CallEndDateTimeUtc",
+
     TIME ( ZCALLRECORD.ZDURATION, 'unixepoch' ) AS "CallDuration",
 
     CASE ZCALLRECORD.ZANSWERED
