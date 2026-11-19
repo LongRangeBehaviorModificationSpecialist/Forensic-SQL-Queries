@@ -12,7 +12,11 @@ SELECT
     [columnName] AS 'Matching Rows'
 FROM [tableB];
 
--- OR
+
+/*
+OR
+*/
+
 
 SELECT DISTINCT tableA.columnName AS 'Matching Rows'
 FROM [tableA]
