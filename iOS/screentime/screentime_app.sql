@@ -1,32 +1,35 @@
 /*
 [DLU]
-    19-Nov-2026
-[FILE PATH]
+    20-Nov-2026
+[DATABASE PATH]
     \private\var\mobile\Library\Application Support\com.apple.remotemanagementd
-[FILE NAMES]
-    RMAdminStore-Local.sqlite & RMAdminStore-Cloud.sqlite
+[DATABASE]
+    RMAdminStore-Local.sqlite
+    RMAdminStore-Cloud.sqlite
+[NOTES]
+
 */
 
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZUSAGEBLOCK.ZSTARTDATE ) AS "RowNumber",
+    ROW_NUMBER() OVER ( ORDER BY ZUSAGEBLOCK.ZSTARTDATE ) AS RowNumber,
 
     strftime (
         '%F_%H:%M:%f',
         ZUSAGEBLOCK.ZSTARTDATE + 978307200,
         'unixepoch'
-    ) AS "StartDateUtc",
+    ) AS StartDateUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZUSAGEBLOCK.ZLASTEVENTDATE + 978307200,
         'unixepoch'
-    ) AS "LastEventDateUtc",
+    ) AS LastEventDateUtc,
 
-    ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS AS "TotalTimeInSeconds",
-    ( ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS / 60.00 ) AS "TotalTimeInMinutes",
-    ZUSAGETIMEDITEM.ZBUNDLEIDENTIFIER AS "BundleIdentifier",
+    ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS AS TotalTimeInSeconds,
+    ( ZUSAGETIMEDITEM.ZTOTALTIMEINSECONDS / 60.00 ) AS TotalTimeInMinutes,
+    ZUSAGETIMEDITEM.ZBUNDLEIDENTIFIER AS BundleIdentifier,
 
     CASE ZUSAGECATEGORY.ZIDENTIFIER
         WHEN 'DH0011' THEN 'Unspecified1'
@@ -41,31 +44,31 @@ SELECT
         WHEN 'DH1007' THEN 'ReadingReference'
         WHEN 'DH1008' THEN 'HealthFitness'
         WHEN 'DH1009' THEN 'Other'
-        ELSE 'Type ' || ZUSAGECATEGORY.ZIDENTIFIER
-    END AS "UsageCategoryIdentifier",
+        ELSE 'Type: [' || ZUSAGECATEGORY.ZIDENTIFIER || ']'
+    END AS UsageCategoryIdentifier,
 
-    ZUSAGECOUNTEDITEM.ZNUMBEROFNOTIFICATIONS AS "NumberOfNotifications",
-    ZUSAGECOUNTEDITEM.ZNUMBEROFPICKUPS AS "NumberOfPickups",
-    ZUSAGEBLOCK.ZNUMBEROFPICKUPSWITHOUTAPPLICATIONUSAGE AS "NumberOfPickupsWithoutApplicationUsage",
+    ZUSAGECOUNTEDITEM.ZNUMBEROFNOTIFICATIONS AS NumberOfNotifications,
+    ZUSAGECOUNTEDITEM.ZNUMBEROFPICKUPS AS NumberOfPickups,
+    ZUSAGEBLOCK.ZNUMBEROFPICKUPSWITHOUTAPPLICATIONUSAGE AS NumberOfPickupsWithoutApplicationUsage,
     ZCOREDEVICE.ZNAME AS "Name",
-    ZCOREDEVICE.ZIDENTIFIER AS "CoreDeviceIdentifier",
+    ZCOREDEVICE.ZIDENTIFIER AS CoreDeviceIdentifier,
 
     CASE ZCOREDEVICE.ZPLATFORM
         WHEN 0 THEN 'Unknown'
         WHEN 1 THEN 'macOS'
         WHEN 2 THEN 'iOS'
         WHEN 4 THEN 'Apple Watch'
-        ELSE 'Type ' || ZCOREDEVICE.ZPLATFORM
-    END AS "Platform",
+        ELSE 'Type: [' || ZCOREDEVICE.ZPLATFORM || ']'
+    END AS Platform,
 
-    ZCOREUSER.ZAPPLEID AS "AppleId",
-    ZCOREUSER.ZDSID AS "Dsid",
-    ZCOREUSER.ZALTDSID AS "AltDsid",
-    ZCOREUSER.ZGIVENNAME || ' ' || ZCOREUSER.ZFAMILYNAME AS "GivenName",
-    ZCOREUSER.ZFAMILYMEMBERTYPE AS "FamilyMemberType",
+    ZCOREUSER.ZAPPLEID AS AppleId,
+    ZCOREUSER.ZDSID AS Dsid,
+    ZCOREUSER.ZALTDSID AS AltDsid,
+    ZCOREUSER.ZGIVENNAME || ' ' || ZCOREUSER.ZFAMILYNAME AS GivenName,
+    ZCOREUSER.ZFAMILYMEMBERTYPE AS FamilyMemberType,
 
     /* Source for each line of data */
-    'Table: ZUSAGEGETIMEDITEM (Z_PK:' || ZUSAGETIMEDITEM.Z_PK || ')' AS "DataSource"
+    'Table: ZUSAGEGETIMEDITEM(Z_PK:' || ZUSAGETIMEDITEM.Z_PK || ')' AS DataSource
 
 
 FROM ZUSAGETIMEDITEM

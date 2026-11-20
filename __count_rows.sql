@@ -1,13 +1,13 @@
 /*
 [DLU]
-    19-Nov-2026
+    20-Nov-2026
 */
 
 
 -- Count number of rows meeting a condition
 SELECT
     [columnName],
-    COUNT( * ) AS "occurrences"
+    COUNT( * ) AS Occurrences
 FROM [tableName]
 GROUP BY [columnName]
 HAVING COUNT( * ) > 1;
@@ -27,7 +27,7 @@ SELECT *
 FROM (
     SELECT
         *,
-        COUNT( * ) OVER ( PARTITION BY [columnName] ) AS "num"
+        COUNT( * ) OVER ( PARTITION BY [columnName] ) AS num
     FROM [tableName]
 ) t
-WHERE "num" >=2;
+WHERE num >= 2;

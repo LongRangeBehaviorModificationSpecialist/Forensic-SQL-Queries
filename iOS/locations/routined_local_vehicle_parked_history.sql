@@ -1,29 +1,33 @@
 /*
 DLU:
-    19-Nov-2026
+    20-Nov-2026
+[DATABASE]
+
+[NOTES]
+
 */
 
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZRTVEHICLEEVENTHISTORYMO.ZDATE ) AS "RowNumber",
+    ROW_NUMBER() OVER ( ORDER BY ZRTVEHICLEEVENTHISTORYMO.ZDATE ) AS RowNumber,
 
-    ZRTVEHICLEEVENTHISTORYMO.Z_PK AS "ZPk",
+    ZRTVEHICLEEVENTHISTORYMO.Z_PK AS ZPk,
 
     strftime (
         '%F_%H:%M:%f',
         ZRTVEHICLEEVENTHISTORYMO.ZDATE + 978307200,
         'unixepoch'
-    ) AS "DateTimeUtc",
+    ) AS DateTimeUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZRTVEHICLEEVENTHISTORYMO.ZLOCDATE + 978307200,
         'unixepoch'
-    ) AS "LocationDateTimeUtc",
+    ) AS LocationDateTimeUtc,
 
-    ZRTVEHICLEEVENTHISTORYMO.ZLOCLATITUDE AS "Latitude",
-    ZRTVEHICLEEVENTHISTORYMO.ZLOCLONGITUDE AS "Longitude",
+    ZRTVEHICLEEVENTHISTORYMO.ZLOCLATITUDE AS Latitude,
+    ZRTVEHICLEEVENTHISTORYMO.ZLOCLONGITUDE AS Longitude,
 
     RTRIM (
         LTRIM (
@@ -33,10 +37,14 @@ SELECT
                 ROUND ( ZRTVEHICLEEVENTHISTORYMO.ZLOCLONGITUDE, 6 )
             )
         )
-    ) AS "LatLongMerged",
+    ) AS LatLongMerged,
 
-    ZRTVEHICLEEVENTHISTORYMO.ZLOCUNCERTAINTY AS "LocUncertainty",
-    ZRTVEHICLEEVENTHISTORYMO.ZIDENTIFIER AS "Identifier"
+    ZRTVEHICLEEVENTHISTORYMO.ZLOCUNCERTAINTY AS LocUncertainty,
+    ZRTVEHICLEEVENTHISTORYMO.ZIDENTIFIER AS Identifier,
+
+        /* Source for each line of data */
+    -- TODO -> update database file name
+    'Table: ZRTVEHICLEEVENTHISTORYMO(Z_PK:' ||  ZRTVEHICLEEVENTHISTORYMO.Z_PK || ')' AS DataSource
 
 
 FROM ZRTVEHICLEEVENTHISTORYMO

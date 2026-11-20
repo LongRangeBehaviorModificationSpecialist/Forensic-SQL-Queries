@@ -1,15 +1,23 @@
 /*
 [DLU]
-    19-Nov-2026
+    20-Nov-2026
+[NOTES]
+    Finds matching data in different tables of the same database.
 */
 
 
 SELECT
-    [columnName] AS "Matching Rows"
+
+    [columnName] AS MatchingRows
+
 FROM [tableA]
+
 INTERSECT
+
 SELECT
-    [columnName] AS "Matching Rows"
+
+    [columnName] AS MatchingRows
+
 FROM [tableB];
 
 
@@ -18,6 +26,12 @@ OR
 */
 
 
-SELECT DISTINCT tableA.columnName AS "Matching Rows"
+SELECT
+
+    DISTINCT
+
+        tableA.columnName AS MatchingRows
+
 FROM [tableA]
+
 INNER JOIN [tableB] ON tableA.columnName = tableB.columnName;

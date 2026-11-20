@@ -1,60 +1,63 @@
 /*
 [DLU]
-    19-Nov-2026
+    20-Nov-2026
 [DATABASE FILE]
     \private\var\networkd\db\netusage.sqlite
+[NOTES]
+
 */
+
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZLIVEROUTEPERF.ZTIMESTAMP ) AS "RowNumber",
+    ROW_NUMBER() OVER ( ORDER BY ZLIVEROUTEPERF.ZTIMESTAMP ) AS RowNumber,
 
-    ZLIVEROUTEPERF.Z_PK AS "LiveRoutePerfZPk",
-    ZNETWORKATTACHMENT.Z_PK AS "NetworkAttachmentZPk",
+    ZLIVEROUTEPERF.Z_PK AS LiveRoutePerfZPk,
+    ZNETWORKATTACHMENT.Z_PK AS NetworkAttachmentZPk,
 
     strftime (
         '%F_%H:%M:%f',
         ZLIVEROUTEPERF.ZTIMESTAMP + 978307200,
         'unixepoch'
-    ) AS "LiveOutEPerfTimeStampUtc",
+    ) AS LiveOutEPerfTimeStampUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZNETWORKATTACHMENT.ZFIRSTTIMESTAMP + 978307200,
         'unixepoch'
-    ) AS "NetworkAttachmentFirstTimeStampUtc",
+    ) AS NetworkAttachmentFirstTimeStampUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZNETWORKATTACHMENT.ZTIMESTAMP + 978307200,
         'unixepoch'
-    ) AS "NetworkAttachmentTimeStampUtc",
+    ) AS NetworkAttachmentTimeStampUtc,
 
     CASE ZLIVEROUTEPERF.ZKIND
         WHEN 1 THEN 'WiFi'
         WHEN 2 THEN 'Cellular'
-        ELSE 'Type ' || ZLIVEROUTEPERF.ZKIND
-    END "LiveRoutePerfKind",
+        ELSE 'Type: [' || ZLIVEROUTEPERF.ZKIND || ']'
+    END LiveRoutePerfKind,
 
-    printf ( '%,d', ZLIVEROUTEPERF.ZBYTESIN ) AS "BytesIn",
-    printf ( '%,d', ZLIVEROUTEPERF.ZBYTESOUT ) AS "BytesOut",
+    printf ( '%,d', ZLIVEROUTEPERF.ZBYTESIN ) AS BytesIn,
+    printf ( '%,d', ZLIVEROUTEPERF.ZBYTESOUT ) AS BytesOut,
 
-    ZLIVEROUTEPERF.ZPACKETSIN AS "PacketsIn",
-    ZLIVEROUTEPERF.ZPACKETSOUT AS "PacketsOut",
-    ZLIVEROUTEPERF.ZCONNATTEMPTS AS "ConnAttempts",
-    ZLIVEROUTEPERF.ZCONNSUCCESSES AS "ConnSuccesses",
-    ZNETWORKATTACHMENT.ZIDENTIFIER AS "Identifier",
-    ZNETWORKATTACHMENT.ZISKNOWNGOOD AS "IsKnownGood",
+    ZLIVEROUTEPERF.ZPACKETSIN AS PacketsIn,
+    ZLIVEROUTEPERF.ZPACKETSOUT AS PacketsOut,
+    ZLIVEROUTEPERF.ZCONNATTEMPTS AS ConnAttempts,
+    ZLIVEROUTEPERF.ZCONNSUCCESSES AS ConnSuccesses,
+    ZNETWORKATTACHMENT.ZIDENTIFIER AS Identifier,
+    ZNETWORKATTACHMENT.ZISKNOWNGOOD AS IsKnownGood,
 
-    hex ( ZNETWORKATTACHMENT.ZNETSIGNATURE ) AS "NetSignatureHex",
+    hex ( ZNETWORKATTACHMENT.ZNETSIGNATURE ) AS NetSignatureHex,
 
-    ZNETWORKATTACHMENT.ZOVERALLSTAYMEAN AS "OverallStayMean",
-    ZNETWORKATTACHMENT.ZOVERALLSTAYVAR AS "OverallStayVar",
-    ZLIVEROUTEPERF.ZOVERALLSTAY AS "OverallStay",
-    ZLIVEROUTEPERF.ZOVERALLSTAYM2 AS "OverallStayM2",
+    ZNETWORKATTACHMENT.ZOVERALLSTAYMEAN AS OverallStayMean,
+    ZNETWORKATTACHMENT.ZOVERALLSTAYVAR AS OverallStayVar,
+    ZLIVEROUTEPERF.ZOVERALLSTAY AS OverallStay,
+    ZLIVEROUTEPERF.ZOVERALLSTAYM2 AS OverallStayM2,
 
     /* Source for each line of data */
-    'netusage.sqlite; Table:ZZLIVEROUTEPERF(Z_PK:' || ZLIVEROUTEPERF.Z_PK || ')' AS "DataSource"
+    'netusage.sqlite; Table:ZZLIVEROUTEPERF(Z_PK:' || ZLIVEROUTEPERF.Z_PK || ')' AS DataSource
 
 
 FROM ZLIVEROUTEPERF

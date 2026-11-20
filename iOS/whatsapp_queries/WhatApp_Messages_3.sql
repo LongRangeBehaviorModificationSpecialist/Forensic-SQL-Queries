@@ -1,34 +1,40 @@
 /*
 [DLU]
-    19-Nov-2026
-Copied from
+    20-Nov-2026
+[URL]
     https://towardsdatascience.com/analyzing-my-whatsapp-database-using-sql-and-redash-5ef9bd6a0b0
+[DATABASE]
+
+[NOTES]
+
 */
+
 
 CREATE view group_messages AS
 
+
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZWAMESSAGE.ZMESSAGEDATE ) AS "RowNumber",
+    ROW_NUMBER() OVER ( ORDER BY ZWAMESSAGE.ZMESSAGEDATE ) AS RowNumber,
 
     strftime (
         '%F_%H:%M:%f',
         ZWAMESSAGE.ZMESSAGEDATE + 978307200,
         'unixepoch'
-    ) AS "MessageDateUtc",
+    ) AS MessageDateUtc,
 
-    ZWACHATSESSION.ZPARTNERNAME AS "PartnerName",
+    ZWACHATSESSION.ZPARTNERNAME AS PartnerName,
 
     CASE ZWAMESSAGE.ZISFROMME
         WHEN 0 THEN 'Incoming'
         WHEN 1 THEN 'Outgoing'
-        ELSE 'Unknown Value: ' || ZWAMESSAGE.ZISFROMME || ''
-    END AS "IsFromMe",
+        ELSE 'Type: [' || ZWAMESSAGE.ZISFROMME || ']'
+    END AS IsFromMe,
 
     CASE ZWAMESSAGE.ZISFROMME
         WHEN 0 THEN ZWAMESSAGE.ZFROMJID
         ELSE ZWAMESSAGE.ZTOJID
-    END AS "GroupId",
+    END AS GroupId,
 
     CASE ZWAMESSAGE.ZMESSAGETYPE
         WHEN 0 THEN 'Text'
@@ -42,12 +48,16 @@ SELECT
         WHEN 8 THEN 'Document'
         WHEN 14 THEN 'Deleted Message'
         WHEN 15 THEN 'Sticker'
-        ELSE 'Unknown Value: ' || ZWAMESSAGE.ZMESSAGETYPE || ''
-    END AS "MessageType",
+        ELSE 'Type: [' || ZWAMESSAGE.ZMESSAGETYPE || ']'
+    END AS MessageType,
 
-    ZWAMESSAGE.ZTEXT AS "MessageText",
-    friend_chat_session.ZPARTNERNAME AS "FriendChatSessionPartnerName",
-    ZWAGROUPMEMBER.ZMEMBERJID AS "MemberJid"
+    ZWAMESSAGE.ZTEXT AS MessageText,
+    friend_chat_session.ZPARTNERNAME AS FriendChatSessionPartnerName,
+    ZWAGROUPMEMBER.ZMEMBERJID AS MemberJid,
+
+    /* Source for each line of data */
+    -- TODO -> update database file name and primary key column name
+    '________; Table:_____(____:' ||  _____________ || ')' AS DataSource
 
 
 FROM ZWACHATSESSION

@@ -1,74 +1,79 @@
 /*
 [DLU]
-    19-Nov-2026
+    20-Nov-2026
+[DATABASE]
+    /private/var/mobile/Media/PhotoData/Photos.sqlite
+    /private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite
+[NOTES]
+
 */
 
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZASSET.ZADDEDDATE ) AS "RowNumber",
+    ROW_NUMBER() OVER ( ORDER BY ZASSET.ZADDEDDATE ) AS RowNumber,
 
-    ZGENERICALBUM.Z_PK AS "ZPk",
+    ZGENERICALBUM.Z_PK AS ZPk,
 
-    ZASSET.ZDIRECTORY AS "Directory",
-    ZASSET.ZFILENAME AS "FileName",
-    ZADDITIONALASSETATTRIBUTES.ZORIGINALFILENAME AS "OriginalFileName",
+    ZASSET.ZDIRECTORY AS Directory,
+    ZASSET.ZFILENAME AS ItemFileName,
+    ZADDITIONALASSETATTRIBUTES.ZORIGINALFILENAME AS OriginalFileName,
 
     CASE ZASSET.ZKINDZUNIFORMTYPEIDENTIFIER
         WHEN 0 THEN 'Photo'
         WHEN 1 THEN 'Video'
-        ELSE 'Type: ' || ZASSET.ZKINDZUNIFORMTYPEIDENTIFIER
-    END AS "KindZUniformTypeIdentifier",
+        ELSE 'Type: [' || ZASSET.ZKINDZUNIFORMTYPEIDENTIFIER || ']'
+    END AS KindZUniformTypeIdentifier,
 
-    ZASSET.ZUNIFORMTYPEIDENTIFIER AS "UniformTypeIdentifier",
+    ZASSET.ZUNIFORMTYPEIDENTIFIER AS UniformTypeIdentifier,
 
     CASE ZASSET.ZFAVORITE
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
-        ELSE 'Type: ' || ZASSET.ZFAVORITE
-    END "Favorite",
+        ELSE 'Type: [' || ZASSET.ZFAVORITE || ']'
+    END IsFavorite,
 
-    strftime ( '%F_%H:%M:%f', ZASSET.ZDATECREATED + 978307200, 'unixepoch' ) AS "DateCreatedUtc",
-    strftime ( '%F_%H:%M:%f', ZASSET.ZADDEDDATE + 978307200, 'unixepoch' ) AS "AddedDateUtc",
-    strftime ( '%F_%H:%M:%f', ZASSET.ZMODIFICATIONDATE + 978307200, 'unixepoch' ) AS "ModificationDateUtc",
-    strftime ( '%F_%H:%M:%f', ZASSET.ZTRASHEDDATE + 978307200, 'unixepoch' ) AS "TrashedDateUtc",
+    strftime ( '%F_%H:%M:%f', ZASSET.ZDATECREATED + 978307200, 'unixepoch' ) AS DateCreatedUtc,
+    strftime ( '%F_%H:%M:%f', ZASSET.ZADDEDDATE + 978307200, 'unixepoch' ) AS AddedDateUtc,
+    strftime ( '%F_%H:%M:%f', ZASSET.ZMODIFICATIONDATE + 978307200, 'unixepoch' ) AS ModificationDateUtc,
+    strftime ( '%F_%H:%M:%f', ZASSET.ZTRASHEDDATE + 978307200, 'unixepoch' ) AS TrashedDateUtc,
 
-    ZADDITIONALASSETATTRIBUTES.ZEXIFTIMESTAMPSTRING AS "ExifTimeStampStringUtc",
-    ZADDITIONALASSETATTRIBUTES.ZVIEWCOUNT AS "ViewCount",
-    ZADDITIONALASSETATTRIBUTES.ZSHARECOUNT AS "ShareCount",
+    ZADDITIONALASSETATTRIBUTES.ZEXIFTIMESTAMPSTRING AS ExifTimeStampStringUtc,
+    ZADDITIONALASSETATTRIBUTES.ZVIEWCOUNT AS ViewCount,
+    ZADDITIONALASSETATTRIBUTES.ZSHARECOUNT AS ShareCount,
 
-    strftime ( '%F_%H:%M:%f', ZASSET.ZLASTSHAREDDATE + 978307200, 'unixepoch' ) AS "LastSharedDateUtc",
+    strftime ( '%F_%H:%M:%f', ZASSET.ZLASTSHAREDDATE + 978307200, 'unixepoch' ) AS LastSharedDateUtc,
 
-    ZADDITIONALASSETATTRIBUTES.ZPLAYCOUNT AS "PlayCount",
+    ZADDITIONALASSETATTRIBUTES.ZPLAYCOUNT AS PlayCount,
 
     CASE ZASSET.ZHIDDEN
         WHEN 0 THEN 'False'
         WHEN 1 THEN 'True'
-        ELSE 'Type: ' || ZASSET.ZHIDDEN
-    END AS "Hidden",
+        ELSE 'Type: [' || ZASSET.ZHIDDEN || ']'
+    END AS IsHidden,
 
-    ZASSET.ZDURATION AS "DurationSeconds",
-    ZADDITIONALASSETATTRIBUTES.ZIMPORTEDBY AS "ImportedBy",
-    ZADDITIONALASSETATTRIBUTES.ZCAMERACAPTUREDEVICE AS "CameraCaptureDevice",
-    ZADDITIONALASSETATTRIBUTES.ZORIGINALFILESIZE AS "OriginalFileSize",
-    ZADDITIONALASSETATTRIBUTES.ZORIGINALHEIGHT AS "OriginalHeight",
-    ZADDITIONALASSETATTRIBUTES.ZORIGINALWIDTH AS "OriginalWidth",
-    ZASSET.ZTHUMBNAILINDEX AS "ThumbnailIndex",
+    ZASSET.ZDURATION AS DurationSeconds,
+    ZADDITIONALASSETATTRIBUTES.ZIMPORTEDBY AS ImportedBy,
+    ZADDITIONALASSETATTRIBUTES.ZCAMERACAPTUREDEVICE AS CameraCaptureDevice,
+    ZADDITIONALASSETATTRIBUTES.ZORIGINALFILESIZE AS OriginalFileSize,
+    ZADDITIONALASSETATTRIBUTES.ZORIGINALHEIGHT AS OriginalHeight,
+    ZADDITIONALASSETATTRIBUTES.ZORIGINALWIDTH AS OriginalWidth,
+    ZASSET.ZTHUMBNAILINDEX AS ThumbnailIndex,
 
-    ZADDITIONALASSETATTRIBUTES.ZCREATORBUNDLEID AS "CreatorBundleId",
-    ZADDITIONALASSETATTRIBUTES.ZEDITORBUNDLEID AS "EditorBundleId",
-    ZADDITIONALASSETATTRIBUTES.ZLOCATIONHASH AS "LocationHash",
-    ZADDITIONALASSETATTRIBUTES.ZMASTERFINGERPRINT AS "MasterFingerPrint",
+    ZADDITIONALASSETATTRIBUTES.ZCREATORBUNDLEID AS CreatorBundleId,
+    ZADDITIONALASSETATTRIBUTES.ZEDITORBUNDLEID AS EditorBundleId,
+    ZADDITIONALASSETATTRIBUTES.ZLOCATIONHASH AS LocationHash,
+    ZADDITIONALASSETATTRIBUTES.ZMASTERFINGERPRINT AS MasterFingerPrint,
 
     CASE ZASSET.ZLATITUDE
         WHEN '-180.0' THEN '[-180.0]'
         ELSE ZASSET.ZLATITUDE
-    END "Latitude",
+    END Latitude,
 
     CASE ZASSET.ZLONGITUDE
         WHEN '-180.0' THEN '[-180.0]'
         ELSE ZASSET.ZLONGITUDE
-    END "Longitude"
+    END Longitude
 
 
 FROM ZASSET
@@ -81,7 +86,7 @@ ORDER BY ZASSET.ZADDEDDATE ASC
 
 To get info for specific media files, enter the file name below
 
-DO NOT put "OR" after the last file name
+DO NOT put OR after the last file name
 
 */
 

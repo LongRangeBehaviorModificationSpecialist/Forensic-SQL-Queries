@@ -1,22 +1,26 @@
 /*
 [DLU]
-    19-Nov-2026
-[DATABASE PATH]
+    20-Nov-2026
+[DATABASE]
     /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
+[NOTES]
+
 */
+
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZOBJECT.ZCREATIONDATE ) AS "RowNumber",
-    ZOBJECT.Z_PK AS "ZPk",
-    ZOBJECT.ZVALUESTRING AS "ValueString",
-    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTCLASS AS "IntentClass",
-    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTVERB AS "Interaction",
-    ZSOURCE.ZBUNDLEID AS "BundleID",
+    ROW_NUMBER() OVER ( ORDER BY ZOBJECT.ZCREATIONDATE ) AS RowNumber,
 
-    strftime ( '%F_%H:%M:%f', ZOBJECT.ZCREATIONDATE + 978307200, 'unixepoch' ) AS "CreationDateUtc",
+    ZOBJECT.Z_PK AS ZPk,
+    ZOBJECT.ZVALUESTRING AS ValueString,
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTCLASS AS IntentClass,
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTVERB AS Interaction,
+    ZSOURCE.ZBUNDLEID AS BundleID,
 
-    ( ZOBJECT.ZSECONDSFROMGMT / 3600 ) AS "GmtOffsetHours",
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZCREATIONDATE + 978307200, 'unixepoch' ) AS CreationDateUtc,
+
+    ( ZOBJECT.ZSECONDSFROMGMT / 3600 ) AS GmtOffsetHours,
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
         WHEN 1 THEN 'Sunday'
@@ -26,13 +30,13 @@ SELECT
         WHEN 5 THEN 'Thursday'
         WHEN 6 THEN 'Friday'
         WHEN 7 THEN 'Saturday'
-        ELSE ZOBJECT.ZSTARTDAYOFWEEK
-    END "StartDayOfWeek",
+        ELSE 'Type: [' || OBJECT.ZSTARTDAYOFWEEK || ']'
+    END StartDayOfWeek,
 
-    ZSOURCE.ZSOURCEID as "SourceId",
+    ZSOURCE.ZSOURCEID as SourceId,
 
     /* Source for each line of data */
-    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS "DataSource"
+    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS DataSource
 
 
 FROM ZOBJECT

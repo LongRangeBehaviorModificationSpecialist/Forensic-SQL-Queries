@@ -1,30 +1,40 @@
 /*
-Original query copied from https://thebinaryhick.blog/2022/06/09/new-msgstore-who-dis-a-look-at-an-updated-whatsapp-on-android/
+[DLU]
+    20-Nov-2026
+[URL]
+    https://thebinaryhick.blog/2022/06/09/new-msgstore-who-dis-a-look-at-an-updated-whatsapp-on-android/
+[DATABASE]
 
-This query is slightly different as an examiner would also need the group/conversation name along with the party sending the message(s) within the group
+[NOTES]
+    This query is slightly different as an examiner would also need the group/conversation name along
+    with the party sending the message(s) within the group
 */
 
---ATTACH DATABASE "[FILE-PATH-TO-DATABASE]" AS 'whatsapp_db';
+
+--ATTACH DATABASE [FILE-PATH-TO-DATABASE] AS 'whatsapp_db';
+
 
 SELECT
-    ROW_NUMBER() OVER ( ORDER BY message.timestamp ) AS "RowNumber",
-    message._id AS "MessageId",
 
-    strftime ( '%F_%H:%M:%f', message.timestamp / 1000.0, 'unixepoch' ) AS "MessageTimestampUtc",
-    strftime ( '%F_%H:%M:%f', message.received_timestamp / 1000.0, 'unixepoch' ) AS "MessageReceivedTimestampUtc",
+    ROW_NUMBER() OVER ( ORDER BY message.timestamp ) AS RowNumber,
 
-    chat.subject AS "ChatSubject",
+    message._id AS MessageId,
+
+    strftime ( '%F_%H:%M:%f', message.timestamp / 1000.0, 'unixepoch' ) AS MessageTimestampUtc,
+    strftime ( '%F_%H:%M:%f', message.received_timestamp / 1000.0, 'unixepoch' ) AS MessageReceivedTimestampUtc,
+
+    chat.subject AS ChatSubject,
 
     CASE
         WHEN message.from_me = 1 THEN 'Self'
-        ELSE 'Type ' || wa_contacts.wa_name
-    END AS "MessageFromMe",
+        ELSE 'Type: [' || wa_contacts.wa_name || ']'
+    END AS MessageFromMe,
 
     CASE message.from_me
         WHEN 0 THEN 'Incoming'
         WHEN 1 THEN 'Outgoing'
-        ELSE 'Type ' || message.from_me
-    END AS "MessageDirection",
+        ELSE 'Type: [' || message.from_me || ']'
+    END AS MessageDirection,
 
     CASE message.message_type
         WHEN 0 THEN 'Text'
@@ -35,21 +45,21 @@ SELECT
         WHEN 7 THEN 'System Message'
         WHEN 9 THEN 'Document'
         WHEN 16 THEN 'Live Location'
-        ELSE 'Type ' || message.message_type
-    END AS "MessageType",
+        ELSE 'Type: [' || message.message_type || ']'
+    END AS MessageType,
 
-    message.text_data AS "TextData",
-    message_media.file_path AS "MediaFilePath",
-    printf ( '%,d', message_media.file_size ) AS "MediaFileSizeBytes",
-    message_media.width AS "MediaWidth",
-    message_media.height AS "MediaHeight",
-    message_location.latitude AS "LocationLatitudeLiveLocation",
-    message_location.longitude AS "LocationLongitudeLiveLocation",
-    message_location.live_location_share_duration AS "LiveLocationShareDurationSeconds",
-    message_location.live_location_final_latitude AS "LiveLocationFinalLatitude",
-    message_location.live_location_final_longitude AS "LiveLocationFinalLongitude",
+    message.text_data AS TextData,
+    message_media.file_path AS MediaFilePath,
+    printf ( '%,d', message_media.file_size ) AS MediaFileSizeBytes,
+    message_media.width AS MediaWidth,
+    message_media.height AS MediaHeight,
+    message_location.latitude AS LocationLatitudeLiveLocation,
+    message_location.longitude AS LocationLongitudeLiveLocation,
+    message_location.live_location_share_duration AS LiveLocationShareDurationSeconds,
+    message_location.live_location_final_latitude AS LiveLocationFinalLatitude,
+    message_location.live_location_final_longitude AS LiveLocationFinalLongitude,
 
-    strftime ( '%F_%H:%M:%f', message_location.live_location_final_timestamp / 1000.0, 'unixepoch' ) AS "LiveLocationFinalTimestampUtc"
+    strftime ( '%F_%H:%M:%f', message_location.live_location_final_timestamp / 1000.0, 'unixepoch' ) AS LiveLocationFinalTimestampUtc
 
 
 FROM message

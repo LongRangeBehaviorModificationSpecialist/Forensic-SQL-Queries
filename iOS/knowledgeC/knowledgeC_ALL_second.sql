@@ -1,20 +1,23 @@
 /*
-Original query copied from https://www.mac4n6.com/blog/2018/8/5/knowledge-is-power-using-the-knowledgecdb-database-on-macos-and-ios-to-determine-precise-user-and-application-usage
-
 [DLU]
-    19-Nov-2026
-[DATABASE PATH]
+    20-Nov-2026
+[URL]
+    Original query copied from https://www.mac4n6.com/blog/2018/8/5/knowledge-is-power-using-the-knowledgecdb-database-on-macos-and-ios-to-determine-precise-user-and-application-usage
+[DATABASE]
     /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
+[NOTES]
+
 */
 
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZOBJECT.ZCREATIONDATE ) AS "RowNumber",
-    ZOBJECT.Z_PK AS "ZPk",
-    ZOBJECT.ZSOURCE AS "Source",
+    ROW_NUMBER() OVER ( ORDER BY ZOBJECT.ZCREATIONDATE ) AS RowNumber,
 
-    strftime ( '%F_%H:%M:%f', ZOBJECT.ZCREATIONDATE + 978307200, 'unixepoch' ) AS "CreationDateUtc",
+    ZOBJECT.Z_PK AS ZPk,
+    ZOBJECT.ZSOURCE AS Source,
+
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZCREATIONDATE + 978307200, 'unixepoch' ) AS CreationDateUtc,
 
     CASE ZOBJECT.ZSTARTDAYOFWEEK
         WHEN 1 THEN 'Sunday'
@@ -24,28 +27,29 @@ SELECT
         WHEN 5 THEN 'Thursday'
         WHEN 6 THEN 'Friday'
         WHEN 7 THEN 'Saturday'
-    END "StartDayOfWeek",
+        ELSE 'Type: [' || ZOBJECT.ZSTARTDAYOFWEEK || ']'
+    END StartDayOfWeek,
 
-    strftime ( '%F_%H:%M:%f', ZOBJECT.ZSTARTDATE + 978307200, 'unixepoch' ) AS "StartDateUtc",
-    strftime ( '%F_%H:%M:%f', ZOBJECT.ZENDDATE + 978307200, 'unixepoch' ) AS "EndDateUtc",
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZSTARTDATE + 978307200, 'unixepoch' ) AS StartDateUtc,
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZENDDATE + 978307200, 'unixepoch' ) AS EndDateUtc,
 
-    (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) AS "Usage(Sec)",
-    ZSOURCE.ZDEVICEID AS "DeviceId",
-    ZOBJECT.ZSTREAMNAME AS "StreamName",
-    ZOBJECT.ZVALUESTRING AS "ValueString",
-    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__ACTIVITYTYPE AS "ActivityType",
-    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__TITLE AS "Title",
-    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__USERACTIVITYREQUIREDSTRING AS "UserActivityRequiredString",
+    (ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE) AS UsageSeconds,
+    ZSOURCE.ZDEVICEID AS DeviceId,
+    ZOBJECT.ZSTREAMNAME AS StreamName,
+    ZOBJECT.ZVALUESTRING AS ValueString,
+    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__ACTIVITYTYPE AS ActivityType,
+    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__TITLE AS Title,
+    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__USERACTIVITYREQUIREDSTRING AS UserActivityRequiredString,
 
-    strftime ( '%F_%H:%M:%f', ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__EXPIRATIONDATE + 978307200, 'unixepoch' ) AS "ExpirationDateUtc",
+    strftime ( '%F_%H:%M:%f', ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONACTIVITYMETADATAKEY__EXPIRATIONDATE + 978307200, 'unixepoch' ) AS ExpirationDateUtc,
 
-    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTCLASS AS "IntentClass",
-    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTVERB AS "IntentVerb",
-    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__SERIALIZEDINTERACTION AS "SerializedInteraction",
-    ZSOURCE.ZBUNDLEID AS "BundleId",
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTCLASS AS IntentClass,
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__INTENTVERB AS IntentVerb,
+    ZSTRUCTUREDMETADATA.Z_DKINTENTMETADATAKEY__SERIALIZEDINTERACTION AS SerializedInteraction,
+    ZSOURCE.ZBUNDLEID AS BundleId,
 
     /* Source for each line of data */
-    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS "DataSource"
+    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS DataSource
 
 
 FROM ZOBJECT

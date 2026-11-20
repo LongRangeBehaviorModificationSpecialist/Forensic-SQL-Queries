@@ -1,28 +1,31 @@
 /*
 [DLU]
-    19-Nov-2026
-[FILE PATH]
+    20-Nov-2026
+[DATABASE]
     /private/var/mobile/Library/SMS/sms.db
-[FILE PATH]
     /private/var/mobile/Library/AddressBook/AddressBook.sqlitedb
+[NOTES]
+
 */
 
+
 -- ATTACH DATABASE 'AddressBook.sqlitedb' AS 'AddressBook_db';
+
 
 SELECT
 
     /* Add a row number at the beggining of each row */
-    ROW_NUMBER() OVER( ORDER BY message.date ) AS "RowNumber",
+    ROW_NUMBER() OVER( ORDER BY message.date ) AS RowNumber,
 
-    message.ROWID AS "RowId",
-    chat_message_join.message_id AS "CMJMessageId",
+    message.ROWID AS RowId,
+    chat_message_join.message_id AS CMJMessageId,
 
     /*
     When 'chat_message_join.chat_id' is NULL, that means the message was deleted,
     but there is still a record of the message in the message table.
     It is likely that the vacuum functions has not run to delete the message from the table
     */
-    chat_message_join.chat_id AS "CMJChatId",
+    chat_message_join.chat_id AS CMJChatId,
 
     CASE
         WHEN LENGTH ( message.date ) = 18
@@ -37,14 +40,14 @@ SELECT
                 message.date + 978307200,
                 'unixepoch'
             )
-        ELSE 'Type ' || message.date
-    END AS "MessageDateUtc",
+        ELSE 'Type: [' || message.date || ']'
+    END AS MessageDateUtc,
 
     CASE message.is_delivered
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
-        ELSE 'Type ' || message.is_delivered
-    END AS "IsDelivered",
+        ELSE 'Type: [' || message.is_delivered || ']'
+    END AS IsDelivered,
 
     CASE
         WHEN LENGTH ( message.date_delivered ) = 18
@@ -59,9 +62,8 @@ SELECT
                 message.date_delivered + 978307200,
                 'unixepoch'
             )
-        WHEN message.date_delivered IS 0 THEN '[N/A]'
-        ELSE 'Type ' || message.date_delivered
-    END AS "DateDeliveredUtc",
+        ELSE 'Type: [' || message.date_delivered || ']'
+    END AS DateDeliveredUtc,
 
     CASE
         WHEN LENGTH ( message.date_read ) = 18
@@ -76,9 +78,8 @@ SELECT
                 message.date_read + 978307200,
                 'unixepoch'
             )
-        WHEN message.date_read IS 0 THEN '[N/A]'
-        ELSE 'Type ' || message.date_read
-    END AS "DateReadUtc",
+        ELSE 'Type: [' || message.date_read || ']'
+    END AS DateReadUtc,
 
     CASE
         WHEN LENGTH ( message.date_edited ) = 18
@@ -93,9 +94,8 @@ SELECT
                 message.date_edited + 978307200,
                 'unixepoch'
             )
-        WHEN message.date_edited IS 0 THEN '[N/A]'
-        ELSE 'Type ' || message.date_edited
-    END AS "DateEditedUtc",
+        ELSE 'Type: [' || message.date_edited || ']'
+    END AS DateEditedUtc,
 
     CASE
         WHEN LENGTH ( message.date_retracted) = 18
@@ -110,9 +110,8 @@ SELECT
                 message.date_retracted + 978307200,
                 'unixepoch'
             )
-        WHEN message.date_retracted IS 0 THEN '[N/A]'
-        ELSE 'Type ' || message.date_retracted
-    END AS "DateRetractedUtc",
+        ELSE 'Type: [' || message.date_retracted || ']'
+    END AS DateRetractedUtc,
 
     CASE
         WHEN LENGTH ( chat_recoverable_message_join.delete_date ) = 18
@@ -127,24 +126,23 @@ SELECT
                 chat_recoverable_message_join.delete_date + 978307200,
                 'unixepoch'
             )
-        WHEN chat_recoverable_message_join.delete_date IS 0 THEN '[N/A]'
-        ELSE 'Type ' || chat_recoverable_message_join.delete_date
-    END AS "CRMJDeleteDateUtc",
+        ELSE 'Type: [' || chat_recoverable_message_join.delete_date || ']'
+    END AS CRMJDeleteDateUtc,
 
     CASE message.share_status
         WHEN 0 THEN 'Not Shared'
         WHEN 1 THEN 'Shared'
-        ELSE 'Type ' || message.share_status
-    END AS "ShareStatus",
+        ELSE 'Type: [' || message.share_status || ']'
+    END AS ShareStatus,
 
     CASE message.share_direction
         WHEN 0 THEN 'Received'
         WHEN 1 THEN 'Sent'
-        ELSE 'Type ' || message.share_direction
-    END AS "ShareDirection",
+        ELSE 'Type: [' || message.share_direction || ']'
+    END AS ShareDirection,
 
 
-    handle.ROWID AS "HandleRowId",
+    handle.ROWID AS HandleRowId,
 
     /*
     Handle ID of the message
@@ -172,21 +170,20 @@ SELECT
                 SUBSTR ( handle.id, 1, 3 ) || ') ' ||
                 SUBSTR ( handle.id, 4, 3 ) || '-' ||
                 SUBSTR ( handle.id, 7, 4 )
-        WHEN handle.id IS NULL THEN '[N/A]'
-        ELSE 'Type ' || handle.id
-    END AS "HandleId",
+        ELSE 'Type: [' || handle.id || ']'
+    END AS HandleId,
 
     CASE chat.style
         WHEN 43 THEN 'Group Chat'
         WHEN 45 THEN 'P2P'
-        ELSE 'Type ' || chat.style
-    END AS "ChatStyle",
+        ELSE 'Type: [' || chat.style || ']'
+    END AS ChatStyle,
 
     CASE message.is_from_me
         WHEN 0 THEN 'Incoming'
         WHEN 1 THEN 'Outgoing'
-        ELSE '[Unknown Value : ' || message.is_from_me || ']'
-    END AS "MessageIsFromMe",
+        ELSE 'Type: [' || message.is_from_me || ']'
+    END AS MessageIsFromMe,
 
     CASE message.type
         WHEN 0 THEN 'Message'
@@ -196,10 +193,10 @@ SELECT
         WHEN 4 THEN 'Location Sharing Data'
         WHEN 5 THEN 'Unknown'
         WHEN 6 THEN 'Unknown'
-        ELSE '[Unknown Value : ' || message.type || ']'
-    END AS "MessageType",
+        ELSE 'Type: [' || message.type || ']'
+    END AS MessageType,
 
-    message.service AS "MessageService",
+    message.service AS MessageService,
 
     /*
     Message account
@@ -228,37 +225,37 @@ SELECT
                 SUBSTR ( message.account, 4, 3 ) || '-' ||
                 SUBSTR ( message.account, 7, 4 )
         WHEN message.account IS NULL THEN '[N/A]'
-        ELSE 'Type ' || message.account
-    END AS "MessageAccount",
+        ELSE 'Type: [' || message.account || ']'
+    END AS MessageAccount,
 
-    message.cache_roomnames AS "MessageCacheRoomnames",
+    message.cache_roomnames AS MessageCacheRoomnames,
 
     CASE
         WHEN message.text IS NULL THEN '**NO TEXT**'
         ELSE message.text
-    END AS "MessageText",
+    END AS MessageText,
 
-    chat.display_name AS "ChatDisplayName",
+    chat.display_name AS ChatDisplayName,
 
     CASE message.cache_has_attachments
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE '[Unknown Value : ' || message.cache_has_attachments || ']'
-    END AS "MessageCacheHasAttachments",
+    END AS MessageCacheHasAttachments,
 
     CASE attachment.is_outgoing
         WHEN 0 THEN 'Incoming'
         WHEN 1 THEN 'Outgoing'
         ELSE '[Unknown Value : ' || attachment.is_outgoing || ']'
-    END AS "AttachmentIsOutgoing",
+    END AS AttachmentIsOutgoing,
 
-    attachment.ROWID AS "AttachmentRowId",
-    attachment.filename AS "AttachmentFilename",
-    attachment.transfer_name AS "AttachmentTransferName",
-    printf ( '%,d', attachment.total_bytes ) AS "AttachmentTotalBytes",
-    attachment.mime_type AS "AttachmentMimeType",
-    attachment.guid AS "AttachmentGuid",
-    attachment.attribution_info AS "AttachmentAttributionInfo",
+    attachment.ROWID AS AttachmentRowId,
+    attachment.filename AS AttachmentFilename,
+    attachment.transfer_name AS AttachmentTransferName,
+    printf ( '%,d', attachment.total_bytes ) AS AttachmentTotalBytes,
+    attachment.mime_type AS AttachmentMimeType,
+    attachment.guid AS AttachmentGuid,
+    attachment.attribution_info AS AttachmentAttributionInfo,
 
     /* Date the attachment was created */
     CASE
@@ -274,15 +271,14 @@ SELECT
                 attachment.created_date + 978307200,
                 'unixepoch'
             )
-        WHEN attachment.created_date IS NULL THEN '[N/A]'
-        ELSE 'Type: ' || attachment.created_date
-    END AS "AttachmentCreatedDateUtc",
+        ELSE 'Type: [' || attachment.created_date  || ']'
+    END AS AttachmentCreatedDateUtc,
 
-    attachment.uti AS "AttachmentUti",
+    attachment.uti AS AttachmentUti,
     -- observed values 5 (temp folder) & 6 (Library)
-    attachment.transfer_state AS "AttachmentTransferState",
-    hex ( attachment.user_info ) AS "AttachmentUserInfoHexBPlist",
-    chat.room_name AS "ChatRoomName",
+    attachment.transfer_state AS AttachmentTransferState,
+    hex ( attachment.user_info ) AS AttachmentUserInfoHexBPlist,
+    chat.room_name AS ChatRoomName,
 
     CASE
         WHEN LENGTH ( chat.chat_identifier ) = 14 AND chat.chat_identifier LIKE '%p:+1%'
@@ -306,8 +302,8 @@ SELECT
                 SUBSTR ( chat.chat_identifier, 4, 3 ) || '-' ||
                 SUBSTR ( chat.chat_identifier, 7, 4 )
         WHEN chat.chat_identifier IS NULL THEN '[N/A]'
-        ELSE 'Type ' || chat.chat_identifier
-    END AS "ChatIdentifier",
+        ELSE 'Type: [' || chat.chat_identifier || ']'
+    END AS ChatIdentifier,
 
     CASE
         WHEN LENGTH ( chat.last_addressed_handle ) = 14 AND chat.last_addressed_handle LIKE '%p:+1%'
@@ -331,60 +327,60 @@ SELECT
                 SUBSTR ( chat.last_addressed_handle, 4, 3 ) || '-' ||
                 SUBSTR ( chat.last_addressed_handle, 7, 4 )
         WHEN chat.last_addressed_handle IS NULL THEN '[N/A]'
-        ELSE 'Type ' || chat.last_addressed_handle
-    END AS "ChatLastAddressedHandle",
+        ELSE 'Type: [' || chat.last_addressed_handle || ']'
+    END AS ChatLastAddressedHandle,
 
     CASE message.was_data_detected
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE '[Unknown Value : ' || message.was_data_detected || ']'
-    END AS "MessageWasDataDetected",
+    END AS MessageWasDataDetected,
 
-    message.item_type AS "MessageItemType",
+    message.item_type AS MessageItemType,
 
     CASE message.is_empty
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE '[Unknown Value : ' || message.is_empty || ']'
-    END AS "MessageIsEmpty",
+    END AS MessageIsEmpty,
 
     CASE message.is_archive
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE '[Unknown Value : ' || message.is_archive || ']'
-    END AS "MessageIsArchive",
+    END AS MessageIsArchive,
 
     CASE message.is_finished
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE '[Unknown Value : ' || message.is_finished || ']'
-    END AS "MessageIsFinished",
+    END AS MessageIsFinished,
 
     CASE message.is_audio_message
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE '[Unknown Value : ' || message.is_audio_message || ']'
-    END AS "MessageIsAudioMessage",
+    END AS MessageIsAudioMessage,
 
     CASE message.is_delayed
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE '[Unknown Value : ' || message.is_delayed || ']'
-    END AS "MessageIsDelayed",
+    END AS MessageIsDelayed,
 
     CASE message.is_emote
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
         ELSE '[Unknown Value : ' || message.is_emote || ']'
-    END AS "MessageIsEmote",
+    END AS MessageIsEmote,
 
-    message.guid AS "MessageGuid",
-    chat.account_id AS "ChatAccountId",
-    chat.group_id AS "ChatGroupId",
-    chat.guid AS "ChatGuid",
+    message.guid AS MessageGuid,
+    chat.account_id AS ChatAccountId,
+    chat.group_id AS ChatGroupId,
+    chat.guid AS ChatGuid,
 
     /* Source for each line of data */
-    'sms.db; Table:messages(ROWID:' || message.ROWID || ')' AS "DataSource"
+    'sms.db; Table:messages(ROWID:' || message.ROWID || ')' AS DataSource
 
 
 FROM message

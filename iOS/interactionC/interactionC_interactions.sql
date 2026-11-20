@@ -1,102 +1,102 @@
 /*
 [DLU]
-    19-Nov-2026
-[VERSION]
-    Tested on iOS 18
-[DATABASE PATH]
+    20-Nov-2026
+[DATABASE]
     /private/var/mobile/Library/CoreDuet/People/interactionC.db
+[NOTES]
+    Tested on iOS 18
 */
 
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZINTERACTIONS.ZSTARTDATE ) AS "RowNumber",
+    ROW_NUMBER() OVER ( ORDER BY ZINTERACTIONS.ZSTARTDATE ) AS RowNumber,
 
-    ZINTERACTIONS.Z_PK AS "ZPk",
+    ZINTERACTIONS.Z_PK AS ZPk,
 
     CASE ZINTERACTIONS.ZDIRECTION
         WHEN 0 THEN 'Incoming'
         WHEN 1 THEN 'Outgoing'
-        ELSE ZINTERACTIONS.ZDIRECTION
-    END AS "MessageDirection",
+        ELSE 'Type: [' || ZINTERACTIONS.ZDIRECTION || ']'
+    END AS MessageDirection,
 
-    ZINTERACTIONS.ZBUNDLEID AS "BundleId",
-    ZINTERACTIONS.ZDOMAINIDENTIFIER AS "DomainIdentifier",
-    ZINTERACTIONS.ZGROUPNAME AS "GroupName",
-    ZINTERACTIONS.ZSENDER AS "Sender",
-    Z_2INTERACTIONRECIPIENT.Z_2RECIPIENTS AS "Recipients",
-    ZCONTACTS.ZDISPLAYNAME AS "DisplayName",
-    ZCONTACTS.ZIDENTIFIER AS "Identifier",
-    ZINTERACTIONS.ZCONTENTURL AS "ContentUrl",
+    ZINTERACTIONS.ZBUNDLEID AS BundleId,
+    ZINTERACTIONS.ZDOMAINIDENTIFIER AS DomainIdentifier,
+    ZINTERACTIONS.ZGROUPNAME AS GroupName,
+    ZINTERACTIONS.ZSENDER AS Sender,
+    Z_2INTERACTIONRECIPIENT.Z_2RECIPIENTS AS Recipients,
+    ZCONTACTS.ZDISPLAYNAME AS DisplayName,
+    ZCONTACTS.ZIDENTIFIER AS Identifier,
+    ZINTERACTIONS.ZCONTENTURL AS ContentUrl,
 
     strftime (
         '%F_%H:%M:%f',
         ZINTERACTIONS.ZSTARTDATE + 978307200,
         'unixepoch'
-    ) AS "StartDateUtc",
+    ) AS StartDateUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZINTERACTIONS.ZENDDATE + 978307200,
         'unixepoch'
-    ) AS "EndDateUtc",
+    ) AS EndDateUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZINTERACTIONS.ZCREATIONDATE + 978307200,
         'unixepoch'
-    ) AS "CreationDateUtc",
+    ) AS CreationDateUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZINTERACTIONS.ZUPDATEDATE + 978307200,
         'unixepoch'
-    ) AS "UpdateDateUtc",
+    ) AS UpdateDateUtc,
 
-    ZCONTACTS.ZINCOMINGRECIPIENTCOUNT AS "IncomingRecipientCount",
+    ZCONTACTS.ZINCOMINGRECIPIENTCOUNT AS IncomingRecipientCount,
 
     strftime (
         '%F_%H:%M:%f',
         ZCONTACTS.ZFIRSTINCOMINGRECIPIENTDATE + 978307200,
         'unixepoch'
-    ) AS "FirstIncomingRecipientDateUtc",
+    ) AS FirstIncomingRecipientDateUtc,
 
-    ZCONTACTS.ZINCOMINGSENDERCOUNT AS "IncomingSenderCount",
+    ZCONTACTS.ZINCOMINGSENDERCOUNT AS IncomingSenderCount,
 
     strftime (
         '%F_%H:%M:%f',
         ZCONTACTS.ZFIRSTINCOMINGSENDERDATE + 978307200,
         'unixepoch'
-    ) AS "FirstIncomingSenderDateUtc",
+    ) AS FirstIncomingSenderDateUtc,
 
-    ZCONTACTS.ZOUTGOINGRECIPIENTCOUNT AS "OutgoingRecipientCount",
+    ZCONTACTS.ZOUTGOINGRECIPIENTCOUNT AS OutgoingRecipientCount,
 
     strftime (
         '%F_%H:%M:%f',
         ZCONTACTS.ZFIRSTOUTGOINGRECIPIENTDATE + 978307200,
         'unixepoch'
-    ) AS "FirstOutgoingRecipientDateUtc",
+    ) AS FirstOutgoingRecipientDateUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZCONTACTS.ZLASTINCOMINGRECIPIENTDATE + 978307200,
         'unixepoch'
-    ) AS "LastIncomingRecipientDateUtc",
+    ) AS LastIncomingRecipientDateUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZCONTACTS.ZLASTINCOMINGSENDERDATE + 978307200,
         'unixepoch'
-    ) AS "LastIncomingSenderDateUtc",
+    ) AS LastIncomingSenderDateUtc,
 
     strftime (
         '%F_%H:%M:%f',
         ZCONTACTS.ZLASTOUTGOINGRECIPIENTDATE + 978307200,
         'unixepoch'
-    ) AS "LastOutgoingRecipientDateUtc",
+    ) AS LastOutgoingRecipientDateUtc,
 
     /* Source for each line of data */
-    'interactionC.db; Table: ZINTERACTIONS(Z_PK: ' || ZINTERACTIONS.Z_PK || ')' AS "DataSource"
+    'interactionC.db; Table: ZINTERACTIONS(Z_PK: ' || ZINTERACTIONS.Z_PK || ')' AS DataSource
 
 
 FROM ZINTERACTIONS

@@ -1,7 +1,12 @@
 /*
+[DLU]
+    20-Nov-2026
 [URL]
     https://belkasoft.com/lagging-for-win
+[NOTES]
+
 */
+
 
 /*
 SELECT * FROM (
@@ -12,13 +17,14 @@ SELECT * FROM (
     WHERE ROWID - "PreviousROWID" > 1
 */
 
+
 SELECT * FROM (
-    SELECT LAG ( ROWID, 1 ) OVER ( ORDER BY ROWID ) AS "PreviousRowID",
-    rowid AS "ROWID",
-    ( ROWID - ( LAG ( ROWID, 1 ) OVER ( ORDER BY ROWID ) ) - 1 ) AS "NumberOfMissingRows",
-    LAG ( datetime( date / 1000000000 + 978307200, 'unixepoch'), 1 ) OVER ( ORDER BY ROWID ) AS "BeginningTimestamp",
-    datetime ( date / 1000000000 + 978307200, 'unixepoch' ) AS "EndingTimestamp"
+    SELECT LAG ( ROWID, 1 ) OVER ( ORDER BY ROWID ) AS PreviousRowID,
+    rowid AS ROWID,
+    ( ROWID - ( LAG ( ROWID, 1 ) OVER ( ORDER BY ROWID ) ) - 1 ) AS NumberOfMissingRows,
+    LAG ( datetime( date / 1000000000 + 978307200, 'unixepoch'), 1 ) OVER ( ORDER BY ROWID ) AS BeginningTimestamp,
+    datetime ( date / 1000000000 + 978307200, 'unixepoch' ) AS EndingTimestamp
 
     from message ) list
 
-    WHERE ROWID - "PreviousRowID" > 1;
+    WHERE ROWID - PreviousRowID > 1;

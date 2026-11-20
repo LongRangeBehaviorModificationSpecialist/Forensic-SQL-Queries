@@ -1,6 +1,10 @@
 /*
 [DLU]
-    19-Nov-2026
+    20-Nov-2026
+[DATABASE]
+    N/A
+[NOTES]
+
 */
 
 
@@ -45,19 +49,21 @@ SELECT
 
 
 FROM (
+
     SELECT
         -- Change 'ROWID' to the name of the column containing the primary key
-        LAG ( ROWID, 1 ) OVER ( ORDER BY ROWID ) AS "PreviousRowID",
-        ROWID AS "RowID",
-        ( ROWID - ( LAG ( ROWID, 1 ) OVER ( ORDER BY ROWID ) ) - 1 ) AS "NumberOfMissingRecords",
+        LAG ( ZASSET.ROWID, 1 ) OVER ( ORDER BY ZASSET.ROWID ) AS PreviousRowID,
+        ZASSET.ROWID AS RowID,
+        ( ZASSET.ROWID - ( LAG ( ZASSET.ROWID, 1 ) OVER ( ORDER BY ZASSET.ROWID ) ) - 1 ) AS NumberOfMissingRecords,
 
         -- Change 'ZDATEADDED' to the name of the column containing the timestamp value
-        LAG ( datetime ( ZADDEDDATE + 978307200, 'unixepoch' ) ) OVER ( ORDER BY ROWID ) AS "StartTime",
-        datetime ( ZADDEDDATE + 978307200, 'unixepoch' ) AS "EndTime"
+        LAG ( datetime ( ZASSET.ZADDEDDATE + 978307200, 'unixepoch' ) ) OVER ( ORDER BY ZASSET.ROWID ) AS StartTime,
+        datetime ( ZASSET.ZADDEDDATE + 978307200, 'unixepoch' ) AS EndTime
+
 
     FROM ZASSET
 
 ) AS "List"
 
 
-WHERE ROWID - 'PreviousRowID' > 1;
+WHERE ZASSET.ROWID - PreviousRowID > 1;

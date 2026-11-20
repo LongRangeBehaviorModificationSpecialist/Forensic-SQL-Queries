@@ -1,31 +1,44 @@
 /*
 [DLU]
-    19-Nov-2026
+    20-Nov-2026
+[DATABASE]
+
+[NOTES]
+
 */
 
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY ZRTADDRESSMO.ZCREATIONDATE ) AS "RowNumber",
+    ROW_NUMBER() OVER ( ORDER BY ZRTADDRESSMO.ZCREATIONDATE ) AS RowNumber,
 
-    ZRTADDRESSMO.Z_PK AS "AddressMo.ZPk",
-    ZRTMAPITEMMO.Z_PK AS "MapItemMmo.ZPk",
-    ZRTADDRESSMO.ZMAPITEM AS "MapItem",
+    ZRTADDRESSMO.Z_PK AS AddressMoZPk,
+    ZRTMAPITEMMO.Z_PK AS MapItemMmoZPk,
+    ZRTADDRESSMO.ZMAPITEM AS MapItem,
     ZRTMAPITEMMO.ZADDRESS AS "Address",
 
-    strftime ( '%F_%H:%M:%f', ZRTADDRESSMO.ZCREATIONDATE + 978307200, 'unixepoch' ) AS "CreationDateUtc",
-    strftime ( '%F_%H:%M:%f', ZRTADDRESSMO.ZEXPIRATIONDATE + 978307200, 'unixepoch' ) AS "ExpirationDateUtc",
+    strftime ( '%F_%H:%M:%f', ZRTADDRESSMO.ZCREATIONDATE + 978307200, 'unixepoch' ) AS CreationDateUtc,
+    strftime ( '%F_%H:%M:%f', ZRTADDRESSMO.ZEXPIRATIONDATE + 978307200, 'unixepoch' ) AS ExpirationDateUtc,
 
-    ZRTADDRESSMO.ZSUBTHOROUGHFARE || ' ' || ZRTADDRESSMO.ZTHOROUGHFARE || ', ' || ZRTADDRESSMO.ZLOCALITY || ', ' || ZRTADDRESSMO.ZADMINISTRATIVEAREA || ' ' || ZRTADDRESSMO.ZPOSTALCODE || ' ' || ZRTADDRESSMO.ZCOUNTRYCODE AS "ItemAddress",
+    ZRTADDRESSMO.ZSUBTHOROUGHFARE || ' ' || ZRTADDRESSMO.ZTHOROUGHFARE || ', ' || ZRTADDRESSMO.ZLOCALITY || ', ' || ZRTADDRESSMO.ZADMINISTRATIVEAREA || ' ' || ZRTADDRESSMO.ZPOSTALCODE || ' ' || ZRTADDRESSMO.ZCOUNTRYCODE AS ItemAddress,
 
-    ZRTMAPITEMMO.ZLATITUDE AS "Latitude",
-    ZRTMAPITEMMO.ZLONGITUDE AS "Longitude",
-    RTRIM ( LTRIM ( CONCAT ( ROUND ( ZRTMAPITEMMO.ZLATITUDE, 6 ), ',', ROUND ( ZRTMAPITEMMO.ZLONGITUDE, 6 ) ) ) ) AS "LatLongMerged",
+    ZRTMAPITEMMO.ZLATITUDE AS Latitude,
+    ZRTMAPITEMMO.ZLONGITUDE AS Longitude,
 
-    ZRTMAPITEMMO.ZUNCERTAINTY AS "Uncertainty",
+    RTRIM (
+        LTRIM (
+            CONCAT (
+                ROUND ( ZRTMAPITEMMO.ZLATITUDE, 6 ),
+                ',',
+                ROUND ( ZRTMAPITEMMO.ZLONGITUDE, 6 )
+            )
+        )
+    ) AS LatLongMerged,
+
+    ZRTMAPITEMMO.ZUNCERTAINTY AS Uncertainty,
 
     /* Source for each line of data */
-    'Cloud-V2.sqlite; Table: ZRTADDRESSMO(Z_PK:' || ZRTADDRESSMO.Z_PK || ')' AS "DataSource"
+    'Cloud-V2.sqlite; Table: ZRTADDRESSMO(Z_PK:' || ZRTADDRESSMO.Z_PK || ')' AS DataSource
 
 
 FROM ZRTADDRESSMO

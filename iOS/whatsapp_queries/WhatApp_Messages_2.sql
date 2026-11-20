@@ -1,38 +1,47 @@
 /*
 [DLU]
-    20-Apr-2026
-Copied from
+    20-Nov-2026
+[URL]
     https://towardsdatAScience.com/analyzing-my-whatsapp-databASe-using-sql-and-redASh-5ef9bd6a0b0
+[DATABASE]
+
+[NOTES]
 */
+
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
+    ROW_NUMBER() OVER ( ORDER BY ZWAMESSAGE.ZMESSAGEDATE ) AS RowNumber,
 
-    ZWACHATSESSION.ZPARTNERNAME AS 'PartnerName',
+    ZWACHATSESSION.ZPARTNERNAME AS PartnerName,
 
     CASE ZWAMESSAGE.ZISFROMME
         WHEN 0 THEN ZWAMESSAGE.ZFROMJID
         ELSE ZWAMESSAGE.ZTOJID
-    END AS 'IsFromMe',
+    END AS IsFromMe,
 
     CASE ZWAMESSAGE.ZMESSAGETYPE
-        WHEN 0 THEN 'Text [0]'
-        WHEN 1 THEN 'Image [1]'
-        WHEN 2 THEN 'Video [2]'
-        WHEN 3 THEN 'VoiceMessage [3]'
-        WHEN 4 THEN 'Gif [4]'
-        WHEN 5 THEN 'Location [5]'
-        WHEN 6 THEN 'GroupEvent [6]'
-        WHEN 7 THEN 'Hyperlink [7]'
-        WHEN 8 THEN 'Document [8]'
-        WHEN 14 THEN 'DeletedMessage [14]'
-        WHEN 15 THEN 'Sticker [15]'
-        ELSE ZWAMESSAGE.ZMESSAGETYPE
+        WHEN 0 THEN 'Text'
+        WHEN 1 THEN 'Image'
+        WHEN 2 THEN 'Video'
+        WHEN 3 THEN 'VoiceMessage'
+        WHEN 4 THEN 'Gif'
+        WHEN 5 THEN 'Location'
+        WHEN 6 THEN 'GroupEvent'
+        WHEN 7 THEN 'Hyperlink'
+        WHEN 8 THEN 'Document'
+        WHEN 14 THEN 'DeletedMessage'
+        WHEN 15 THEN 'Sticker'
+        ELSE 'Type: [' || ZWAMESSAGE.ZMESSAGETYPE  || ']'
+    END AS MessageType,
 T
-    datetime(ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch') AS 'MessageDateUtc',
+    strftime ( '%F_%H:%M:%f', ZWAMESSAGE.ZMESSAGEDATE + 978307200, 'unixepoch') AS MessageDateUtc,
 
-    ZWAMESSAGE.ZTEXT AS 'Text'
+    ZWAMESSAGE.ZTEXT AS MessageText,
+
+    /* Source for each line of data */
+    -- TODO -> update database file name and primary key column name
+    '________; Table:_____(____:' ||  _____________ || ')' AS DataSource
 
 
 FROM ZWACHATSESSION

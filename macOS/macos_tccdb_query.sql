@@ -1,27 +1,30 @@
 /*
-MODULE_NOTES = Transparancy, Consent, and Control (TCC) Database - Application Permissions
-
-[Database Metadata]
-DATABASE = TCC.db
-PLATFORM = macOS
-VERSIONS = 10.14, 10.15
-
-QUERY=
+[DLU]
+    20-Nov-2026
+[DATABASE]
+    TCC.db
+[NOTES]
+    Transparancy, Consent, and Control (TCC) Database - Application Permissions
 */
 
-SELECT
-    datetime ( LAST_MODIFIED, 'unixepoch' ) AS "LastModified",
-    SERVICE AS "Service",
-    CLIENT AS "Client",
 
-    CASE ALLOWED
+SELECT
+
+    ROW_NUMBER() OVER( ORDER BY ACCESS.LAST_MODIFIED ) AS RowNumber,
+
+    strftime ( '%F_%H:%M:%f', ACCESS.LAST_MODIFIED, 'unixepoch' ) AS LastModified,
+    ACCESS.SERVICE AS "Service",
+    ACCESS.CLIENT AS Client,
+
+    CASE ACCESS.ALLOWED
         WHEN 0 THEN 'No'
         WHEN 1 THEN 'Yes'
-        ELSE 'Contact Examiner for Further'
-    END AS "Allowed",
+        ELSE 'Type: [' || ACCESS.ALLOWED || ']'
+    END AS Allowed,
 
-    CLIENT_TYPE AS "ClientType",
-    PROMPT_COUNT AS "PromptCount",
-    INDIRECT_OBJECT_IDENTIFIER AS "IndirectObjectIdentifier"
+    ACCESS.CLIENT_TYPE AS ClientType,
+    ACCESS.PROMPT_COUNT AS PromptCount,
+    ACCESS.INDIRECT_OBJECT_IDENTIFIER AS IndirectObjectIdentifier
+
 
 FROM ACCESS

@@ -1,29 +1,33 @@
 /*
 [DLU]
-    19-Nov-2026
-[DATABASE PATH]
+    20-Nov-2026
+[DATABASE]
     /private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db
+[NOTES]
+
 */
+
 
 SELECT
 
-    ROW_NUMBER() OVER ( ORDER BY  ) AS "RowNumber",
-    ZOBJECT.ZVALUESTRING AS "ZValueString",
-    ZOBJECT.ZSTREAMNAME AS "ZStreamName",
-    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONMETADATAKEY__LAUNCHREASON AS "LaunchReason",
+    ROW_NUMBER() OVER ( ORDER BY ZOBJECT.ZSTARTDATE ) AS RowNumber,
 
-    strftime ( '%F_%H:%M:%f', ZOBJECT.ZSTARTDATE + 978307200, 'unixepoch' ) AS "StartDateUtc",
-    strftime ( '%F_%H:%M:%f', ZOBJECT.ZENDDATE + 978307200, 'unixepoch' ) AS "EndDateUtc",
+    ZOBJECT.ZVALUESTRING AS ZValueString,
+    ZOBJECT.ZSTREAMNAME AS ZStreamName,
+    ZSTRUCTUREDMETADATA.Z_DKAPPLICATIONMETADATAKEY__LAUNCHREASON AS LaunchReason,
 
-    ( ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE ) AS "Usage(Seconds)",
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZSTARTDATE + 978307200, 'unixepoch' ) AS StartDateUtc,
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZENDDATE + 978307200, 'unixepoch' ) AS EndDateUtc,
 
-    strftime ( '%F_%H:%M:%f', ZOBJECT.ZCREATIONDATE + 978307200, 'unixepoch' ) AS "CreationDateUtc",
-    ( ZOBJECT.ZSECONDSFROMGMT / 3600 ) AS "DeviceGmtOffset",
+    ( ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE ) AS UsageSeconds,
 
-    ZOBJECT.ZUUID AS "Uuid",
+    strftime ( '%F_%H:%M:%f', ZOBJECT.ZCREATIONDATE + 978307200, 'unixepoch' ) AS CreationDateUtc,
+    ( ZOBJECT.ZSECONDSFROMGMT / 3600 ) AS DeviceGmtOffset,
+
+    ZOBJECT.ZUUID AS Uuid,
 
     /* Source for each line of data */
-    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS "DataSource"
+    'knowledgeC.db; Table: ZOBJECT(Z_PK:' || ZOBJECT.Z_PK || ')' AS DataSource
 
 
 FROM ZOBJECT
